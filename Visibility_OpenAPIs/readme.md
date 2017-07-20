@@ -1,6 +1,6 @@
 ## Visibility OpenAPIs for OF@KOREN Playground Users!
 
-![](https://raw.githubusercontent.com/SmartX-Labs/KOREN-Playground/master/images/OpenAPI.png)
+![](https://github.com/KOREN-Platform/Open-Platform/blob/master/Visibility_OpenAPIs/visibility.png)
 
 본 페이지에서는 OF@KOREN Playground 사용자들의 편의성을 위한 모니터링 지원 기능에 대한
 Open API를 제공합니다.

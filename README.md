@@ -1,2 +1,2 @@
 # Open-Platform
-Open-Platform for KOREN Community
+Platform for KOREN Community

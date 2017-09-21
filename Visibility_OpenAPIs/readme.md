@@ -1,6 +1,6 @@
-# Visibility OpenAPIs for KOREN Playground
+## Visibility OpenAPIs for KOREN Playground
 --------------------------------------------
-## [Task 2-2] SmartX Playground 상의 종단 간 자원집합의 토폴로지/상태를 가시화하는 Visibility OpenAPIs 지원
+### SmartX Playground 상의 종단 간 자원집합의 토폴로지/상태를 가시화하는 Visibility OpenAPIs 지원
 
 ![](https://github.com/KOREN-Platform/Platform/blob/master/Images/2-2.png)
 

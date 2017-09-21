@@ -1,6 +1,6 @@
-Playground Infrastructure & Platform: Operation 
+## Playground Infrastructure & Platform: Operation 
 ================================================
-## [Task 2-1] IoT-Cloud 대응형 SmartX Playground 인프라로의 보완 및 SDN/Cloud 기반 관제타워 정비
+### IoT-Cloud 대응형 SmartX Playground 인프라로의 보완 및 SDN/Cloud 기반 관제타워 정비
 
 ![](https://github.com/KOREN-Platform/Platform/blob/master/Images/2-1.png)
 

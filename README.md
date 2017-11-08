@@ -1,3 +1,5 @@
+![](https://github.com/KOREN-Platform/Platform/blob/master/Images/platform_home.PNG)
+
 # Platform
 ----------
   

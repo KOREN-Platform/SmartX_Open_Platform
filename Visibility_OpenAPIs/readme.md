@@ -13,4 +13,4 @@
 
 Related Repository
 ----------------------------
-https://github.com/KOREN-Platform/Platform/tree/master/Visibility_OpenAPIs 
+https://github.com/KOREN-Platform/SmartX-MultiView-KOREN

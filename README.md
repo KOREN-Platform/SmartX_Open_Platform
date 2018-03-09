@@ -1,4 +1,4 @@
-![](https://github.com/KOREN-Platform/Platform/blob/master/Images/platform_home.PNG)
+![](https://github.com/KOREN-Platform/SmartX_Open_Platform/blob/master/Images/platform_home.PNG)
 
 # Platform
 ----------

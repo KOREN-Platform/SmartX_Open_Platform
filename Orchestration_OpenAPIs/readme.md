@@ -12,7 +12,7 @@ Playground 인프라를 통해 여러 어플리케이션 개발자들에게 인�
 https://github.com/KOREN-Platform/SmartX_Open_Platform/tree/master/Playground_Infra_Platform_Operation
 
 
-### 슬라이싱
+### 슬라이싱 
 IoT 단말기와 클라우드의 인스턴스 간의 슬라이싱 연결을 위해서는 다음과 같은 절차로 진행합니다.
 
 1. 슬라이싱 ID 생성

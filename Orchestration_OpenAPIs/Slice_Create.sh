@@ -15,10 +15,10 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-IP=1.1.1.1
+IP=103.22.221.74
 Port=35357
-DB_IP=1.1.1.1
-DB_PW=pass
+DB_HOST=172.20.90.167
+DB_PASS="fn!xo!ska!"
 
 
 echo -n "Input your ID: "
@@ -59,29 +59,33 @@ if [ "$Output" == "" ]; then
 fi
 
 
-################################# Slicing Pool
 
-# Find available Slicing pool list
+##### Assigning Slicing  ID
+SPOTS=30
+vlan=0
 
-Slicing=`cat slicing_pool | grep none | awk '{print $1}' | sed -n 1p`
-
-
-# IF slicing pool is not available, halt the script
-if [ "$Slicing" == "" ]; then
-   echo "Slicing ID is not available"
-   exit 1
-fi
-#echo Slciing ID is $Slicing
+let "vlan = $RANDOM % $SPOTS + 950"
 
 
-# Calculateing Row
 
-Row=`expr $Slicing - 950`
-#echo Row is $Row
+sql=$(mysql -u root -h $DB_HOST --password=$DB_PASS -e "use Slicing_Management; select * from Slicing where VLAN_ID='$vlan';")
 
 
-# Edit the Slicing pool
-sed -i "$Row"s/none/used/ slicing_pool
+check=0
+while [ $check == 0 ]
+do
+
+  if [ "$sql" != "" ]; then
+    let "vlan = $RANDOM % $SPOTS + 950"
+    sql=$(mysql -u root -h $DB_HOST --password=$DB_PASS -e "use Slicing_Management; select * from Slicing where VLAN_ID='$vlan';")
+  else
+    check=1
+  fi
+
+done
+
+echo $vlan
+
 
 
 ###################### Create DB
@@ -90,16 +94,16 @@ sed -i "$Row"s/none/used/ slicing_pool
 Authority="high"
 
 # Add DB
-cat << EOF | mysql -h $DB_IP -uroot -p$DB_PW
+cat << EOF | mysql -h $DB_HOST -uroot -p$DB_PASS
 use Slicing_Management;
-INSERT INTO Slicing  VALUES ('$Slicing', '$ID', '$Authority', '$Slicing');
+INSERT INTO Slicing  VALUES ('$vlan', '$ID', '$Authority', '$vlan');
 quit
 EOF
 
 
 echo "Slicing has been created"
 echo
-echo "Slicing id: $Slicing"
+echo "Slicing id: $vlan"
 echo
 
 

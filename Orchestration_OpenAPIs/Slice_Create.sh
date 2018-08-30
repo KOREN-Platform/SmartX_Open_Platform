@@ -15,10 +15,10 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-IP=103.22.221.74
+IP=100.100.100.100
 Port=35357
-DB_HOST=172.20.90.167
-DB_PASS="fn!xo!ska!"
+DB_HOST=100.100.100.100
+DB_PASS="pass"
 
 
 echo -n "Input your ID: "

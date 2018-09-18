@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<style>
+			#allState {visibility: hidden;}
+		</style>
+  </head>
+  <body>
+    <p>
+    <form id='list' action='/client/makeList'>
+      <select name='spkfile' size='6' id='select_APP' >
+      </select>
+      <select name='textfile' size='6' id='select_data' >
+      </select>
+    </form>
+
+		<input type="radio" value='slack' id="slackBtn" name="sendRadio" checked />slack
+		<input type="radio" value='email' id="emailBtn" name="sendRadio" />email
+		<input type="text" name="sendName" id="user"/>
+
+    <form id='parameter_blank'>
+    </form>
+
+    </p>
+
+
+    <button class="submit">spark-submit</button>
+
+    <div class="result">결과</div>
+
+    <br>
+
+    <p>upload data file</p>
+    <form id='fileForm' method='post' enctype='multipart/form-data' action='/upload'>
+	<input type='file' id='fileInput' name='fileInput' accept=".txt, .log" size="500MB">
+    </form>
+    <button class='delete'>DATA FILE DELETE</button>
+
+<br>
+<br>
+    <p>spark log</p>
+    <textarea class='sparkLog' id='sparkLog' cols=60 rows=10>
+    </textarea>
+
+<br>
+<br>
+<p>
+	<select class="stateList" id="allState" name="allState" size="2">
+	</select>
+	<select class="stateList" id="runState" name="runState" size="10">
+	</select>
+	<select class="stateList" id="doneState" name="doneState" size="10">
+	</select>
+</p>
+<div class="appState">
+	<h4 id="id">id : </h4>
+	<h4 id="name">name : </h4>
+	<h4 id="elapsedTime">elapsedTime : </h4>
+	<h4 id="startedTime">startedTime : </h4>
+	<h4 id="finishedTime">finishedTime : </h4>
+	<h4 id="state">state : </h4>
+</div>
+<script>
+		 $(document).ready(function() {
+            allRefreshState();
+            setInterval( allRefreshState ,2000);
+        })
+        $('.stateList').change(function() {
+			var application_id = $(this).val()
+			$.ajax({
+				url: '/client/appState',
+				dataType: 'json',
+				type: 'GET',
+				data: {"id":application_id},
+				success:function(result) {
+					var elapsedTime = result.result.elapsedTime;
+					var sec_gap = elapsedTime /1000;
+					var min_gap = Math.floor(elapsedTime /1000/60);
+					var hour_gap = Math.floor(elapsedTime / 1000 / 60 /60);
+					var name = result.result.name;			
+
+					$('#id').html("id : "+result.result.id)
+					$('#name').html("name : "+result.result.name)
+					$('#elapsedTime').html("elapsedTime : "+  hour_gap + "시" + min_gap+ "분" +sec_gap + "초")
+					$('#startedTime').html("startedTime : "+new Date(result.result.startedTime).toString())
+					$('#finishedTime').html("finishedTime : "+ new Date(result.result.finishedTime).toString())
+					$('#state').html("state : " + result.result.state)
+				},	
+				error:function(error) {
+					console.log("error : " + error)	
+				}
+			})
+		})
+        var allStateLen = null
+        function allRefreshState() {
+            $.ajax({
+                url:'/client/clientYarnAll',
+                method:'get',
+                success: function(result){
+                    //console.log(result)
+                    var stateLen = result.result.length;
+					$('#runState').empty()
+					$('#doneState').empty()
+					for(var i=0; i<stateLen; i++) {
+						var id = result.result[i].id;
+						var name = result.result[i].name;
+						var state = result.result[i].state;
+						if(state == "RUNNING") {
+							$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:yellow">' + id + '</option>').appendTo('#runState');
+						} else if(state=="FINISHED") {
+							$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:gray">' + id + '</option>').appendTo('#doneState');
+						}
+					}
+
+					$('#allState').attr("size", stateLen)
+					if(allStateLen != stateLen) {
+						$('#allState').empty();
+						for(var i=0; i<stateLen; i++)
+	  					{
+							var id = result.result[i].id;
+							var name = result.result[i].name;
+							var state = result.result[i].state;
+							var startedTime = new Date(result.result[i].startedTime).toString();
+							if(result.result[i].state == "RUNNING")	{	
+								$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:yellow">' + id + '</option>').appendTo('#allState');
+							} else {		
+								$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:gray">' + id +  '</option>').appendTo('#allState');
+							}
+						}
+						allStateLen = stateLen;
+					}
+					else {
+						for(var i=0; i<stateLen; i++) {
+							var id = result.result[i].id;
+							var name = result.result[i].name;
+							var currentState = result.result[i].state;
+							var beforeClass = $('#'+id).attr('class')
+							var startedTime = new Date(result.result[i].startedTime).toString();
+							
+							if(beforeClass != currentState ) {
+								$('#'+id).removeClass(beforeClass);
+								$('#'+id).addClass(currentState);
+								$('#'+id).html(id)
+								var state = ""
+								console.log(currentState)
+								if(currentState == "ACCEPTED") {
+									state = "ACCEPTED"
+									$('#'+id).attr('style','background-color:blue');
+								} else if(currentState == "RUNNING") {
+									state = "RUNNING"
+									$('#'+id).attr('style','background-color:yellow');
+								} else if(currentState == "FINISHED") {
+									state = "FINISHED"
+									$('#'+id).attr('style','background-color:gray');
+								}
+								if($('#allState option:selected').attr('id') == id) {
+									$('#state').html("state : "+state)
+								}
+							}
+						}
+					}	
+                },
+                error : function(error) {
+                    console.log(error)
+                }
+            })
+        }
+var parameterKey = new Array()
+
+$('.submit').click( function() {
+
+	//파라미터값 초기화
+	var parameterValue = ''
+
+	//파라미터값 입력
+	for(var i=0 ; i < parameterKey.length ; i++){
+	  parameterValue += parameterKey[i] + '=' + $('#'+parameterKey[i]).val()+' '
+	}
+
+      console.log(parameterValue)
+
+      //예외처리
+      if($('#select_data option:selected').val() == null){
+        alert('please select data file')
+      } else if ($('#select_APP option:selected').val() == null){
+        alert('please select Application')
+      } else{
+
+      $('.result').html('처리중');
+      $.ajax({
+        url: '/client/sparkSubmit',
+        method: 'post',
+        data: {
+	'APP' : $('#select_APP option:selected').val(),
+	'data' : $('#select_data option:selected').val(),
+	'parameter' : parameterValue,
+	'target': $('input[name="sendRadio"]:checked').val(),
+	'user' : $('#user').val()
+	},
+        dataType: 'json',
+        success: function(result) {
+          if(result){
+            $('.result').html(result.result);
+          }
+        }
+      });
+      }
+    });
+    $('.delete').click( function() {
+      if($('#select_data option:selected').val() == null){
+          alert('please select data file')
+        } else {
+      $.ajax({
+        url: '/client/dataDelete',
+        method: 'post',
+        data: {
+	'data' : $('#select_data option:selected').val()
+	},
+        dataType: 'json',
+        success: function(result) {
+          if(result){
+
+	    $('#select_data').empty();
+	    for(var i=1 ; i<result.datalist.length ; i++){
+              $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
+	    }
+          }
+        }
+      });
+      }
+    });
+    $(document).ready(function(){
+      $.ajax({
+        url: '/client/makeList',
+        method: 'post',
+        success: function(result) {
+          if(result){
+	    for(var i=0 ; i<result.applist.length ; i++){
+              $('#select_APP').append('<option value='+result.applist[i]+'>'+result.applist[i]+'</option>');
+	    }
+	  }
+	}
+      });
+      $.ajax({
+        url: '/client/makeList',
+        method: 'post',
+        success: function(result) {
+          if(result){
+
+	    $('#select_data').empty();
+	    for(var i=1 ; i<result.datalist.length ; i++){
+              $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
+	    }
+          }
+        }
+      });
+	updateLog()
+    });
+
+function updateLog(){
+	$.ajax({
+	  url: '/client/sparkLog',
+	  method: 'post',
+	  success:function(result){
+	    if(result){
+		$('#sparkLog').val(result.latelyLog)
+	    }
+	  }
+	})
+	setTimeout('updateLog()',1000)
+}
+
+    $('#fileForm').change(function(){
+	var form = $('#fileForm')[0];
+	var formData = new FormData(form);
+
+	if($('#fileInput').val() == ""){
+          alert('please select upload file')
+        } else {	
+	  $.ajax({
+	    url:'/client/dataUpload',
+	    processData: false,
+	    contentType: false,
+	    data : formData,
+	    type: 'POST',
+	    success: function(result){
+
+		  $('#select_data').empty();
+		  for(var i=1 ; i<result.datalist.length ; i++){
+		    $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
+		  }
+	    }
+	  });
+	}
+    });
+    $('#select_APP').click( function() {
+      $.ajax({
+        url: '/client/makeParameterBlank',
+        method: 'post',
+        data: {
+	'appname' : $('#select_APP option:selected').val()
+	},
+        dataType: 'json',
+        success: function(result) {
+          if(result){
+
+	    //파라미터 입력 공간 초기화
+	    $('#parameter_blank').empty();
+	    parameterKey = []
+
+	    //모든 파라미터 체크
+	    for(var i=0 ; i<result.nameList.length ; i++){
+
+	      //파라미터 키 리스트 작성
+	      parameterKey[i] = result.nameList[i]
+
+	      //파라미터 입력 타입 체크
+	      if(result.typeList[i] == 'text'){
+		//text 방식 입력 공간 생성
+		$('#parameter_blank').append(
+		  result.nameList[i]+' '+'<input id='+result.nameList[i]+' type="text" maxlength="'+result.typeMaxList[i]+'"> ['+result.descriptionList[i]+']'+'<br>'
+		)
+	      }else if(result.typeList[i] == 'radio'){
+		//radio 방식 입력 공간 생성
+		$('#parameter_blank').append(result.nameList[i]+' ['+result.descriptionList[i]+']'+'<br>')
+		for(var j = 0 ; j < result.typeDataList[i].length ; j++){
+		  $('#parameter_blank').append(
+		    '<input id='+result.nameList[i]+' type="radio" value='+result.typeDataList[i][j]+' name='+result.nameList[i]+'/>'+result.typeDataList[i][j]+'<br>'
+		  )
+		}
+	      }
+
+	    }
+
+	    $('#parameter_blank').append('<br>'+'Description : '+result.description)
+
+          }
+        }
+      });
+    });
+
+
+	</script>
+  </body>
+</html>

@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <style>
+			#allState {visibility: hidden;}
+	</style>
+  </head>
+  <body>
+        <h1><%= title %></h1>
+        <h2><%= info %></h2>
+        <form id="logout" method="get" action="/logout">
+            <input type="submit" value="logout"/>
+        </form>
+        <br>
+        <select class="stateList" id="allState" name="allState" size="10">
+        </select>
+        <select class="stateList" id="runState" name="runState" size="10">
+        </select>
+        <select class="stateList" id="doneState" name="doneState" size="10">
+        </select>
+        <br>
+        <div class="appState">
+                <h4 id="id">id : </h4>
+                <h4 id="name">name : </h4>
+                <h4 id="elapsedTime">elapsedTime : </h4>
+                <h4 id="startedTime">startedTime : </h4>
+                <h4 id="finishedTime">finishedTime : </h4>
+                <h4 id="state">state : </h4>
+		</div>
+		
+    <script>
+         $(document).ready(function() {
+            allRefreshState();
+            setInterval( allRefreshState ,2000);
+        })
+        $('.stateList').change(function() {
+			var application_id = $(this).val()
+			$.ajax({
+				url: '/client/appState',
+				dataType: 'json',
+				type: 'GET',
+				data: {"id":application_id},
+				success:function(result) {
+					var elapsedTime = result.result.elapsedTime;
+					var sec_gap = elapsedTime /1000;
+					var min_gap = Math.floor(elapsedTime /1000/60);
+					var hour_gap = Math.floor(elapsedTime / 1000 / 60 /60);
+					var name = result.result.name;			
+
+					$('#id').html("id : "+result.result.id)
+					$('#name').html("name : "+result.result.name)
+					$('#elapsedTime').html("elapsedTime : "+  hour_gap + "시" + min_gap+ "분" +sec_gap + "초")
+					$('#startedTime').html("startedTime : "+new Date(result.result.startedTime).toString())
+					$('#finishedTime').html("finishedTime : "+ new Date(result.result.finishedTime).toString())
+					$('#state').html("state : " + result.result.state)
+				},	
+				error:function(error) {
+					console.log("error : " + error)	
+				}
+			})
+		})
+        var allStateLen = null
+        function allRefreshState() {
+            $.ajax({
+                url:'/client/clientYarnAll',
+                method:'get',
+                success: function(result){
+                    //console.log(result)
+                    var stateLen = result.result.length;
+					$('#runState').empty()
+					$('#doneState').empty()
+					for(var i=0; i<stateLen; i++) {
+						var id = result.result[i].id;
+						var name = result.result[i].name;
+						var state = result.result[i].state;
+						if(state == "RUNNING") {
+							$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:yellow">' + id + '</option>').appendTo('#runState');
+						} else if(state=="FINISHED") {
+							$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:gray">' + id + '</option>').appendTo('#doneState');
+						}
+					}
+
+					$('#allState').attr("size", stateLen)
+					if(allStateLen != stateLen) {
+						$('#allState').empty();
+						for(var i=0; i<stateLen; i++)
+	  					{
+							var id = result.result[i].id;
+							var name = result.result[i].name;
+							var state = result.result[i].state;
+							var startedTime = new Date(result.result[i].startedTime).toString();
+							if(result.result[i].state == "RUNNING")	{	
+								$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:yellow">' + id + '</option>').appendTo('#allState');
+							} else {		
+								$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:gray">' + id +  '</option>').appendTo('#allState');
+							}
+						}
+						allStateLen = stateLen;
+					}
+					else {
+						for(var i=0; i<stateLen; i++) {
+							var id = result.result[i].id;
+							var name = result.result[i].name;
+							var currentState = result.result[i].state;
+							var beforeClass = $('#'+id).attr('class')
+							var startedTime = new Date(result.result[i].startedTime).toString();
+							
+							if(beforeClass != currentState ) {
+								$('#'+id).removeClass(beforeClass);
+								$('#'+id).addClass(currentState);
+								$('#'+id).html(id)
+								var state = ""
+								console.log(currentState)
+								if(currentState == "ACCEPTED") {
+									state = "ACCEPTED"
+									$('#'+id).attr('style','background-color:blue');
+								} else if(currentState == "RUNNING") {
+									state = "RUNNING"
+									$('#'+id).attr('style','background-color:yellow');
+								} else if(currentState == "FINISHED") {
+									state = "FINISHED"
+									$('#'+id).attr('style','background-color:gray');
+								}
+								if($('#allState option:selected').attr('id') == id) {
+									$('#state').html("state : "+state)
+								}
+							}
+						}
+					}	
+                },
+                error : function(error) {
+                    console.log(error)
+                }
+            })
+        }
+	</script>
+  </body>
+</html>

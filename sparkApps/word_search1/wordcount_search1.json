@@ -1,0 +1,33 @@
+{
+    "appName" : "wordcount_search1.py",
+    "description" : "특정 글자의 갯수를 세는 파일",
+    "author" : {
+	"name" : "choi",
+            "email" : "ghwlchlaks"
+    },
+    "parameters" : [
+	{
+		"name" : "--oddEven",
+                        "description" : "특정 단어의 갯수를 세는 옵션 (대,소문자 구별)",
+		"inputType" : {
+			"data" : ["odd", "even" ],
+			"boxType" : "radio",
+			"min" : 1,
+			"max" : 10
+		},
+		"default" : "A"
+            },
+	{
+		"name" : "--word",
+                        "description" : "특정 단어의 갯수를 세는 옵션 (대,소문자 구별)",
+		"inputType" : {
+			"boxType" : "text",
+			"min" : 1,
+			"max" : 10
+		},
+		"default" : "A"
+            }
+    ],
+   "version" : "0.0.1",
+   "type" : "json"
+}

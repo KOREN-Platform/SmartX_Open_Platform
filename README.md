@@ -1,9 +1,9 @@
 # Spark
 
 ## How to Use
-git clone http://git.nilab.xyz:6363/nightzen/otter.git 
+git clone http://git.nilab.xyz:6363/nightzen/otter2.git 
 
-cd otter/Spark
+cd otter2/
 
 npm install
 

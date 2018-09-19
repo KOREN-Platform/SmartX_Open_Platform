@@ -7,6 +7,14 @@ const Request= require('request')
 //mailer config
 const nodemailer = require('nodemailer')
 
+/**
+ * @name sendToSlack 
+ * @description slack으로 콜백
+ * @method
+ * @param {String} message - 보낼 메시지
+ * @param {String} conversationId - 슬랙 개인별 고유 아이디
+ * @param {requestCallback} callback - 보내는데 걸리는 시간
+ */
 function sendToSlack(message, conversationId, callback) {
   web.chat.postMessage({channel:conversationId, text: message})
   .then((res)=> {
@@ -15,36 +23,44 @@ function sendToSlack(message, conversationId, callback) {
 }
 
 module.exports = {
-  sendToService(req, res, next) {
+  /**
+   * @name sendToService
+   * @description callback 서비스 slack email 구분
+   * @method
+   * @param {String} req.body.target -slack, email target id
+   * @param {String} req.body.stdout - spark 앱 결과값
+   * @param {String} req.body.user - email, slack id 정보
+   */
+  sendToService(req, res) {
     const target = req.body.target
     const stdout = req.body.stdout
     const user = req.body.user
-    //const id = req.body.id
-    //console.log("user : "+ user)
     if (target == "slack") {
-      //console.log("target : "+target)
       checkUser(user, function(result) {
-        //console.log("result " + result)
         if (!result) {
           res.send({status:false, result: "slack user not found"})
         } else {
-          sendToSlack("result : " + stdout, result, function(response){
-            //console.log(response)
+          sendToSlack("result : " + stdout, result, function(response){  
             res.send({status: true, result: stdout})
           })
         }
       })
     } else if(target == "email") {
       sendToEmail("result : "+stdout, user, function(response) {
-        //console.log(response)
         res.send({status: true, result: stdout})
       })
     } else {}
   }
 }
-
+/**
+ * @name sendToEmail
+ * @description 이메일 보내기
+ * @method
+ * @param {String} message - 보낼 메세지
+ * @param {String} ToMailName - 보낼 대상 이메일
+ * @param {requestCallback} callback - error, info
+ */
 function sendToEmail(message, ToMailName, callback) {
-      //console.log(ToMailName)
       let transport = nodemailer.createTransport({
           service : 'gmail',
           auth: {
@@ -69,6 +85,13 @@ function sendToEmail(message, ToMailName, callback) {
           }
       })
   }
+  /**
+   * @name checkUser
+   * @description slack user인지 체크
+   * @method
+   * @param {String} id - slakc email
+   * @param {requestCallback} callback - slack 유저 id 
+   */
   function checkUser(id, callback) {
     Request({
       method: 'get',
@@ -80,20 +103,18 @@ function sendToEmail(message, ToMailName, callback) {
       try{
         if(!err && response.statusCode ==200){
           const result = JSON.parse(body)
-          var users = result.users
-          for (var i in users) {
+          const users = result.users
+          for (let i in users) {
             if (users[i].name == id ) {
-              var ims = result.ims
-              for (var j in ims) {
+              let ims = result.ims
+              for (let j in ims) {
                 if (ims[j].user == users[i].id){
-                  //console.log("id: "+ims[j].id)
                   callback(ims[j].id)
                   return
                 }
               }
             }
           }
-          //return {status: true, userId: }
         }
       }catch(e){
         console.log(e)
@@ -101,5 +122,4 @@ function sendToEmail(message, ToMailName, callback) {
         return
       }
     })
-  
   }

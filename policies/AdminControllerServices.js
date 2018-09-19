@@ -3,13 +3,19 @@ const fs = require('fs')
 const multiparty = require('multiparty');
 
 //mongodb model
-var App = require('../models/appSchema').App
+const App = require('../models/appSchema').App
 
 module.exports = {
+	/**
+	 * @name saveInfo
+	 * @description app 데이터 스키마 저장
+	 * @method
+	 * @param {Object} req - 저장할 앱 스키마 정보
+	 * @param {Object} res
+	*/
 	saveInfo(req, res) {
-		var body = req.info
-		//console.log(fs.readFileSync('../jsonFolder/'+body,'utf8'))
-		var info = JSON.parse(fs.readFileSync('../jsonFolder/'+body,'utf8'))
+		const body = req.info
+		const info = JSON.parse(fs.readFileSync('../jsonFolder/'+body,'utf8'))
 		console.log(info.appName)
 		App.findOne({"appName" : info.appName}, function(err, user) {
 			if(err) {
@@ -19,7 +25,7 @@ module.exports = {
 				//save data
 				parameter = []
 
-				for (var data of info.parameters){
+				for (let data of info.parameters){
 					parameter.push(data)
 				}
 				app = new App({
@@ -40,15 +46,23 @@ module.exports = {
 			}
 		})
 	},
-
+	
+	/**
+	 * @name saveFile
+	 * @description spark 앱 파일과 스키마 파일 저장
+	 * @method
+	 * @param {Object} req - 저장할 파일(앱, 스키마)
+	 * @param {Object} res
+	 * @param {Object} next - 성공시 saveInfo 메소드로 이동
+	 */
 	saveFile(req, res, next) {
-		var form = new multiparty.Form({
+		const form = new multiparty.Form({
 			autoFiles: false,
 			uploadDir: '../appFolder/',
 		});
 		form.parse(req, function(error, fields, files){
-			var path = files.appFile[0].path;
-			var originalName = files.appFile[0].originalFilename
+			let path = files.appFile[0].path;
+			let originalName = files.appFile[0].originalFilename
 			if(error) {res.send({status: false, result:error})}
 			fs.exists('../appFolder/'+originalName,function(appExists){
 				if(appExists) {
@@ -59,12 +73,10 @@ module.exports = {
 						else {
 							path = files.appFile[1].path
 							originalName = files.appFile[1].originalFilename
-							
 							fs.rename(path, '../jsonFolder/' +originalName, function(err) {
 								if(err) {res.send({status:false, result:err})}
 								else {
 									req.info = originalName
-									//console.log("req body" +req.info)
 									next()
 								}
 							})
@@ -74,19 +86,32 @@ module.exports = {
 			})		
         });
 	},
+	/**
+	 * @name appList
+	 * @description spark 앱 리스트 가져오기
+	 * @method
+	 * @param {Object} req
+	 * @param {Object} res
+	*/
 	appList(req, res) {
-		var submit = 'ls ../appFolder/'
+		const submit = 'ls ../appFolder/'
 		exec(submit, function(error, stdout, stderr) {
 			if(error !== null) {
-				//console.log('exec error :' + error)
 				res.send({status: false, result:error})
 			} else {
 				res.send({status:true ,result: stdout})
 			}
 		});	
 	},
+	/**
+	 * @name appList
+	 * @description spark 앱 데이터 가져오기
+	 * @method
+	 * @param {Object} req.query.id - 앱 아이디
+	 * @param {Object} res
+	*/
 	appData(req, res) {
-		var id = req.query.id
+		const id = req.query.id
 		App.findOne({appName:id}, function(err, app) {
 			if(err) {res.send({status: false, result: err})}
 			if(!app) {res.send({status: false, result: "not exists app data"})}
@@ -95,9 +120,16 @@ module.exports = {
 			}
 		})
 	},
+	/**
+	 * @name delApp
+	 * @description spark 앱 삭제, json파일 삭제 및 mongodb 데이터 삭제
+	 * @method
+	 * @param {Object} req.query.id - 앱 아이디
+	 * @param {Object} res
+	 */
 	delApp(req, res) {
-		var id = req.query.id
-		var path = '../appFolder/'+id
+		const id = req.query.id
+		let path = '../appFolder/'+id
 		fs.exists(path, function(appExists) {
 			if(!appExists) {res.send({status: false, result: "not exists"})}
 			else {

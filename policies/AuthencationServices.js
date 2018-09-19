@@ -3,6 +3,13 @@ const LocalStrategy = require('passport-local').Strategy
 const Users = require('../models/users').Users
 
 module.exports = {
+    /**
+     * @name service
+     * @description  로그인 정보 확인
+     * @method
+     * @param {Object} req 
+	 * @param {Object} res
+    */
     service(req, res) {
         passport.serializeUser(function(user, done){
             done(null, user)
@@ -34,6 +41,13 @@ module.exports = {
             })
         }))
     },
+    /**
+     * @name login
+     * @description 로그인 처리
+     * @method
+     * @param {Object} req.query
+	 * @param {Object} res
+     */
     login(req, res, next) {
         passport.authenticate('local', function(err, user) {
             if(err) {return next(err)}
@@ -49,15 +63,26 @@ module.exports = {
             })
         })(req, res, next)
     },
+    /**
+     *  @name loginResult
+     *  @description 로그인 결과
+     *  @method
+     */
     loginResult (req, res) {
         res.send({
             status: true,
             message: 'login success'
         })
     },
+    /**
+     * @name register
+     * @description 회원가입
+     * @method
+     * @param {Object} req.body - 앱 아이디
+	 * @param {Object} res
+     */
     register(req, res) {
-        var inputUser = req.body
-        console.log(req.body)
+        const inputUser = req.body
         Users.findOne({email : inputUser.email}, function(err, user){
             if(err) {res.send({status: false, message: err})}
             if(user) {res.send({status: false, message: "user exists"})}

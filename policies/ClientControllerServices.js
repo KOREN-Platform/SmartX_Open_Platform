@@ -16,7 +16,7 @@ module.exports = {
 	 * @param {Object} res
 	 */
     makeList(req, res) {
-		exec("curl -i 'http://192.168.2.12:50070/webhdfs/v1//data?op=LISTSTATUS'" , function(err, stdout, stderr){
+		exec("curl -i 'http://192.168.2.12:9870/webhdfs/v1//data?op=LISTSTATUS'" , function(err, stdout, stderr){
 			//make data list
 			let dataList = stdout.split('pathSuffix":"')
 			for(let i=1 ; i<dataList.length ; i++){

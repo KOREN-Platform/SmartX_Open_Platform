@@ -1,5 +1,6 @@
 <html>
   <head>
+      <!--link&style-->
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" charset="utf-8"></script>
@@ -8,10 +9,11 @@
 	</style>
   </head>
   <body>
+      <!--Application-->
     <div>
     <select id="appList" name="appList"></select>
     <button id="delApp" name="delApp">delete App</button>
-
+        <!--Application info-->
     <h3 id="appName">[appName]</h3>
     <h3 id="description">[description]</h3>
     <h3 id="author_name">[author.name]</h3>
@@ -20,7 +22,7 @@
     <h3 id="version">[version]</h3>
     <h3 id="type">[type]</h3>
     </div>
-
+    <!--add file&app-->
     <form action="/admin/saveApp"  method="post" enctype="multipart/form-data" id="fileForm" accept-charset="utf-8">
         <input type='file' id='appFile' name='appFile' accept=".py">
         <br>    
@@ -28,17 +30,19 @@
     </form>
     
     
-
+    <!--upload btn-->
     <br>
     <button id="uploadBtn">upload button</button>
     
+    <!--application help-->
     <br>
     <h4>help</h4>
     <textarea id="metaText" rows="10" cols="50"></textarea>
-
+    <!--confirm btn-->
     <br>
     <button id="confirmBtn">confirm</button>
 
+    <!--state-->
     <p>
             <select class="stateList" id="allState" name="allState" size="2">
             </select>
@@ -55,7 +59,7 @@
             <h4 id="finishedTime">finishedTime : </h4>
             <h4 id="state">state : </h4>
         </div>
-
+        <!--application script-->
     <script>
         $('.stateList').change(function() {
 			var application_id = $(this).val()

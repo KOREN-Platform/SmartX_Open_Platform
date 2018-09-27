@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+		<!--link&style-->
     <link rel='stylesheet' href='/stylesheets/style.css' />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<style>
@@ -8,6 +9,7 @@
 		</style>
   </head>
   <body>
+		<!--client applist&data-->
     <p>
     <form id='list' action='/client/makeList'>
       <select name='spkfile' size='6' id='select_APP' >
@@ -15,7 +17,7 @@
       <select name='textfile' size='6' id='select_data' >
       </select>
     </form>
-
+		<!--callback-->
 		<input type="radio" value='slack' id="slackBtn" name="sendRadio" checked />slack
 		<input type="radio" value='email' id="emailBtn" name="sendRadio" />email
 		<input type="text" name="sendName" id="user"/>
@@ -25,27 +27,30 @@
 
     </p>
 
-
+		<!--spark-submit-->
     <button class="submit">spark-submit</button>
 
     <div class="result">결과</div>
 
     <br>
-
+		<!--upload data file-->
     <p>upload data file</p>
     <form id='fileForm' method='post' enctype='multipart/form-data' action='/upload'>
-	<input type='file' id='fileInput' name='fileInput' accept=".txt, .log" size="500MB">
-    </form>
+		<input type='file' id='fileInput' name='fileInput' accept=".txt, .log" size="500MB">
+		</form>
+		<!--delete data file-->
     <button class='delete'>DATA FILE DELETE</button>
 
 <br>
 <br>
+		<!--spark log-->
     <p>spark log</p>
     <textarea class='sparkLog' id='sparkLog' cols=60 rows=10>
     </textarea>
 
 <br>
 <br>
+<!--app state-->
 <p>
 	<select class="stateList" id="allState" name="allState" size="2">
 	</select>
@@ -54,6 +59,7 @@
 	<select class="stateList" id="doneState" name="doneState" size="10">
 	</select>
 </p>
+<!--app info-->
 <div class="appState">
 	<h4 id="id">id : </h4>
 	<h4 id="name">name : </h4>
@@ -62,6 +68,7 @@
 	<h4 id="finishedTime">finishedTime : </h4>
 	<h4 id="state">state : </h4>
 </div>
+<!--app script-->
 <script>
 		 $(document).ready(function() {
             allRefreshState();

@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <!--link&style-->
     <link rel='stylesheet' href='/stylesheets/style.css' />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   </head>
   <body>
         <h1>index page</h1>
         <br>
+        <!--login form-->
         <h1>Login form</h1>
             email <input type="text" id="l_email" name="l_email" ><br />
             password <input type="password" id="l_password" name="l_password" ><br />
             <button id="loginBtn">login</button>
-            <br />
+            <br/>
+        <!--register form-->
         <h1>register form</h1>
             email <input type="text" id="r_email" name="r_email" ><br />
             password <input type="password" id="r_password" name="r_password" ><br />
@@ -19,11 +22,11 @@
             firstName <input type="text" id="r_firstName" name="r_firstName"><br />
             lastName <input type="text" id="r_lastName" name="r_lastName"><br />
             <button id="registerBtn">register</button> 
-
             <br />
             <br />
             <input type="text" id="slackId"/>
             <button id="slackBtn">slack</button>
+    <!--login&register script-->
     <script>
 
         $('#loginBtn').click(function(){

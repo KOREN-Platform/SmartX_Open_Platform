@@ -10,10 +10,12 @@
   </head>
   <body>
         <h1><%= title %></h1>
-        <h2><%= info %></h2>
+		<h2><%= info %></h2>
+		<!--logout-->
         <form id="logout" method="get" action="/logout">
             <input type="submit" value="logout"/>
-        </form>
+		</form>
+		<!--app state-->
         <br>
         <select class="stateList" id="allState" name="allState" size="10">
         </select>
@@ -21,7 +23,8 @@
         </select>
         <select class="stateList" id="doneState" name="doneState" size="10">
         </select>
-        <br>
+		<br>
+		<!--app info-->
         <div class="appState">
                 <h4 id="id">id : </h4>
                 <h4 id="name">name : </h4>
@@ -30,7 +33,7 @@
                 <h4 id="finishedTime">finishedTime : </h4>
                 <h4 id="state">state : </h4>
 		</div>
-		
+	<!--script-->	
     <script>
          $(document).ready(function() {
             allRefreshState();

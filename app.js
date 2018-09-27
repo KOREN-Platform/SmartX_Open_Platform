@@ -18,6 +18,7 @@ const indexRouter = require('./routes/index');
 const clientRouter = require('./routes/client');
 const adminRouter = require('./routes/admin');
 
+//userpage 라우트 파일
 const clientmainRouter = require('./routes/client_main');
 const appstatusRouter = require('./routes/app_status');
 const clusterRouter = require('./routes/cluster');
@@ -25,6 +26,7 @@ const hdfsRouter = require('./routes/hdfs');
 const yarnRouter = require('./routes/yarn');
 const zooRouter = require('./routes/zoo');
 
+//member 라우트 파일
 const loginRouter = require('./routes/login');
 const registerRouter = require('./routes/register');
 
@@ -57,19 +59,22 @@ app.use(passport.session())
 passportPolicy.service()
 
 // default
-// /index/?
+// /index hosting
 app.use('/', indexRouter);
-// /admin/?
+// /admin hosting
 app.use('/admin', adminRouter)
-// /client/?
+// /client hosting
 app.use('/client', clientRouter);
 
+//user pages hosting
 app.use('/client_main',clientmainRouter);
 app.use('/app_status', appstatusRouter);
 app.use('/cluster', clusterRouter);
 app.use('/hdfs', hdfsRouter);
 app.use('/yarn', yarnRouter);
 app.use('/zoo', zooRouter);
+
+//member ages hosting
 app.use('/login',loginRouter);
 app.use('/register',registerRouter);
 
@@ -105,7 +110,7 @@ app.use('/profile', indexRouter)
 //로그아웃
 app.use('/logout',indexRouter)
 
-//css&js
+//css&js&data
 app.use('/css', express.static(__dirname +'/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname +'/node_modules/bootstrap/dist/js'));
 app.use('/img', express.static(__dirname +'/node_modules/bootstrap/dist/img'));

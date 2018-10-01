@@ -1,8 +1,7 @@
 const exec = require('child_process').exec;
 const fs = require('fs')
 const multiparty = require('multiparty');
-
-const dataFolder = 'data' //HDFS에서 Data가 들어있는 폴더의 이름
+const conf = require('../config/config.json')
 
 //mongodb model
 const App = require('../models/appSchema').App
@@ -16,13 +15,13 @@ module.exports = {
 	 * @param {Object} res
 	 */
     makeList(req, res) {
-		exec("curl -i 'http://192.168.2.12:9870/webhdfs/v1//data?op=LISTSTATUS'" , function(err, stdout, stderr){
+		exec("curl -i 'http://"+conf.ManagerIp+":"+conf.HDFSPort+"/webhdfs/v1//"+conf.DataFolder+"?op=LISTSTATUS'" , function(err, stdout, stderr){
 			//make data list
 			let dataList = stdout.split('pathSuffix":"')
 			for(let i=1 ; i<dataList.length ; i++){
                 dataList[i] = dataList[i].split('","permission')[0]
         	}
-			fs.readdir('../appFolder', function (err, files){
+			fs.readdir(conf.AppFolder, function (err, files){
 				//applist : Spark Application List
 				//datalist : HDFS에 저장된 Data List
 				res.send({applist: files, datalist : dataList});
@@ -38,7 +37,7 @@ module.exports = {
 	 */
 	dataUpload(req, res){
 		//DummyPath : 임시 파일을 생성할 장소
-		const DummyPath = '../appFolder/'
+		const DummyPath = conf.AppFolder
 		const form = new multiparty.Form({
 			fileNames: 'uploadtest.txt',
 			autoFiles: false,
@@ -50,19 +49,21 @@ module.exports = {
 			const originalName = files.fileInput[0].originalFilename
 
 			//HDFS에 올릴 파일을 임시로 생성하고 rename
+			console.log(originalName)
+			console.log(path)
 			fs.rename(path, DummyPath+originalName, function (err){});
 
 			//HDFS에 Data 파일을 업로드
-			exec('hdfs dfs -put '+DummyPath+originalName + ' /' + dataFolder , function(err, stdout, stderr){
+			exec('hdfs dfs -put '+DummyPath+originalName + ' /' + conf.DataFolder , function(err, stdout, stderr){
 				//임시 생성한 파일을 삭제
 				exec('rm '+DummyPath+originalName , function(err, stdout, stderr){
 					//업로드 후 새로운 dataList를 생성하여 준다.
-					exec("curl -i 'http://192.168.2.12:50070/webhdfs/v1//data?op=LISTSTATUS'" , function(err, stdout, stderr){
+					exec("curl -i 'http://"+conf.ManagerIp+":"+conf.HDFSPort+"/webhdfs/v1//"+conf.DataFolder+"?op=LISTSTATUS'" , function(err, stdout, stderr){
 						let dataList = stdout.split('pathSuffix":"')
 						for(let i=1 ; i<dataList.length ; i++){
 			                		dataList[i] = dataList[i].split('","permission')[0]
 			        		}
-						fs.readdir('../appFolder', function (err, files){
+						fs.readdir(conf.AppFolder, function (err, files){
 							res.send({datalist : dataList});
 						});
 					});
@@ -79,18 +80,18 @@ module.exports = {
 	 */
 	dataDelete(req, res){
 		//Remove DATA to HDFS
-		exec('hdfs dfs -rm /' + dataFolder +'/'+ req.body.data , function(err, stdout, stderr){
+		exec('hdfs dfs -rm /' + conf.DataFolder +'/'+ req.body.data , function(err, stdout, stderr){
 			console.log('Remove DATA to HDFS')
 			//make new data list
-			exec("curl -i 'http://192.168.2.12:50070/webhdfs/v1//data?op=LISTSTATUS'" , function(err, stdout, stderr){
+			exec("curl -i 'http://"+conf.ManagerIp+":"+conf.HDFSPort+"/webhdfs/v1//"+conf.DataFolder+"?op=LISTSTATUS'" , function(err, stdout, stderr){
 				//make data list
 				let dataList = stdout.split('pathSuffix":"')
 				for(let i=1 ; i<dataList.length ; i++){
 	                		dataList[i] = dataList[i].split('","permission')[0]
 	        		}
-				fs.readdir('../appFolder', function (err, files){
-					res.send({datalist : dataList})
-				});
+				//fs.readdir(conf.AppFolder, function (err, files){
+				res.send({datalist : dataList})
+				//});
 			});
 		});
 	},
@@ -102,7 +103,7 @@ module.exports = {
 	 * @param {Object} res
 	 */
 	 makeParameterBlank(req, res){
-		const appname = req.body.appname
+		const appname = req.body.appname+'.py'
 		App.findOne({appName : appname}, function(error, metadata){
 				if(error){
 					console.log(error)
@@ -128,8 +129,12 @@ module.exports = {
 					}
 
 					//데이터 넘기기
-					res.send({nameList : nameList,
+					res.send({	
+						appname : metadata.appName,
+						author : metadata.author,
+						version : metadata.version,
 						description : metadata.description,
+						nameList : nameList,
 						descriptionList : descriptionList,
 						defaultList : defaultList,
 						typeList : typeList,

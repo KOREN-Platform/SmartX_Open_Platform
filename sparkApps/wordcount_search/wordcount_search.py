@@ -1,6 +1,6 @@
 from pyspark import SparkContext
 import argparse
-¿³
+
 #spark context
 sc = SparkContext()
 
@@ -8,15 +8,19 @@ sc = SparkContext()
 parser = argparse.ArgumentParser()
 
 parser.add_argument("--file", help=": file name")
-parser.add_argument("--user", help=": user name")
 parser.add_argument("--word", help=": search word name")
+parser.add_argument("--optArg", help=": (optional arg)")
 
 filename = parser.parse_args().file
-username = parser.parse_args().user
 search = parser.parse_args().word
+optionalArg = parser.parse_args()
 
 #read file route
-text_file = sc.textFile("hdfs:///"+username+"/"+ filename)
+text_file = sc.textFile("hdfs:///data/"+ filename)
+
+#check optionalArg
+if optionalArg.optArg:
+	print("select optional arg")
 
 #word search and count
 counts = text_file.flatMap(lambda line: line.split(" "))\

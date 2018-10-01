@@ -174,11 +174,24 @@ $('.submit').click( function() {
 	//파라미터값 초기화
 	var parameterValue = ''
 
-	//파라미터값 입력
 	for(var i=0 ; i < parameterKey.length ; i++){
-	  parameterValue += parameterKey[i] + '=' + $('#'+parameterKey[i]).val()+' '
-	}
 
+if($('#'+parameterKey[i]).attr('type') == 'text'){
+	parameterValue += parameterKey[i] + '=' + $('#'+parameterKey[i]).val()+' '
+}else if ($('#'+parameterKey[i]).attr('type') == 'radio' || $('#'+parameterKey[i]).attr('type') == 'checkbox'){//ÀÔ·Â Å¸ÀÔÀÌ radio ¶Ç´Â checkbox
+	
+	var checkLists = []
+
+	parameterValue += parameterKey[i] + '='
+	$('input[name="'+parameterKey[i]+'/"]:checked').each(function(j){
+		checkLists.push($(this).val())
+	})
+
+	for(var j = 0 ; j < checkLists.length ; j++){
+		parameterValue += checkLists[j] + ' '
+	}
+}
+}
       console.log(parameterValue)
 
       //예외처리
@@ -193,12 +206,12 @@ $('.submit').click( function() {
         url: '/client/sparkSubmit',
         method: 'post',
         data: {
-	'APP' : $('#select_APP option:selected').val(),
-	'data' : $('#select_data option:selected').val(),
-	'parameter' : parameterValue,
-	'target': $('input[name="sendRadio"]:checked').val(),
-	'user' : $('#user').val()
-	},
+					'APP' : $('#select_APP option:selected').val(),
+					'data' : $('#select_data option:selected').val(),
+					'parameter' : parameterValue,
+					'target': $('input[name="sendRadio"]:checked').val(),
+					'user' : $('#user').val()
+				},
         dataType: 'json',
         success: function(result) {
           if(result){
@@ -322,20 +335,21 @@ function updateLog(){
 		$('#parameter_blank').append(
 		  result.nameList[i]+' '+'<input id='+result.nameList[i]+' type="text" maxlength="'+result.typeMaxList[i]+'"> ['+result.descriptionList[i]+']'+'<br>'
 		)
-	      }else if(result.typeList[i] == 'radio'){
-		//radio 방식 입력 공간 생성
+	}else if(result.typeList[i] == 'radio' || result.typeList[i] == 'checkbox'){		//make radio or checkbox blank
 		$('#parameter_blank').append(result.nameList[i]+' ['+result.descriptionList[i]+']'+'<br>')
 		for(var j = 0 ; j < result.typeDataList[i].length ; j++){
 		  $('#parameter_blank').append(
-		    '<input id='+result.nameList[i]+' type="radio" value='+result.typeDataList[i][j]+' name='+result.nameList[i]+'/>'+result.typeDataList[i][j]+'<br>'
+		    '<input id='+result.nameList[i]+' type="'+result.typeList[i]+'" value='+result.typeDataList[i][j]+' name='+result.nameList[i]+'/>'+result.typeDataList[i][j]+'<br>'
 		  )
 		}
 	      }
 
 	    }
-
+	    $('#parameter_blank').append('<br>'+'Appname : '+result.appname)
+	    $('#parameter_blank').append('<br>'+'App Version : '+result.version)
 	    $('#parameter_blank').append('<br>'+'Description : '+result.description)
-
+	    $('#parameter_blank').append('<br>'+'Author : '+result.author.name)
+	    $('#parameter_blank').append('<br>'+'Email : '+result.author.email)
           }
         }
       });

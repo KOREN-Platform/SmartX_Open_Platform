@@ -1,4 +1,6 @@
 const exec = require('child_process').exec;
+const conf = require('../config/config.json')
+
 
 module.exports = {
 	/**
@@ -12,7 +14,7 @@ module.exports = {
 	 */
 	sparkSubmit(req, res, next) {
 		const email = req.user.email
-		const submit = 'spark-submit '+'--name '+email+' ../app/'+req.body.APP+' --file='+req.body.data + ' ' +  req.body.parameter
+		const submit = 'spark-submit '+'--name '+email+' '+conf.AppFolder+req.body.APP+'/'+req.body.APP+'.py'+' --file='+req.body.data + ' ' +  req.body.parameter
 		exec(submit, function (err, stdout, stderr) {
 			console.log(submit)
 			if(err !== null) {

@@ -31,14 +31,14 @@
           <form>
             <div class="form-group">
               <div class="form-label-group">
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
-                <label for="inputEmail">Email address</label>
+                <input type="email" id="l_email" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
+                <label for="l_email">Email address</label>
               </div>
             </div>
             <div class="form-group">
               <div class="form-label-group">
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
-                <label for="inputPassword">Password</label>
+                <input type="password" id="l_password" class="form-control" placeholder="Password" required="required">
+                <label for="l_password">Password</label>
               </div>
             </div>
             <div class="form-group">
@@ -49,7 +49,7 @@
                 </label>
               </div>
             </div>
-            <a class="btn btn-primary btn-block" href="client_main">Login</a>
+            <a class="btn btn-primary btn-block" id="loginBtn">Login</a>
           </form>
           <div class="text-center">
             <a class="d-block small mt-3" href="register">Register an Account</a>
@@ -65,6 +65,71 @@
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script>
+
+        $('#loginBtn').click(function(){
+            inputUser = {
+                email : $('#l_email').val(),
+                password : $('#l_password').val()
+            }
+            $.ajax({
+            url:'/login',
+            method: 'post',
+            dataType: 'json',
+            data : inputUser,
+            success : function (result) {
+                location.href = '/client_main'
+                },
+            error : function (error) {
+                alert("not exists")
+                location.reload()
+            }})
+        })
+        
+        $('#registerBtn').click(function(){
+            inputUser = {
+                email : $('#r_email').val(),
+                password : $('#r_password').val(),
+                firstName : $('#r_firstName').val(),
+                lastName : $('#r_lastName').val()
+            }
+            
+            $.ajax({
+                url:'/register',
+                method :'post',
+                dataType:'json',
+                data: inputUser,
+                success: function(result) {
+                    location.reload()
+                },
+                error : function(error) {
+                    alert("failed regist")
+                    location.reload()
+                }
+            })
+        })
+        $('#slackBtn').click(function(){
+            
+            $.ajax({
+                url:'/slackTest',
+                method: 'post',
+                dataType:'json',
+                data: {
+                    id : $('#slackId').val(),
+                    target : "slack",
+                    stdout : "test"
+                },
+                success: function(result) {
+                    console.log(result)
+                },
+                error : function(error) {
+                    console.log(error)
+                }
+
+            })
+        })
+        
+	</script>
 
   </body>
 

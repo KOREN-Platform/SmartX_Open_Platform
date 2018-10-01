@@ -66,7 +66,8 @@
                 </div>
               </div>
             </div>
-            <a class="btn btn-primary btn-block" href="login">Register</a>
+            <!-- <a class="btn btn-primary btn-block" href="login">Register</a> -->
+            <a class="btn btn-primary btn-block" id="registerBtn">Register</a>
           </form>
           <div class="text-center">
             <a class="d-block small mt-3" href="login">Login Page</a>
@@ -82,7 +83,31 @@
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
+    <script>
+      $('#registerBtn').click(function(){
+            inputUser = {
+                email : $('#inputEmail').val(),
+                password : $('#inputPassword').val(),
+                firstName : $('#firstName').val(),
+                lastName : $('#lastName').val()
+            }
+            
+            $.ajax({
+                url:'/register',
+                method :'post',
+                dataType:'json',
+                data: inputUser,
+                success: function(result) {
+                    alert("success!")
+                    location.href = "/login"
+                },
+                error : function(error) {
+                    alert("failed regist")
+                    location.reload()
+                }
+            })
+        })
+    </script>
   </body>
 
 </html>

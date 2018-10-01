@@ -40,15 +40,15 @@
                 <label for="inputPassword">Password</label>
               </div>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <div class="checkbox">
                 <label>
                   <input type="checkbox" value="remember-me">
                   Remember Password
                 </label>
               </div>
-            </div>
-            <a class="btn btn-primary btn-block" href="client_main">Login</a>
+            </div> -->
+            <a class="btn btn-primary btn-block" id="loginBtn">Login</a>
           </form>
           <div class="text-center">
             <a class="d-block small mt-3" href="register">Register an Account</a>
@@ -66,5 +66,28 @@
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
   </body>
-
+  <script>
+    $('#loginBtn').click(function(){
+            inputUser = {
+                email : $('#inputEmail').val(),
+                password : $('#inputPassword').val()
+            }
+            $.ajax({
+            url:'/login',
+            method: 'post',
+            dataType: 'json',
+            data : inputUser,
+            success : function (result) {
+                if (result.message == "admin") {
+                  alert('welcome admin!')
+                }
+                else {alert('welcome!')}
+                location.href = '/client_main'
+                },
+            error : function (error) {
+                alert("not exists")
+                location.reload()
+            }})
+        })
+  </script>
 </html>

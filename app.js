@@ -26,6 +26,7 @@ const clusterRouter = require('./routes/cluster');
 const hdfsRouter = require('./routes/hdfs');
 const yarnRouter = require('./routes/yarn');
 const zooRouter = require('./routes/zoo');
+const historyRouter = require('./routes/history')
 
 //member 라우트 파일
 const loginRouter = require('./routes/login');
@@ -75,6 +76,7 @@ app.use('/cluster', clusterRouter);
 app.use('/hdfs', hdfsRouter);
 app.use('/yarn', yarnRouter);
 app.use('/zoo', zooRouter);
+app.use('/history', historyRouter);
 
 //member ages hosting
 app.use('/login',loginRouter);

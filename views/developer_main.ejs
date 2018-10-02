@@ -7,7 +7,6 @@
     <meta name="author" content="">
 
     <title>NILAB - Dashboard</title>
-
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -25,11 +24,11 @@
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
+@-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style></head>
-<style>
-    #allState {visibility: hidden;}
-</style>
+
   <body id="page-top">
+
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
       <a class="navbar-brand mr-1" href="index.html">NILAB</a>
@@ -84,7 +83,7 @@
             <a class="dropdown-item" href="#">Settings</a>
             <a class="dropdown-item" href="/profile">Profile</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">Logout</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
           </div>
         </li>
       </ul>
@@ -122,7 +121,6 @@
               <a class="dropdown-item" href="developer_main">Upload</a>
               <a class="dropdown-item" href="app_Status">App_Status</a>
             </div>
-        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-chart-area"></i>
@@ -133,111 +131,89 @@
             <a class="dropdown-item" href="Cluster">Cluster</a>
             <a class="dropdown-item" href="Hdfs">Hdfs</a>
             <a class="dropdown-item" href="Yarn">Yarn</a>
-            <a class="dropdown-item" href="zoo">Zookeeper</a> 
+            <a class="dropdown-item" href="zoo">Zookeeper</a>
           </div>
         </li>
+       
       </ul>
       <div id="content-wrapper">
         <div class="container-fluid">
           <!-- Breadcrumbs-->
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <a href="#">Application</a>
+              <a href="#">Developer</a>
             </li>
-            <li class="breadcrumb-item active">APP Status</li>
+            <li class="breadcrumb-item active">Upload</li>
           </ol>
           <!-- Icon Cards-->
           <div class="card mb-3">
-            <!-- <div class="card-header">
-              <i class="fas fa-table"></i>
-              Data Table Example</div> -->
-            <div class="card-body">
-              <!--table tool-->
-              <div class="table-responsive">
-                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="dataTable_length">
-                  <!-- <label>Show <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option>
-                  <option value="100">100</option></select> entries</label> -->
-                
-                </div></div><div class="col-sm-12 col-md-6"><div id="dataTable_filter" class="dataTables_filter">
-                  <!-- <label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label> -->
-                </div></div></div><div class="row"><div class="col-sm-12">
-
-                  <!-- running yarn status -->
-                  <h3>Running APP</h3>
-                  <br/>
-                    <table id="dtVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                        <thead>
-                          <tr>
-                            <th class="th-sm">id
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">name
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">elapsedTime
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">startedTime
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">finishedTime
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">state
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody id="runState1">
-                        </tbody>
-                      </table>
-                        
-                      <br /> <br />  <br />  <br />
-                      
-                      <!-- finished yarn status -->
-                      <h3>Finished APP</h3>
-                      <br/>
-                      <table id="dtVerticalScrollExample1" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                          <thead >
-                            <tr>
-                              <th class="th-sm">id
-                                <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                              </th>
-                              <th class="th-sm">name
-                                <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                              </th>
-                              <th class="th-sm">state
-                                <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                              </th>
-                              <th class="th-sm">elapsedTime
-                                <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                              </th>
-                              <th class="th-sm">startedTime
-                                <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                              </th>
-                              <th class="th-sm">finishedTime
-                                <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody id="doneState1">
-                  
-                          </tbody>
-                        </table>
-  
-                
-              <!-- </div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 10 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="dataTable_previous"><a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item next disabled" id="dataTable_next"><a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div> -->
+            <div class="card-header">
+              <!--working space-->
+              <!--Application-->
+              <div>
+                <select id="appList" name="appList"></select>
+                <button id="delApp" name="delApp">delete App</button>
+                <!--Application info-->
+                <h3 id="appName">[appName]</h3>
+                <h3 id="description">[description]</h3>
+                <h3 id="author_name">[author.name]</h3>
+                <h3 id="email">[author.email]</h3>
+                <h3 id="parameters">[parameters]</h3>
+                <h3 id="version">[version]</h3>
+                <h3 id="type">[type]</h3>
               </div>
+              <!--add file&app-->
+              <form action="/admin/saveApp"  method="post" enctype="multipart/form-data" id="fileForm" accept-charset="utf-8">
+              <input type='file' id='appFile' name='appFile' accept=".py">
+              <br>    
+              <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8">
+              </form>
+      
+              <!--upload btn-->
+              <br>
+              <button id="uploadBtn">upload button</button>
+      
+              <!--application help-->
+              <br>
+              <h4>help</h4>
+              <textarea id="metaText" rows="10" cols="50"></textarea>
+              <!--confirm btn-->
+              <br>
+              <button id="confirmBtn">confirm</button>
+  
+              <!--state-->
+              <p>
+              <select class="stateList" id="allState" name="allState" size="2">
+              </select>
+              <select class="stateList" id="runState" name="runState" size="10">
+              </select>
+              <select class="stateList" id="doneState" name="doneState" size="10">
+              </select>
+              </p>
+              <div class="appState">
+                <h4 id="id">id : </h4>
+                <h4 id="name">name : </h4>
+                <h4 id="elapsedTime">elapsedTime : </h4>
+                <h4 id="startedTime">startedTime : </h4>
+                <h4 id="finishedTime">finishedTime : </h4>
+                <h4 id="state">state : </h4>
+              </div>
+
+              <div class="card-footer small text-muted"></div>
+              </div>
+
             </div>
-            <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
-          </div>
-        </div>
         <!-- /.container-fluid -->
+
         <!-- Sticky Footer -->
+        
+
       </div>
       <!-- /.content-wrapper -->
+
     </div>
     <!-- /#wrapper -->
+
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top" style="display: none;">
       <i class="fas fa-angle-up"></i>
@@ -256,13 +232,11 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <button class="btn btn-primary" id="logoutBtn">Logout</a>
+            <a class="btn btn-primary" href="login.html">Logout</a>
           </div>
         </div>
       </div>
     </div>
-
-   
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -272,7 +246,7 @@
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Page level plugin JavaScript-->
-    <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
 
@@ -281,38 +255,9 @@
 
     <!-- Demo scripts for this page-->
     <script src="js/demo/datatables-demo.js"></script>
-    <!-- <script src="js/demo/chart-area-demo.js"></script> -->
+    <script src="js/demo/chart-area-demo.js"></script>
+
     <script>
-      $('#logoutBtn').click(function(){
-        $.ajax({
-				url: '/logout',
-				type: 'GET',
-				success:function(result) {
-          alert("success")
-          location.href = "/login"
-				},	
-				error:function(error) {
-					console.log("error : " + error)	
-				}
-			})
-      })
-
-      $(document).ready(function () {
-  $('#dtVerticalScrollExample').DataTable({
-    "scrollY": "200px",
-    "scrollCollapse": true,
-  });
-  $('#dtVerticalScrollExample1').DataTable({
-    "scrollY": "200px",
-    "scrollCollapse": true,
-  });
-  $('.dataTables_length').addClass('bs-select');
-});
-
-      $(document).ready(function() {
-            allRefreshState();
-            setInterval( allRefreshState ,2000);
-        })
         $('.stateList').change(function() {
 			var application_id = $(this).val()
 			$.ajax({
@@ -339,31 +284,29 @@
 				}
 			})
 		})
-        var allStateLen = null
-        function allRefreshState() {
-            $.ajax({
-                url:'/client/clientYarnAll',
-                method:'get',
-                success: function(result){
-                    //console.log(result)
-                    var stateLen = result.result.length;
-          $('#runState1').empty()
-          $('#doneState1').empty()
+		$(document).ready(function() {
+			allRefreshState();
+			setInterval( allRefreshState ,2000);
+		});
+
+    var allStateLen = null
+    function allRefreshState() {	
+	    $.ajax({
+				url: '/client/yarnAllState',
+				dataType: 'json',
+				type: 'GET',
+				success:function(result) {
+					var stateLen = result.result.length;
+					$('#runState').empty()
+					$('#doneState').empty()
 					for(var i=0; i<stateLen; i++) {
 						var id = result.result[i].id;
 						var name = result.result[i].name;
-            var state = result.result[i].state;
-            var elapsedTime = result.result[i].elapsedTime;
-					  var sec_gap = elapsedTime /1000;
-					  var min_gap = Math.floor(elapsedTime /1000/60);
-            var hour_gap = Math.floor(elapsedTime / 1000 / 60 /60);
-            var startedTime = new Date(result.result[i].startedTime).toString()
-            var finishedTime = new Date(result.result[i].finishedTime).toString()
-            
+						var state = result.result[i].state;
 						if(state == "RUNNING") {
-              $('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+hour_gap + "시" + min_gap+ "분" +sec_gap + "초"+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>').appendTo('#runState1')
+							$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:yellow">' + id + '</option>').appendTo('#runState');
 						} else if(state=="FINISHED") {
-              $('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+hour_gap + "시" + min_gap+ "분" +sec_gap + "초"+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>').appendTo('#doneState1')
+							$('<option id="'+id+'" class="'+state+'" value="'+ id +'" style="background-color:gray">' + id + '</option>').appendTo('#doneState');
 						}
 					}
 
@@ -397,7 +340,7 @@
 								$('#'+id).addClass(currentState);
 								$('#'+id).html(id)
 								var state = ""
-								//console.log(currentState)
+								console.log(currentState)
 								if(currentState == "ACCEPTED") {
 									state = "ACCEPTED"
 									$('#'+id).attr('style','background-color:blue');
@@ -414,13 +357,234 @@
 							}
 						}
 					}	
+				},
+				error:function(error) {
+					console.log("error : "+ error)
+				}
+			})
+}
+        var info ={
+            "appName": "",
+            "description": "",
+            "author": {
+                "name" : "",
+                "email" : ""
+            },
+            "parameters": [],
+            "version" :  "",
+            "type" : ""
+        }
+        function appListRef() {
+            $.ajax({
+                url: '/admin/appList',
+                method: "GET",
+                    success: function(result) {
+                    $('#appList').empty();
+                    var list = result.result.split("\n");
+                    $('#appList').attr("size", list.length-1)
+                    //console.log(list)
+                    for (var i=0; i<list.length-1; i++){
+                        $('#appList').append('<option id='+list[i]+ 'value='+list[i]+'>'+list[i]+'</option>');
+                    }
                 },
                 error : function(error) {
                     console.log(error)
                 }
             })
         }
+        $('#appList').change(function(){
+            var selectedId = $(this).val();
+            $.ajax({
+                url: "/admin/appData",
+                method: "GET",
+                data : {"id": selectedId},
+                dataType: 'json',
+                success: function(result) {
+                    var data = result.result;
+                    var parameters = ""
+                    
+                    $('#appName').html("[appName]<br>"+data.appName)
+                    $('#description').html("[description]<br>" +data.description)
+                    $('#author_name').html("[author.name]<br>"+ data.author.name)
+                    $('#email').html("[author.email]<br>"+ data.author.email)
+                    $('#version').html("[version]<br>"+data.version)
+                    $('#type').html("[type]<br>"+data.type)
+                    if (data.parameters.length > 0) {
+                        for (let parameter of data.parameters) {
+                            console.log()
+                            parameters += JSON.stringify(parameter) + "<br>"
+                        }
+                    }
+                    $('#parameters').html("parameters<br>"+ parameters)
 
+                    
+                },
+                error : function(error) {
+                    console.log(error)
+                } 
+            })
+            
+        })
+        $('#delApp').click(function(){
+            var check = confirm("really?")
+            if(check) {
+                var clickedId = $('#appList').val()
+                $.ajax({
+                    url: "/admin/delApp",
+                    dataType: "json",
+                    method: "GET",
+                    data : {"id" : clickedId},
+                    success: function(result) {
+                        if(!result.result) {
+                            alert("failed metadata delete ")
+                        } else {
+                            appListRef()
+                        }
+                    }, 
+                    error : function(error) {
+                        console.log(error)
+                    }
+                })
+            }
+        })
+        $('#appFile').change(function(){
+            if(fname == null || fname ==undefined){}
+            else {
+                var fname = $(this).val().split('.')[1].toLowerCase()
+                if(fname != "py"){
+                    alert("!!!!!!!")
+                    $(this).val(null)
+                }
+            }
+        })
+        $('#metaFile').change(function(){
+            if(fname ==null || fname == undefined){}
+                else {
+                var fname = $(this).val().split('.')[1].toLowerCase()
+                if(fname != "json"){
+                    alert("!!!!!!!")
+                    $(this).val(null)
+                }
+            }
+        })
+        $(document).ready(function() {
+            appListRef();
+        })
+        $('#uploadBtn').click(function() {
+            $('#metaFile').trigger('change')
+        })
+        function readTextFile(file, callback) {
+            var rawFile = new XMLHttpRequest();
+                    rawFile.overrideMimeType("application/json;charset=euc-kr");
+                    rawFile.open("GET", file, true);
+                    rawFile.onreadystatechange = function() {
+                    if (rawFile.readyState === 4 && rawFile.status == "200") {
+                        callback(rawFile.responseText);
+                }
+            }
+            rawFile.send(null);
+        }                   
+        $('#metaFile').change(function(e) {
+            const files = e.target.files;
+            if(files && files.length > 0) {
+                const targetFile = files[0]
+                try {
+                    const path = window.URL.createObjectURL(targetFile)
+                    readTextFile(path, function(text){
+                        $('#metaText').html(text)
+                    });                    
+                    $.getJSON(path, function(data) {
+                        info.appName = data.appName
+                        info.description = data.description
+                        info.author.name = data.author.name
+                        info.author.email = data.author.email
+                        info.version = data.version
+                        info.type = data.type
+                        
+                        var inputParameters = []
+
+                        try {
+                        if (data.parameters.length > 0) {
+                            for (var i in data.parameters) {
+                                inputParameters.push(data.parameters[i])
+                            }
+                        }
+                    } catch (e) {
+                        console.log(e)
+                        }
+                        info.parameters = inputParameters
+                    })
+                }
+                catch(ex) {
+                    console.log(ex)
+                    try {
+                        const fileReader = new FileReader();
+                        fileReader.onload = (event) =>  {
+                            console.log("fileReader " + event.target.result)
+                        }
+                        fileReader.readAsDataURL(targetFile)
+                    }
+                    catch (e) {
+                        console.log("file upload not supported : ")
+                    }
+                }
+            }
+        })
+        
+        $('#uploadBtn').click(function() {
+            $.getJSON()
+            var data = "";
+            $('#metaText').html(data)
+        })
+
+        $('#confirmBtn').click(function() {
+
+            info = JSON.parse($('#metaText').html())
+            //console.log(info)
+            
+            var appValue = $('#appFile').val().split("\\");
+            info.appName = appValue[appValue.length-1];
+            var jsonValue = $('#metaFile').val().split("\\")
+            if (appValue[appValue.length-1].split(".")[0] == jsonValue[jsonValue.length-1].split(".")[0]) {
+               
+                //app data
+                var form = $('#fileForm')[0];
+                var formData = new FormData(form);
+                
+                formData.append("metaFile",$('#metaFile'))
+                //console.log(formData)
+                //save : app(.py..) + parameterFile(.json..) in mongodb 
+                $.ajax({
+                    url: '/admin/saveApp',
+                    data: formData,
+                    method: 'POST',
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        //console.log(result);
+                        if(result.status) {
+                            alert("App 업로드에 성공하였습니다.")
+                        } else {
+                            alert(result.result)
+                        }
+                        appListRef()
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });       
+            } else {
+                alert("please same file name")
+            }
+            
+    })
     </script>
-</body>
-</html>
+  
+
+
+
+
+
+
+
+</body></html>

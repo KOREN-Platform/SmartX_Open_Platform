@@ -1,6 +1,6 @@
 {
     "appName" : "wordcount_search.py",
-    "description" : "특정 글자의 갯수를 세는 파일",
+    "description" : "Apps that count the number of specific characters",
     "author" : {
 	"name" : "choi",
             "email" : "ghwlchlaks"
@@ -8,7 +8,7 @@
     "parameters" : [
 	{
 		"name" : "--word",
-                        "description" : "특정 단어의 갯수를 세는 옵션 (대,소문자 구별)",
+                        "description" : "Option to count the number of specific words (case sensitive)",
 		"inputType" : {
 			"boxType" : "text",
 			"min" : 1,

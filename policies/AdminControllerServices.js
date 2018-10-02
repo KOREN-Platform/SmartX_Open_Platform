@@ -1,6 +1,7 @@
 const exec = require('child_process').exec;
 const fs = require('fs')
 const multiparty = require('multiparty');
+const conf = require('../config/config.json')
 
 //mongodb model
 const App = require('../models/appSchema').App
@@ -15,7 +16,7 @@ module.exports = {
 	*/
 	saveInfo(req, res) {
 		const body = req.info
-		const info = JSON.parse(fs.readFileSync('../jsonFolder/'+body,'utf8'))
+		const info = JSON.parse(fs.readFileSync(conf.AppFolder+body.split('.')[0]+'/'+body,'utf8'))
 		console.log(info.appName)
 		App.findOne({"appName" : info.appName}, function(err, user) {
 			if(err) {
@@ -58,22 +59,21 @@ module.exports = {
 	saveFile(req, res, next) {
 		const form = new multiparty.Form({
 			autoFiles: false,
-			uploadDir: '../appFolder/',
+			uploadDir: conf.AppFolder,
 		});
 		form.parse(req, function(error, fields, files){
-			let path = files.appFile[0].path;
+			let path = files.appFile[0].path
 			let originalName = files.appFile[0].originalFilename
-			if(error) {res.send({status: false, result:error})}
-			fs.exists('../appFolder/'+originalName,function(appExists){
-				if(appExists) {
-					res.send({status: false, result: "same file name exists"})
-				} else {
-					fs.rename(path, '../appFolder/' +originalName, function(err){
+			let splitName = originalName.split('.')[0]
+			fs.mkdir(conf.AppFolder+splitName, function(err){
+				if(err) {res.send({status: false, result: err})}
+				else {
+					fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err){
 						if(err) {res.send({status: false, result: err})}
 						else {
 							path = files.appFile[1].path
 							originalName = files.appFile[1].originalFilename
-							fs.rename(path, '../jsonFolder/' +originalName, function(err) {
+							fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err) {
 								if(err) {res.send({status:false, result:err})}
 								else {
 									req.info = originalName
@@ -83,8 +83,8 @@ module.exports = {
 						}
 					})
 				}
-			})		
-        });
+			})
+		})
 	},
 	/**
 	 * @name appList
@@ -94,7 +94,7 @@ module.exports = {
 	 * @param {Object} res
 	*/
 	appList(req, res) {
-		const submit = 'ls ../appFolder/'
+		const submit = 'ls '+conf.AppFolder
 		exec(submit, function(error, stdout, stderr) {
 			if(error !== null) {
 				res.send({status: false, result:error})
@@ -111,7 +111,7 @@ module.exports = {
 	 * @param {Object} res
 	*/
 	appData(req, res) {
-		const id = req.query.id
+		const id = req.query.id+'.py'
 		App.findOne({appName:id}, function(err, app) {
 			if(err) {res.send({status: false, result: err})}
 			if(!app) {res.send({status: false, result: "not exists app data"})}
@@ -129,25 +129,32 @@ module.exports = {
 	 */
 	delApp(req, res) {
 		const id = req.query.id
-		let path = '../appFolder/'+id
+		let path = conf.AppFolder+id+'/'+id+'.py'
 		fs.exists(path, function(appExists) {
 			if(!appExists) {res.send({status: false, result: "not exists"})}
 			else {
 				fs.unlink(path, function(err){
 					if(err) {res.send({status: false, result: "permission denied"})}
 					else {
-						path = '../jsonFolder/' + id.split(".")[0] + ".json"
-						fs.exists(path, function(jsonExists){
-							if(!jsonExists) {res.send({status: false, result: "not exists"})}
-							else {
-								fs.unlink(path, function(err) {
-									if(err) {res.send({status: false, result: "permission denied"})}
-									 else {
-										App.remove({appName:id},function(err, result) {
-											if(err) {res.send({status: false, result:err})}
-											if(!result) {res.send({status: false, result: result})}
-											else {
-												res.send({status: true, result: result})
+						 path = conf.AppFolder+id+'/'+id+".json"
+						 fs.exists(path, function(jsonExists){
+						 	if(!jsonExists) {res.send({status: false, result: "not exists"})}
+						 	else {
+						 		fs.unlink(path, function(err) {
+						 			if(err) {res.send({status: false, result: "permission denied"})}
+						 			else {
+										path = conf.AppFolder+id
+										fs.rmdir(path, function(err){
+											if(err) {res.send({status: false, result: "permission denied"})}
+											else{
+												console.log(id)
+												App.deleteOne({appName : id+'.py'},function(err, result) {
+													if(err) {res.send({status: false, result:err})}
+													if(!result) {res.send({status: false, result: result})}
+													else {
+														res.send({status: true, result: result})
+													}
+												})													
 											}
 										})
 									 }

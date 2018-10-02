@@ -18,8 +18,9 @@ const indexRouter = require('./routes/index');
 const clientRouter = require('./routes/client');
 const adminRouter = require('./routes/admin');
 
-//userpage 라우트 파일
+//page 라우트 파일
 const clientmainRouter = require('./routes/client_main');
+const developermainRouter = require('./routes/developer_main');
 const appstatusRouter = require('./routes/app_status');
 const clusterRouter = require('./routes/cluster');
 const hdfsRouter = require('./routes/hdfs');
@@ -68,6 +69,7 @@ app.use('/client', clientRouter);
 
 //user pages hosting
 app.use('/client_main',clientmainRouter);
+app.use('/developer_main',developermainRouter);
 app.use('/app_status', appstatusRouter);
 app.use('/cluster', clusterRouter);
 app.use('/hdfs', hdfsRouter);

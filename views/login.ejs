@@ -30,17 +30,17 @@
           <form>
             <div class="form-group">
               <div class="form-label-group">
-                <input type="email" id="l_email" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
-                <label for="l_email">Email address</label>
+                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
+                <label for="email">Email address</label>
               </div>
             </div>
             <div class="form-group">
               <div class="form-label-group">
-                <input type="password" id="l_password" class="form-control" placeholder="Password" required="required">
-                <label for="l_password">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
+                <label for="password">Password</label>
               </div>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <div class="checkbox">
                 <label>
                   <input type="checkbox" value="remember-me">
@@ -48,6 +48,7 @@
                 </label>
               </div>
             </div>
+            </div> -->
             <a class="btn btn-primary btn-block" id="loginBtn">Login</a>
           </form>
           <div class="text-center">
@@ -64,7 +65,7 @@
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-<script>
+<!-- <script>
 
         $('#loginBtn').click(function(){
             inputUser = {
@@ -128,8 +129,31 @@
             })
         })
         
-	</script>
+	</script> -->
 
   </body>
-
+  <script>
+    $('#loginBtn').click(function(){
+            inputUser = {
+                email : $('#inputEmail').val(),
+                password : $('#inputPassword').val()
+            }
+            $.ajax({
+            url:'/login',
+            method: 'post',
+            dataType: 'json',
+            data : inputUser,
+            success : function (result) {
+                if (result.message == "admin") {
+                  alert('welcome admin!')
+                }
+                else {alert('welcome!')}
+                location.href = '/client_main'
+                },
+            error : function (error) {
+                alert("not exists")
+                location.reload()
+            }})
+        })
+  </script>
 </html>

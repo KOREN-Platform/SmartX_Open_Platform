@@ -71,7 +71,7 @@ module.exports = {
     loginResult (req, res) {
         res.send({
             status: true,
-            message: 'login success'
+            message: req.user.email
         })
     },
     /**

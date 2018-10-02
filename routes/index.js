@@ -5,11 +5,10 @@ const authenticateServices = require('../policies/AuthencationServices')
 
 /* GET home page. */
 router.get('/', function(req,res) {
-	res.render('index')
+	//res.render('index')
+	res.render('intro')
 })
-/* 
- author : 최지호
-*/
+
 // authenticateServices.login : 로그인 처리,authenticateServices.loginResult : 로그인 결과값
  router.post('/login', authenticateServices.login, authenticateServices.loginResult)
 // 회원가입
@@ -34,7 +33,8 @@ router.get('/logout', function(req, res) {
 	req.session.destroy(function(err){
 		if(err){res.send({status:false, message: err})}
 		else{
-			res.redirect('/')
+			//res.redirect('/')
+			res.send({status:true, message: "success logout"})
 		}
 	})
 })

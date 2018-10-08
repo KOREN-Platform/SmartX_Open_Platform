@@ -1,6 +1,7 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const Users = require('../models/users').Users
+const session = require('express-session')
 
 module.exports = {
     /**
@@ -69,6 +70,9 @@ module.exports = {
      *  @method
      */
     loginResult (req, res) {
+        req.session.email = req.user.email
+        req.session.role = req.user.role
+        console.log(req.session)
         res.send({
             status: true,
             message: req.user.email

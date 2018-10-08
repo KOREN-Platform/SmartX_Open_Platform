@@ -14,7 +14,7 @@ module.exports = {
 	 */
 	sparkSubmit(req, res, next) {
 		const email = req.user.email
-		const submit = 'spark-submit '+'--name '+email+' '+conf.AppFolder+req.body.APP+'/'+req.body.APP+'.py'+' --file='+req.body.data + ' ' +  req.body.parameter
+		const submit = 'spark-submit '+'--name '+email+' '+conf.AppFolder+req.body.APP.split('.')[0]+'/'+req.body.APP+' --file='+req.body.data + ' ' +  req.body.parameter
 		exec(submit, function (err, stdout, stderr) {
 			console.log(submit)
 			if(err !== null) {

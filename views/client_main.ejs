@@ -150,39 +150,52 @@
               <i class="fas fa-table"></i>
               Data Table Example</div> -->
             <div class="card-body">
-              <!--working space-->
-              <div>
-                <form id='list' action='/client/makeList'>
-                  <select name='spkfile' size='6' id='select_APP' >
-                  </select>
-                  <select name='textfile' size='6' id='select_data'>
-                  </select>
-                </form>
-              </div>
-              <input type="radio" value='slack' id="slackBtn" name="sendRadio" checked />slack
-		          <input type="radio" value='email' id="emailBtn" name="sendRadio" />email
-          		<input type="text" name="sendName" id="user"/>  
 
-              <form id='parameter_blank'>
-              </form>
-
-              <button type="submit" class="submit">Spark-Submit</button>
-              <div class="result">app result</div>
-
-              <br>
-
-              <p>upload data file</p>
-              <form id='fileForm' method='post' enctype='multipart/form-data' action='/upload'>
-            	  <input type='file' id='fileInput' name='fileInput' accept=".txt, .log" size="500MB">
-              </form>
-              <button class='delete'>DATA FILE DELETE</button>
-
-              <br>
-              <br>
               
-              <p>spark log</p>
-              <textarea class='sparkLog' id='sparkLog' cols=100 rows=10>
-              </textarea>
+              <!--working space-->
+
+              
+              
+                
+              <select size='6' id='select_APP' >
+              </select>
+              <br>
+              <br>
+              <input type="button" id='ready_button' onclick='readyToRun();' value='Ready To Run'>
+              <input type="button" id='ready_button' onclick='readyToAdd();' value='Add'>
+              <input type="button" id='delApp' value='Delete'>
+              <br>
+              <br>
+              <div id='readyToSpark' style="display: none">
+                <select size='6' id='select_data' >
+                </select>
+
+                <br>
+
+                <form id='parameter_blank'></form>
+
+                <br>
+
+                <input type="radio" value='slack' id="slackBtn" name="sendRadio" checked />slack
+                <input type="radio" value='email' id="emailBtn" name="sendRadio" />email
+                <input type="text" name="sendName" id="user"/>  
+  
+                <br>
+
+                <button type="submit" class="sparkRun">Spark Run</button>
+                <!-- <div class="result">app result</div> -->
+              </div>
+
+              <div id='addApp' style="display:none">
+                <!--add file&app-->
+                <form action="/admin/saveApp"  method="post" enctype="multipart/form-data" id="fileForm" accept-charset="utf-8">
+                  <input type='file' id='appFile' name='appFile' accept=".py">
+                  <br>
+                  <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8">
+                </form>
+                <br>
+                <button id="addAppBtn">add app</button>
+              </div>
 
             </div>
             <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
@@ -237,7 +250,22 @@
     <!-- <script src="js/demo/datatables-demo.js"></script> -->
     <!-- <script src="js/demo/chart-area-demo.js"></script> -->
 
+
     <script>
+      //ready to run button event
+      function readyToRun(){
+        if ($('#select_APP option:selected').val() == null){
+          alert('please select Application')
+        } else{//show
+          document.all.addApp.style.display="none"
+          document.all.readyToSpark.style.display=""
+        }
+      }
+      function readyToAdd(){
+        document.all.readyToSpark.style.display="none"
+        document.all.addApp.style.display=""
+      }
+
       $('#logoutBtn').click(function(){
         $.ajax({
 				url: '/logout',
@@ -252,9 +280,30 @@
 			  })
       })
 
+      function listRef() {
+        $.ajax({
+          url: '/client/makeList',
+          method: 'post',
+          success: function(result) {
+            if(result){
+              $('#select_APP').empty();
+              $('#select_data').empty();
+
+	            for(var i=0 ; i<result.applist.length ; i++){
+                $('#select_APP').append('<option value='+result.applist[i].appName+'>'+result.applist[i].appName+'</option>');
+              }
+              
+	            for(var i=1 ; i<result.datalist.length ; i++){
+                $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
+	            }
+	          }
+	        }
+        })
+      }
+
       var parameterKey = new Array()
 
-      $('.submit').click( function() {
+      $('.sparkRun').click( function() {
 
 	      //파라미터값 초기화
       	var parameterValue = ''
@@ -286,7 +335,9 @@
           alert('please select Application')
         } else{
           $('.result').html('prosessing');
-          $.ajax({
+          var check = confirm("Do you want running selected app?")
+          if(check){
+            $.ajax({
             url: '/client/sparkSubmit',
             method: 'post',
             data: {
@@ -302,93 +353,14 @@
                 $('.result').html(result.result);
               }
             }
-          })
+            })
+          }
           }
         })
-        $('.delete').click( function() {
-          if($('#select_data option:selected').val() == null){
-            alert('please select data file')
-          } else {
-            $.ajax({
-            url: '/client/dataDelete',
-            method: 'post',
-            data: {
-	            'data' : $('#select_data option:selected').val()
-	          },
-            dataType: 'json',
-            success: function(result) {
-              if(result){
-          	    $('#select_data').empty();
-	              for(var i=1 ; i<result.datalist.length ; i++){
-                  $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
-	              }
-              }
-            }
-            });
-          }
-        });
+
       $(document).ready(function(){
-        $.ajax({
-          url: '/client/makeList',
-          method: 'post',
-          success: function(result) {
-            if(result){
-	            for(var i=0 ; i<result.applist.length ; i++){
-                $('#select_APP').append('<option value='+result.applist[i]+'>'+result.applist[i]+'</option>');
-	            }
-	          }
-	        }
-        });
-        $.ajax({
-          url: '/client/makeList',
-          method: 'post',
-          success: function(result) {
-            if(result){
-        	    $('#select_data').empty();
-	            for(var i=1 ; i<result.datalist.length ; i++){
-                $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
-	            }
-            }
-          }
-        });
-	      updateLog()
-      });
-
-      function updateLog(){
-	      $.ajax({
-	        url: '/client/sparkLog',
-	        method: 'post',
-	        success:function(result){
-	          if(result){
-		          $('#sparkLog').val(result.latelyLog)
-	          }
-	        }
-	      })
-	      setTimeout('updateLog()',1000)
-      }
-
-      $('#fileForm').change(function(){
-	      var form = $('#fileForm')[0];
-	      var formData = new FormData(form);
-
-	      if($('#fileInput').val() == ""){
-          alert('please select upload file')
-        } else {	
-	        $.ajax({
-	          url:'/client/dataUpload',
-	          processData: false,
-	          contentType: false,
-	          data : formData,
-	          type: 'POST',
-	          success: function(result){
-		          $('#select_data').empty();
-		          for(var i=1 ; i<result.datalist.length ; i++){
-		            $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
-		          }
-	          }
-	        });
-	      }
-      });
+        listRef();
+      })
       $('#select_APP').click( function() {
         $.ajax({
           url: '/client/makeParameterBlank',
@@ -424,20 +396,79 @@
 		              }
 	              }
     	        }
-	            $('#parameter_blank').append('<br>'+'Appname : '+result.appname)
-	            $('#parameter_blank').append('<br>'+'App Version : '+result.version)
-	            $('#parameter_blank').append('<br>'+'Description : '+result.description)
-	            $('#parameter_blank').append('<br>'+'Author : '+result.author.name)
-	            $('#parameter_blank').append('<br>'+'Email : '+result.author.email)
+	            // $('#parameter_blank').append('<br>'+'Appname : '+result.appname)
+	            // $('#parameter_blank').append('<br>'+'App Version : '+result.version)
+	            // $('#parameter_blank').append('<br>'+'Description : '+result.description)
+	            // $('#parameter_blank').append('<br>'+'Author : '+result.author.name)
+	            // $('#parameter_blank').append('<br>'+'Email : '+result.author.email)
             }
           }
-        });
-      });
-    </script>
+        })
+      })
 
+
+
+      $('#delApp').click(function(){
+            var check = confirm("Do you want delete selected app?")
+            if(check) {
+                var selectedApp = $('#select_APP option:selected').val()
+                $.ajax({
+                    url: "/client/delApp",
+                    dataType: "json",
+                    method: "get",
+                    data : {"id" : selectedApp},
+                    success: function(result) {
+                        if(!result.result) {
+                            alert("failed metadata delete ")
+                        } else {
+                          listRef()
+                        }
+                    }, 
+                    error : function(error) {
+                        console.log(error)
+                    }
+                })
+            }
+        })
+
+        $('#addAppBtn').click(function() {
+
+          //info = JSON.parse($('#metaText').html())
+          //console.log(info)
+
+          var appValue = $('#appFile').val().split("\\");
+          //info.appName = appValue[appValue.length-1];
+          var jsonValue = $('#metaFile').val().split("\\")
+          if (appValue[appValue.length-1].split(".")[0] == jsonValue[jsonValue.length-1].split(".")[0]) {
+              //app data
+              var form = $('#fileForm')[0];
+              var formData = new FormData(form);
     
-
-
-
-
+              formData.append("metaFile",$('#metaFile'))
+              //console.log(formData)
+              //save : app(.py..) + parameterFile(.json..) in mongodb 
+              $.ajax({
+                  url: '/client/saveApp',
+                  data: formData,
+                  method: 'POST',
+                  processData: false,
+                  contentType: false,
+                  success: function (result) {
+                      //console.log(result);
+                      if(result.status) {
+                          alert("App 업로드에 성공하였습니다.")
+                      } else {
+                          alert(result.result)
+                      }
+                      listRef()
+                  },
+                  error: function (err) {
+                      console.log(err);
+                  }
+                });       
+              } else {
+                  alert("please same file name")
+              }
+        })
+    </script>
 </body></html>

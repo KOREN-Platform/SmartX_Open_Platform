@@ -41,6 +41,12 @@ router.post('/dataDelete',ClientControllerServices.dataDelete)
 router.post('/makeParameterBlank',ClientControllerServices.makeParameterBlank)
 //spark log Data를 받아온다.
 router.post('/sparkLog', ClientControllerServices.sparkLog)
+// ClientControllerServices.delApp : spark 앱 삭제 및 데이터 삭제
+router.get('/delApp', ClientControllerServices.delApp)
+// ClientControllerServices.saveFile :spark app 파일 저장 , ClientControllerServices.saveInfo : spark parameter 저장
+router.post('/saveApp', ClientControllerServices.saveFile, ClientControllerServices.saveInfo);
+// ClientControllerServices.appData : spark 앱 데이터 가져옴
+router.get('/appData',ClientControllerServices.appData)
 
 
 

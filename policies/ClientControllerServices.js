@@ -5,7 +5,7 @@ const conf = require('../config/config.json')
 
 //mongodb model
 const App = require('../models/appSchema').App
-const User = require('../models/users').Users
+const Users = require('../models/users').Users
 const Data = require('../models/dataSchema').Datas
 
 module.exports = {
@@ -17,19 +17,42 @@ module.exports = {
 	 * @param {Object} res
 	 */
     makeList(req, res) {
-		App.find({},function(err, appList){
-			if (err){
-				console.log('mongodb err')
-			}else{
-				Data.find({},function(err, dataList){
-					if (err){
-						console.log('mongodb err')
-					}else{
-						res.send({applist: appList, datalist : dataList})
-					}
-				})
-			}
-		})
+		let role = req.user.role
+		if(role == 2){
+			//developer
+			//condtion = {email :req.user.email}
+			Users.findOne({email : req.user.email}).populate('apps').exec(function(err, appList){
+				if (err) {res.send  ({err:err})}
+				if (appList) {
+					Data.find({},function(err, dataList){
+						if (err){
+							console.log('mongodb err')
+						}else{
+							console.log(appList)
+							res.send({applist: appList.apps, datalist : dataList})
+						}
+					})
+				}
+			})
+		}else if(role == 1){
+			//user
+			//condtion = {}
+			App.find({}, function(err, appList){
+				if (err){
+					console.log('mongodb err')
+				}else{
+					Data.find({},function(err, dataList){
+						if (err){
+							console.log('mongodb err')
+						}else{
+							console.log(appList)
+							res.send({applist: appList, datalist : dataList})
+						}
+					})
+				}
+			})
+		}else{}
+		
 	},
 	/**
 	 * @name dataUpload

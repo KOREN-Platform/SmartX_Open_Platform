@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema
+const Users = require('../models/users').Users
 
 var parameterSchema = new Schema({
     "name" : String,
@@ -35,7 +36,14 @@ var appSchema = new Schema({
     },
     user : {type:Schema.Types.ObjectId, ref:'Users'}
 })
-
+appSchema.post('deleteOne', function(next){
+    console.log("etetetetetettet"+ this._id)
+    Users.update(
+        {apps :this._id},
+        {$pull : {apps : this._id}}
+    ).exec()
+    next()
+})
 var App = mongoose.model('App', appSchema)
 var Parameter = mongoose.model('Parameter', parameterSchema)
 

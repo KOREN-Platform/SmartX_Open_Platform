@@ -425,14 +425,35 @@
         })
       })
 
-
+        //      $('#delApp').click(function(){
+        //     var check = confirm("really?")
+        //     if(check) {
+        //         var clickedId = $('#appList').val()
+        //         $.ajax({
+        //             url: "/admin/delApp",
+        //             dataType: "json",
+        //             method: "GET",
+        //             data : {"id" : clickedId},
+        //             success: function(result) {
+        //                 if(!result.result) {
+        //                     alert("failed metadata delete ")
+        //                 } else {
+        //                     appListRef()
+        //                 }
+        //             }, 
+        //             error : function(error) {
+        //                 console.log(error)
+        //             }
+        //         })
+        //     }
+        // })
 
       $('#delApp').click(function(){
             var check = confirm("Do you want delete selected app?")
             if(check) {
                 var selectedApp = $('#select_APP option:selected').val()
                 $.ajax({
-                    url: "/client/delApp",
+                    url: "/admin/delApp",
                     dataType: "json",
                     method: "get",
                     data : {"id" : selectedApp},
@@ -467,7 +488,7 @@
               //console.log(formData)
               //save : app(.py..) + parameterFile(.json..) in mongodb 
               $.ajax({
-                  url: '/client/saveApp',
+                  url: '/admin/saveApp',
                   data: formData,
                   method: 'POST',
                   processData: false,

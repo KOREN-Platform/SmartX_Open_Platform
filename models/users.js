@@ -1,5 +1,6 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
+const App = require('../models/appSchema').App
 
 var UserSchema = new Schema({
     email : {type: String, lowercase: true, unique: true, required: true},
@@ -22,6 +23,13 @@ UserSchema.methods.comparePassword = function(inputPassword, cb) {
         cb('error')
     }
 }
+// UserSchema.pre('remove', function(next){
+//     App.update(
+//         {apps :this._id},
+//         {$pull : {apps : this._id}}
+//     ).exec()
+//     next()
+// })
 var Users = mongoose.model('Users', UserSchema)
 
 module.exports = {

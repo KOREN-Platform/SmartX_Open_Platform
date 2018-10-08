@@ -122,11 +122,11 @@ router.post('/mongo', function(req, res){
 router.post('/mongoSel', function(req, res){
 	data = req.body
 	console.log(data)
-	Users.findOne({email : data.email}).populate('apps').exec(function(err, result){
-		if (err) {res.send  ({err:err})}
-		if (result) {
-			res.send({result:result})
-		}
-	})
+	// Users.findOne({email : data.email}).populate('apps').exec(function(err, result){
+	// 	if (err) {res.send  ({err:err})}
+	// 	if (result) {
+	// 		res.send({result:result})
+	// 	}
+	// })
 })
 module.exports = router;

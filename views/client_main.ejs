@@ -162,7 +162,7 @@
               <br>
               <br>
               <input type="button" id='ready_button' onclick='readyToRun();' value='Ready To Run'>
-              <input type="button" id='ready_button' onclick='readyToAdd();' value='Add'>
+              <button type="button" data-toggle="modal" data-target="#myModal">Add</button>
               <input type="button" id='delApp' value='Delete'>
               <br>
               <br>
@@ -186,15 +186,31 @@
                 <!-- <div class="result">app result</div> -->
               </div>
 
-              <div id='addApp' style="display:none">
-                <!--add file&app-->
-                <form action="/admin/saveApp"  method="post" enctype="multipart/form-data" id="fileForm" accept-charset="utf-8">
-                  <input type='file' id='appFile' name='appFile' accept=".py">
-                  <br>
-                  <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8">
-                </form>
-                <br>
-                <button id="addAppBtn">add app</button>
+              <!-- Modal -->
+              <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Application Add</h4>
+                    </div>
+                    <div class="modal-body">
+                      <!--add file&app-->
+                      <form action="/admin/saveApp"  method="post" enctype="multipart/form-data" id="fileForm" accept-charset="utf-8">
+                        <input type='file' id='appFile' name='appFile' accept=".py">
+                        <br>
+                        <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8">
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" id="addAppBtn">add app</button>
+                      <button type="button" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+
+                </div>
               </div>
 
             </div>
@@ -257,15 +273,16 @@
         if ($('#select_APP option:selected').val() == null){
           alert('please select Application')
         } else{//show
-          document.all.addApp.style.display="none"
           document.all.readyToSpark.style.display=""
         }
       }
-      function readyToAdd(){
-        document.all.readyToSpark.style.display="none"
-        document.all.addApp.style.display=""
+      function readyToApp(){
+        // var popUrl = "admin.ejs"
+        // var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;"
+        // window.open(popUrl,"",popOption);
+        BootstrapDialog.alert('I want banana!');
       }
-
+      
       $('#logoutBtn').click(function(){
         $.ajax({
 				url: '/logout',

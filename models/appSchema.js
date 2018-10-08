@@ -32,7 +32,8 @@ var appSchema = new Schema({
     "issuedDate" : {
         type : Date, 
         default: Date.now
-    }
+    },
+    user : {type:Schema.Types.ObjectId, ref:'Users'}
 })
 
 var App = mongoose.model('App', appSchema)
@@ -40,5 +41,5 @@ var Parameter = mongoose.model('Parameter', parameterSchema)
 
 module.exports = {
     App : App,
-    Parameter:Parameter
+    Parameter:Parameter,
 }

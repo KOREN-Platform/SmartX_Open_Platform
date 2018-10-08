@@ -203,6 +203,8 @@
                         <br>
                         <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8">
                       </form>
+                      <br>
+                      <textarea id="metaText" rows="10" cols="50"></textarea>
                     </div>
                     <div class="modal-footer">
                       <button type="button" id="addAppBtn">add app</button>
@@ -310,8 +312,8 @@
                 $('#select_APP').append('<option value='+result.applist[i].appName+'>'+result.applist[i].appName+'</option>');
               }
               
-	            for(var i=1 ; i<result.datalist.length ; i++){
-                $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
+	            for(var i=0 ; i<result.datalist.length ; i++){
+                $('#select_data').append('<option value='+result.datalist[i].dataName+'>'+result.datalist[i].dataName+'</option>');
 	            }
 	          }
 	        }

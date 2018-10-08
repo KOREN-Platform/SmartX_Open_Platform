@@ -5,6 +5,8 @@ const conf = require('../config/config.json')
 
 //mongodb model
 const App = require('../models/appSchema').App
+const User = require('../models/users').Users
+const Data = require('../models/dataSchema').Datas
 
 module.exports = {
 	/**
@@ -15,38 +17,19 @@ module.exports = {
 	 * @param {Object} res
 	 */
     makeList(req, res) {
-
 		App.find({},function(err, appList){
 			if (err){
 				console.log('mongodb err')
 			}else{
-				console.log(appList[0].appName)
-
-				exec("curl -i 'http://"+conf.ManagerIp+":"+conf.HDFSPort+"/webhdfs/v1//"+conf.DataFolder+"?op=LISTSTATUS'" , function(err, stdout, stderr){
-					//make data list
-					let dataList = stdout.split('pathSuffix":"')
-					for(let i=1 ; i<dataList.length ; i++){
-	                	dataList[i] = dataList[i].split('","permission')[0]
-    	    		}
-					//applist : Spark Application List
-					//datalist : HDFS에 저장된 Data List
-					res.send({applist: appList, datalist : dataList});
-				});
+				Data.find({},function(err, dataList){
+					if (err){
+						console.log('mongodb err')
+					}else{
+						res.send({applist: appList, datalist : dataList})
+					}
+				})
 			}
 		})
-
-		// exec("curl -i 'http://"+conf.ManagerIp+":"+conf.HDFSPort+"/webhdfs/v1//"+conf.DataFolder+"?op=LISTSTATUS'" , function(err, stdout, stderr){
-		// 	//make data list
-		// 	let dataList = stdout.split('pathSuffix":"')
-		// 	for(let i=1 ; i<dataList.length ; i++){
-        //         dataList[i] = dataList[i].split('","permission')[0]
-        // 	}
-		// 	fs.readdir(conf.AppFolder, function (err, files){
-		// 		//applist : Spark Application List
-		// 		//datalist : HDFS에 저장된 Data List
-		// 		res.send({applist: files, datalist : dataList});
-		// 	});
-		// });
 	},
 	/**
 	 * @name dataUpload
@@ -58,13 +41,23 @@ module.exports = {
 	dataUpload(req, res){
 		//DummyPath : 임시 파일을 생성할 장소
 		const DummyPath = conf.AppFolder
+		
+		//req.User.email
+
 		const form = new multiparty.Form({
 			fileNames: 'uploadtest.txt',
 			autoFiles: false,
 			uploadDir: DummyPath,
 			//maxFilesSize: 1024 * 1024 * 5
 		});
-		form.parse(req, function(error, fields, files){
+		form.parse(req, function(err, fields, files){
+			// if (err){
+			// 	console.log(err)
+			// }else{
+			// 	const path = files.fileInput[0].path
+			// 	const originalName = files.fileInput[0].originalFilename
+			// }
+
 			const path = files.fileInput[0].path
 			const originalName = files.fileInput[0].originalFilename
 

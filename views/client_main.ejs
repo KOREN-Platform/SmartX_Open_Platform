@@ -162,7 +162,7 @@
               <br>
               <br>
               <input type="button" id='ready_button' onclick='readyToRun();' value='Ready To Run'>
-              <button type="button" data-toggle="modal" data-target="#myModal">Add</button>
+              <button type="button" data-toggle="modal" data-target="#addModel">Add</button>
               <input type="button" id='delApp' value='Delete'>
               <br>
               <br>
@@ -187,7 +187,7 @@
               </div>
 
               <!-- Modal -->
-              <div id="myModal" class="modal fade" role="dialog">
+              <div id="addModel" class="modal fade" role="dialog">
                 <div class="modal-dialog">
 
                   <!-- Modal content-->
@@ -204,6 +204,7 @@
                         <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8">
                       </form>
                       <br>
+                      <!-- meta JSON text -->
                       <textarea id="metaText" rows="10" cols="50"></textarea>
                     </div>
                     <div class="modal-footer">
@@ -211,9 +212,25 @@
                       <button type="button" data-dismiss="modal">Close</button>
                     </div>
                   </div>
-
                 </div>
               </div>
+              <style>
+                .modal-dialog {
+                height: 85% !important;
+                padding-top:10%;
+                }
+
+                .modal-content {
+                height: 100% !important;
+                overflow:visible;
+                }
+
+                .modal-body {
+                height: 80%;
+                overflow: auto;
+                }
+              </style>
+
 
             </div>
             <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
@@ -284,6 +301,7 @@
         // window.open(popUrl,"",popOption);
         BootstrapDialog.alert('I want banana!');
       }
+      
       
       $('#logoutBtn').click(function(){
         $.ajax({
@@ -488,6 +506,77 @@
               } else {
                   alert("please same file name")
               }
+        })
+        var info ={
+            "appName": "",
+            "description": "",
+            "author": {
+                "name" : "",
+                "email" : ""
+            },
+            "parameters": [],
+            "version" :  "",
+            "type" : ""
+        }
+
+        function readTextFile(file, callback) {
+            var rawFile = new XMLHttpRequest();
+                    rawFile.overrideMimeType("application/json;charset=euc-kr");
+                    rawFile.open("GET", file, true);
+                    rawFile.onreadystatechange = function() {
+                    if (rawFile.readyState === 4 && rawFile.status == "200") {
+                        callback(rawFile.responseText);
+                }
+            }
+            rawFile.send(null);
+        }  
+        
+        $('#metaFile').change(function(e) {
+            const files = e.target.files;
+            // console.log(files)
+            if(files && files.length > 0) {
+                const targetFile = files[0]
+                try {
+                    const path = window.URL.createObjectURL(targetFile)
+                    readTextFile(path, function(text){
+                        $('#metaText').html(text)
+                    })
+                    $.getJSON(path, function(data) {
+                        info.appName = data.appName
+                        info.description = data.description
+                        info.author.name = data.author.name
+                        info.author.email = data.author.email
+                        info.version = data.version
+                        info.type = data.type
+                        
+                        var inputParameters = []
+
+                        try {
+                        if (data.parameters.length > 0) {
+                            for (var i in data.parameters) {
+                                inputParameters.push(data.parameters[i])
+                            }
+                        }
+                    } catch (e) {
+                        console.log(e)
+                        }
+                        info.parameters = inputParameters
+                    })
+                }
+                catch(ex) {
+                    console.log(ex)
+                    try {
+                        const fileReader = new FileReader();
+                        fileReader.onload = (event) =>  {
+                            console.log("fileReader " + event.target.result)
+                        }
+                        fileReader.readAsDataURL(targetFile)
+                    }
+                    catch (e) {
+                        console.log("file upload not supported : ")
+                    }
+                }
+            }
         })
     </script>
 </body></html>

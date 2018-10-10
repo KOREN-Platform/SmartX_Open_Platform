@@ -41,48 +41,61 @@ module.exports = {
 	dataUpload(req, res){
 		//DummyPath : 임시 파일을 생성할 장소
 		const DummyPath = conf.AppFolder
-		
-		//req.User.email
-
 		const form = new multiparty.Form({
-			fileNames: 'uploadtest.txt',
+			fileNames: 'Dummy.txt',
 			autoFiles: false,
 			uploadDir: DummyPath,
 			//maxFilesSize: 1024 * 1024 * 5
-		});
+		})
 		form.parse(req, function(err, fields, files){
-			// if (err){
-			// 	console.log(err)
-			// }else{
-			// 	const path = files.fileInput[0].path
-			// 	const originalName = files.fileInput[0].originalFilename
-			// }
+			if (err){
+				console.log(err)
+			}else{
+				const path = files.fileInput[0].path
+				const originalName = files.fileInput[0].originalFilename
+				//HDFS에 올릴 파일을 임시로 생성하고 rename
+				fs.rename(path, DummyPath+originalName, function (err){
+					if(err){
+						console.log('error : dummy file rename failed')
+					}else{
+						//HDFS에 Data 파일을 업로드
+						exec('hdfs dfs -put '+DummyPath+originalName+' '+conf.DataFolder , function(err, stdout, stderr){
+							if(err){
+								console.log('error : can not upload to HDFS')
+								console.log(stdout)
+								console.log(stderr)
+							}else{
+								//임시 생성한 파일을 삭제
+								fs.unlink(DummyPath+originalName, function(err){
+									if(err){
+										console.log('error : can not remove dummyfile')
+									}else{
+										console.log('data file upload success')
 
-			const path = files.fileInput[0].path
-			const originalName = files.fileInput[0].originalFilename
-
-			//HDFS에 올릴 파일을 임시로 생성하고 rename
-			console.log(originalName)
-			console.log(path)
-			fs.rename(path, DummyPath+originalName, function (err){});
-
-			//HDFS에 Data 파일을 업로드
-			exec('hdfs dfs -put '+DummyPath+originalName + ' /' + conf.DataFolder , function(err, stdout, stderr){
-				//임시 생성한 파일을 삭제
-				exec('rm '+DummyPath+originalName , function(err, stdout, stderr){
-					//업로드 후 새로운 dataList를 생성하여 준다.
-					exec("curl -i 'http://"+conf.ManagerIp+":"+conf.HDFSPort+"/webhdfs/v1//"+conf.DataFolder+"?op=LISTSTATUS'" , function(err, stdout, stderr){
-						let dataList = stdout.split('pathSuffix":"')
-						for(let i=1 ; i<dataList.length ; i++){
-			                		dataList[i] = dataList[i].split('","permission')[0]
-			        		}
-						fs.readdir(conf.AppFolder, function (err, files){
-							res.send({datalist : dataList});
-						});
-					});
-				});
-			});
-        	});
+										data = new Data({
+											"Uploader" : req.user.email,
+											"dataName" : originalName,
+											"file_loca" : conf.DataFolder,
+											"description" : 'asdf',//req.body.description,
+											"size" : 56//req.body.filesize
+										})
+										data.save(function(err, user) {
+											if(err){
+												console.log('error : db save error')
+												console.log(err)
+											}else{
+												console.log('db upload success')
+												// res.send({status: true, result: user})
+											}
+										})
+									}
+								})
+							}
+						})
+					}
+				})
+			}
+		})
 	},
 	/**
 	 * @name dataDelete
@@ -92,21 +105,19 @@ module.exports = {
 	 * @param {Object} res
 	 */
 	dataDelete(req, res){
+		//const user_email = req.user.email
+
 		//Remove DATA to HDFS
 		exec('hdfs dfs -rm /' + conf.DataFolder +'/'+ req.body.data , function(err, stdout, stderr){
 			console.log('Remove DATA to HDFS')
-			//make new data list
-			exec("curl -i 'http://"+conf.ManagerIp+":"+conf.HDFSPort+"/webhdfs/v1//"+conf.DataFolder+"?op=LISTSTATUS'" , function(err, stdout, stderr){
-				//make data list
-				let dataList = stdout.split('pathSuffix":"')
-				for(let i=1 ; i<dataList.length ; i++){
-	                		dataList[i] = dataList[i].split('","permission')[0]
-	        		}
-				//fs.readdir(conf.AppFolder, function (err, files){
-				res.send({datalist : dataList})
-				//});
-			});
-		});
+			Data.deleteOne({dataName : req.body.data},function(err, result) {
+				if(err){
+					console.log('error : db delete error')
+				}else{
+					console.log('db delete success')
+				}
+			})
+		})
 	},
 	/**
 	 * @name makeParameterBlank

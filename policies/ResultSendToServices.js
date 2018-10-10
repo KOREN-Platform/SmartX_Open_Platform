@@ -1,6 +1,6 @@
 //slack config
 const {WebClient} = require('@slack/client')
-const token = 'xoxp-401187969874-400943764356-429588191991-fd8e255bcf9ee5b0ed296e6115fbd0ac'
+const token = 'xoxp-401187969874-400943764356-452818180835-2f3f14384a80d62ed5d7f95d03e2ae49'
 const web = new WebClient(token)
 const Request= require('request')
 

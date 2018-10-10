@@ -77,6 +77,8 @@ router.post('/mongo', function(req, res){
 	// 		res.send({app : result, user :user})
 	// 	})
 	// })
+
+
 	Users.findOne({email : data.email}, function(err, user) {
 		if(err) {res.send({err : err})}
 		if(user) {

@@ -3,6 +3,7 @@ var Schema = mongoose.Schema
 const App = require('../models/appSchema').App
 
 var UserSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     email : {type: String, lowercase: true, unique: true, required: true},
     password : {type :String, required: true},
     firstName : {type: String},

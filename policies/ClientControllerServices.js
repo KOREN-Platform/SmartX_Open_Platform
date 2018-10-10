@@ -28,7 +28,7 @@ module.exports = {
 						if (err){
 							console.log('mongodb err')
 						}else{
-							console.log(appList)
+							//console.log(appList)
 							res.send({applist: appList.apps, datalist : dataList})
 						}
 					})
@@ -45,7 +45,7 @@ module.exports = {
 						if (err){
 							console.log('mongodb err')
 						}else{
-							console.log(appList)
+							//console.log(appList)
 							res.send({applist: appList, datalist : dataList})
 						}
 					})

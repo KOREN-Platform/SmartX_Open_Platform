@@ -82,8 +82,8 @@ module.exports = {
 				console.log(fields.description[0])
 				console.log(fields.fileSize[0])
 				
-				const description = fields[0].description
-				const fileSize = fields[0].fileSize
+				const description = fields.description[0]
+				const fileSize = fields.fileSize[0]
 
 				const path = files.fileInput[0].path
 				const originalName = files.fileInput[0].originalFilename

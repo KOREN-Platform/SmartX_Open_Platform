@@ -114,9 +114,6 @@ app.use('/profile', indexRouter)
 //로그아웃
 app.use('/logout',indexRouter)
 
-app.use('/mongo', indexRouter)
-app.use('/mongoSel', indexRouter)
-
 //css&js&data
 app.use('/css', express.static(__dirname +'/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname +'/node_modules/bootstrap/dist/js'));

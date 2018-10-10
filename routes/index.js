@@ -3,10 +3,6 @@ const router = express.Router();
 
 const authenticateServices = require('../policies/AuthencationServices')
 
-const Users = require('../models/users').Users
-const App = require('../models/appSchema').App
-var mongoose = require('mongoose')
-
 /* GET home page. */
 router.get('/', function(req,res) {
 	//res.render('index')
@@ -42,93 +38,5 @@ router.get('/logout', function(req, res) {
 		}
 	})
 })
-router.post('/mongo', function(req, res){
-	data = req.body
-	//console.log(data)
-	// var user = new Users({
-	// 	_id : new mongoose.Types.ObjectId(),
-	// 	email : data.email,
-	// 	password : data.password,
-	// 	firstName : data.firstName,
-	// 	lastName :data.lastName,
-	// 	role : data.role
-	// })
-	
-	// user.save(function(err){
-	// 	if(err) {
-	// 		console.log(err)
-	// 		return
-	// 	}
-	// 	var app = new App({
-	// 		appName : data.appName,
-	// 		description : data.description,
-	// 		author : data.author,
-	// 		parameters : data.parameters,
-	// 		version : data.version,
-	// 		type : data.type,
-	// 		user : user._id
-	// 	})
-	// 	app.save(function(err, result) {
-	// 		if (err) {
-	// 			console.log(err)
-	// 			return
-	// 		}
-	// 		console.log(user)
-	// 		res.send({app : result, user :user})
-	// 	})
-	// })
 
-
-	Users.findOne({email : data.email}, function(err, user) {
-		if(err) {res.send({err : err})}
-		if(user) {
-		var app = new App({
-			appName : data.appName,
-			description : data.description,
-			author : data.author,
-			parameters : data.parameters,
-			version : data.version,
-			type : data.type,
-			user : user._id
-			})
-		}
-		app.save(function(err, result) {
-			if(err)  {res.send({err : err})}
-			if(user) {
-				//res.send({result :result})
-				//console.log(result)
-				// Users.findOne({email:"ghwlchlaks"}).populate('apps').exec(function(err, data){
-				// 	if(err) {res.send({err : err})}
-				// 	if(data) {
-				// 		res.send({data: data})
-				// 	}
-				// })
-				Users.findOne({email:"ghwlchlaks"}, function(err, data){
-					if(err) {res.send({err : err})}
-					if(data) {
-						data.apps.push(app)
-						data.save(function(err, result){
-							if(err) {res.send({err : err})}
-							if(result) {
-								res.send({data: result})
-							}
-						})
-						
-					}
-				})
-			}
-		})
-	})
-})
-
-router.post('/mongoSel', function(req, res){
-	data = req.body
-	console.log(data)
-	// Users.findOne({email : data.email}).populate('apps').exec(function(err, result){
-	// 	if (err) {res.send  ({err:err})}
-	// 	if (result) {
-	// 		res.send({result:result})
-	// 	}
-	// })
-})
 module.exports = router;

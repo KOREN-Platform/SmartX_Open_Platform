@@ -37,6 +37,7 @@
     <form id='fileForm' method='post' enctype='multipart/form-data' action='/upload'>
 		<input type='file' id='fileInput' name='fileInput' accept=".txt, .log" size="500MB">
 		</form>
+		<button class='data_upload'>DATA FILE UPLOAD</button>
 		<!--delete data file-->
     <button class='delete'>DATA FILE DELETE</button>
 
@@ -249,32 +250,25 @@ if($('#'+parameterKey[i]).attr('type') == 'text'){
         }
       });
       }
-    });
-    $(document).ready(function(){
-      $.ajax({
+		});
+		function listLef(){
+			$.ajax({
         url: '/client/makeList',
         method: 'post',
         success: function(result) {
           if(result){
 	    for(var i=0 ; i<result.applist.length ; i++){
-              $('#select_APP').append('<option value='+result.applist[i]+'>'+result.applist[i]+'</option>');
+              $('#select_APP').append('<option value='+result.applist[i]+'>'+result.applist[i]+'</option>');			
+			}
+			for(var i=0 ; i<result.datalist.length ; i++){
+              $('#select_data').append('<option value='+result.datalist[i].dataName+'>'+result.datalist[i].dataName+'</option>');
 	    }
 	  }
 	}
       });
-      $.ajax({
-        url: '/client/makeList',
-        method: 'post',
-        success: function(result) {
-          if(result){
-
-	    $('#select_data').empty();
-	    for(var i=1 ; i<result.datalist.length ; i++){
-              $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
-	    }
-          }
-        }
-      });
+		}
+    $(document).ready(function(){
+      listLef()
 	updateLog()
     });
 
@@ -291,25 +285,25 @@ function updateLog(){
 	setTimeout('updateLog()',1000)
 }
 
-    $('#fileForm').change(function(){
+    $('.data_upload').click(function(){
 	var form = $('#fileForm')[0];
 	var formData = new FormData(form);
-
+	console.log(form.size)
 	if($('#fileInput').val() == ""){
           alert('please select upload file')
-        } else {	
+        } else {
 	  $.ajax({
 	    url:'/client/dataUpload',
 	    processData: false,
 	    contentType: false,
-	    data : formData,
+			data : {
+				'formData' : formData,
+				'description' : 'asdf',
+				'filesize' : form.size
+			},
 	    type: 'POST',
 	    success: function(result){
-
-		  $('#select_data').empty();
-		  for(var i=1 ; i<result.datalist.length ; i++){
-		    $('#select_data').append('<option value='+result.datalist[i]+'>'+result.datalist[i]+'</option>');
-		  }
+				listLef()
 	    }
 	  });
 	}

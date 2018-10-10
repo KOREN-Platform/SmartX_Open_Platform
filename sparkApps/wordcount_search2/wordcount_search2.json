@@ -1,0 +1,22 @@
+{
+    "appName" : "wordcount_search2.py",
+    "description" : "test",
+    "author" : {
+	"name" : "choi",
+            "email" : "ghwlchlaks"
+    },
+    "parameters" : [
+	{
+		"name" : "--word",
+		"data" : ["odd", "even" ],
+                        "description" : "Option to count the number of specific words (case sensitive)",
+		"inputType" : {
+			"boxType" : "text",
+			"min" : 1,
+			"max" : 10
+		},
+		"default" : "A"
+            }
+    ],
+   "version" : "0.0.1"
+}

@@ -9,7 +9,7 @@
     <title>NILAB - Dashboard</title>
 
     <!-- Bootstrap core CSS-->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -20,6 +20,8 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
 
+    <!-- -->
+    
   <style type="text/css">/* Chart.js */
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
@@ -161,38 +163,47 @@
               
               <!--working space-->
 
-              
-              
-                
-              <select size='6' id='select_APP' >
-              </select>
-              <br>
-              <br>
-              <input type="button" id='ready_button' onclick='readyToRun();' value='Ready To Run'>
-              <% if (user.role == 2)  { %>
-                <button type="button" data-toggle="modal" data-target="#myModal">Add</button>
-                <input type="button" id='delApp' value='Delete'>
-              <% } %>
-              <br>
-              <br>
-              <div id='readyToSpark' style="display: none">
-                <select size='6' id='select_data' >
-                </select>
+              <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                  <h1 class="display-4">Hello John, Welcome to Nilab!</h1>
+                  <p class="lead">This page can be used by the primary user <span class="badge badge-pill badge-primary">Primary</span>. Select the app, then run with the 'Ready to Run' button.</p>
+                  <select class="custom-select" id='select_APP' >
+                  </select>
+    
+                  <!-- <input type="button" id='ready_button' onclick='readyToRun();' value='Ready To Run'> -->
+                  <button type="button" class="btn btn-dark" id='ready_button' onclick='readyToRun();'>READY TO RUN</button>
+                  <% if (user.role == 2)  { %>
+                    <button type="button" data-toggle="modal" data-target="#myModal">Add</button>
+                    <input type="button" id='delApp' value='Delete'>
+                  <% } %>
+                  <div id='readyToSpark' style="display: none">
+                    <hr class="my-4">
+                    <select class="custom-select" id='select_data' >
+                    </select> <br>
 
-                <br>
-
-                <form id='parameter_blank'></form>
-
-                <br>
-
-                <input type="radio" value='slack' id="slackBtn" name="sendRadio" checked />slack
-                <input type="radio" value='email' id="emailBtn" name="sendRadio" />email
-                <input type="text" name="sendName" id="user"/>  
-  
-                <br>
-
-                <button type="submit" class="sparkRun">Spark Run</button>
-                <!-- <div class="result">app result</div> -->
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Dropdown
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                      <button class="dropdown-item" type="button">Action</button>
+                      <button class="dropdown-item" type="button">Another action</button>
+                      <button class="dropdown-item" type="button">Something else here</button>
+                    </div>
+    
+                    <form id='parameter_blank'></form>
+    
+                    <br>
+    
+                    <input type="radio" value='slack' id="slackBtn" name="sendRadio" checked />slack
+                    <input type="radio" value='email' id="emailBtn" name="sendRadio" />email
+                    <input type="text" name="sendName" id="user"/>  
+      
+                    <br>
+    
+                    <button type="submit" class="sparkRun">Spark Run</button>
+                    <!-- <div class="result">app result</div> -->
+                  </div>
+                </div>
               </div>
                 <!-- Modal -->
                 <div id="myModal" class="modal fade" role="dialog">

@@ -65,6 +65,9 @@ module.exports = {
 	dataUpload(req, res){
 		//DummyPath : 임시 파일을 생성할 장소
 		const DummyPath = conf.AppFolder
+		const email = req.user.email
+
+
 		const form = new multiparty.Form({
 			fileNames: 'Dummy.txt',
 			autoFiles: false,
@@ -75,6 +78,14 @@ module.exports = {
 			if (err){
 				console.log(err)
 			}else{
+
+				const jsonObj = JSON.stringify(fields.data)
+				console.log(fields.description[0])
+				console.log(fields.fileSize[0])
+				
+				const description = fields.description[0]
+				const fileSize = fields.fileSize[0]
+
 				const path = files.fileInput[0].path
 				const originalName = files.fileInput[0].originalFilename
 				//HDFS에 올릴 파일을 임시로 생성하고 rename
@@ -97,11 +108,11 @@ module.exports = {
 										console.log('data file upload success')
 
 										data = new Data({
-											"Uploader" : req.user.email,
+											"Uploader" : email,
 											"dataName" : originalName,
 											"file_loca" : conf.DataFolder,
-											"description" : 'asdf',//req.body.description,
-											"size" : 56//req.body.filesize
+											"description" : description,
+											"size" : fileSize
 										})
 										data.save(function(err, user) {
 											if(err){
@@ -132,7 +143,7 @@ module.exports = {
 		//const user_email = req.user.email
 
 		//Remove DATA to HDFS
-		exec('hdfs dfs -rm /' + conf.DataFolder +'/'+ req.body.data , function(err, stdout, stderr){
+		exec('hdfs dfs -rm ' + conf.DataFolder +'/'+ req.body.data , function(err, stdout, stderr){
 			console.log('Remove DATA to HDFS')
 			Data.deleteOne({dataName : req.body.data},function(err, result) {
 				if(err){

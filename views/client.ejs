@@ -251,7 +251,7 @@ if($('#'+parameterKey[i]).attr('type') == 'text'){
       });
       }
 		});
-		function listLef(){
+		function listRef(){
 			$.ajax({
         url: '/client/makeList',
         method: 'post',
@@ -268,7 +268,7 @@ if($('#'+parameterKey[i]).attr('type') == 'text'){
       });
 		}
     $(document).ready(function(){
-      listLef()
+      listRef()
 	updateLog()
     });
 
@@ -303,7 +303,7 @@ function updateLog(){
 			},
 	    type: 'POST',
 	    success: function(result){
-				listLef()
+				listRef()
 	    }
 	  });
 	}

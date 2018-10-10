@@ -31,7 +31,7 @@
 
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-      <a class="navbar-brand mr-1" href="index.html">NILAB</a>
+      <a class="navbar-brand mr-1" href="client_main">NILAB</a>
 
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
@@ -40,6 +40,13 @@
       <!-- Navbar Search -->
       <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
         <div class="input-group">
+            <% if (user.role == 1) { %>
+              <h2 class="text-primary"> User  &nbsp; &nbsp; &nbsp; &nbsp; </h2>
+              <% } else if (user.role == 2) { %>
+                <h2 class="text-success"> Developer  &nbsp; &nbsp; &nbsp; &nbsp; </h2>
+                <% } else { %>
+                  <h2 class="text-danger"> Manager  &nbsp; &nbsp; &nbsp; &nbsp;  </h2>
+                  <% } %>
           <input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
           <div class="input-group-append">
             <button class="btn btn-primary" type="button">
@@ -95,7 +102,7 @@
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav">
         <li class="nav-item active">
-          <a class="nav-link" href="index.html">
+          <a class="nav-link" href="client_main">
             <i class="fas fa-fw fa-table"></i>
             <span>Main</span>
           </a>
@@ -198,7 +205,7 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-primary" id="logoutBtn">Logout</a>
           </div>
         </div>
       </div>
@@ -227,7 +234,21 @@
 
 
 
-
+<script>
+  $('#logoutBtn').click(function(){
+        $.ajax({
+				url: '/logout',
+				type: 'GET',
+				success:function(result) {
+          alert("success")
+          location.href = "/login"
+				},	
+				error:function(error) {
+					console.log("error : " + error)	
+				}
+			  })
+      })
+</script>
 
 
 

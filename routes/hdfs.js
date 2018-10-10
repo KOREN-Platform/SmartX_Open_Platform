@@ -10,6 +10,6 @@ let isAuthenticated = function(req, res, next) {
 }
 
 router.get('/',isAuthenticated, function(req,res) {
-	res.render('hdfs')
+	res.render('hdfs',{user:req.user})
 })
 module.exports = router;

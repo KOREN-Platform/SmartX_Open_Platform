@@ -352,7 +352,6 @@
                   })
                 }
               }
-              if (RunningLen != beforeRunningLen) {
                 $('#runState1').empty()
                 $('#dtVerticalScrollExample').DataTable().clear()
                 $('#dtVerticalScrollExample').DataTable().destroy()
@@ -372,7 +371,7 @@
                 }).draw()  
                 beforeRunningLen = RunningLen
                 RunningLen = 0
-              } 
+ 
               if (FinishedLen != beforeFinishedLen) {
                 $('#doneState1').empty()  
                 for (var i =0; i <finishedData.length; i++) {

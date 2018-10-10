@@ -5,6 +5,7 @@ const conf = require('../config/config.json')
 
 //mongodb model
 const App = require('../models/appSchema').App
+const Users = require('../models/users').Users
 
 module.exports = {
 	/**
@@ -18,34 +19,76 @@ module.exports = {
 		const body = req.info
 		const info = JSON.parse(fs.readFileSync(conf.AppFolder+body.split('.')[0]+'/'+body,'utf8'))
 		console.log(info.appName)
-		App.findOne({"appName" : info.appName}, function(err, user) {
-			if(err) {
-				res.send({status:false, result: err})
-			}
-			if(!user) {
-				//save data
-				parameter = []
+		App.findOne({"appName": info.appName}, function(err, app){
+			if(err) {res.send({status:false, result: err})}
+			if(!app){
+			Users.findOne({email: req.user.email}, function(err, user){
+				if(err) {res.send({status:false, result:err})}
+				if(!user) {res.send({status:false,result:"not exists"})}
+				else{
+					let parameters = []
 
-				for (let data of info.parameters){
-					parameter.push(data)
+					for (let data of info.parameters){
+						parameters.push(data)
+					}
+					console.log(parameters)
+					let app = new App({
+						appName : info.appName,
+						description : info.description,
+						author : info.author,
+						parameters : parameters,
+						version : info.version,
+						type : info.type,
+						user : user._id
+					})
+					app.save(function(err, result){
+						if(err) {res.send({status:false, result:err})}
+						if(result) {
+							user.apps.push(app)
+							user.save(function(err, data){
+								if(err) {res.send({status:false, result:err})}
+								if(data){
+									res.send({status:true, result:data})
+								}
+							})
+						}
+					})
 				}
-				app = new App({
-					"appName" : info.appName,
-					"description" : info.description,
-					"author" : info.author,
-					"parameters" : parameter,
-					"version" : info.version,
-					"type" :info.type
-				})
-				app.save(function(err, user) {
-					//console.log('create', user)
-					res.send({status: true, result: user})
-				})
-			} 
-			else {
+			})
+		}
+		else{
 				res.send({status: false, result: "file exists"})
 			}
 		})
+
+		// App.findOne({"appName" : info.appName}, function(err, user) {
+		// 	if(err) {
+		// 		res.send({status:false, result: err})
+		// 	}
+		// 	if(!user) {
+		// 		//save data
+		// 		parameter = []
+
+		// 		for (let data of info.parameters){
+		// 			parameter.push(data)
+		// 		}
+		// 		app = new App({
+		// 			"appName" : info.appName,
+		// 			"description" : info.description,
+		// 			"author" : info.author,
+		// 			"parameters" : parameter,
+		// 			"version" : info.version,
+		// 			"type" :info.type
+		// 		})
+		// 		app.save(function(err, user) {
+		// 			//console.log('create', user)
+		// 			res.send({status: true, result: user})
+		// 		})
+		// 	} 
+		// 	else {
+		// 		res.send({status: false, result: "file exists"})
+		// 	}
+		// })
 	},
 	
 	/**
@@ -128,8 +171,9 @@ module.exports = {
 	 * @param {Object} res
 	 */
 	delApp(req, res) {
-		const id = req.query.id
+		const id = req.query.id.split('.')[0]
 		let path = conf.AppFolder+id+'/'+id+'.py'
+		console.log('id='+id)
 		fs.exists(path, function(appExists) {
 			if(!appExists) {res.send({status: false, result: "not exists"})}
 			else {
@@ -147,14 +191,35 @@ module.exports = {
 										fs.rmdir(path, function(err){
 											if(err) {res.send({status: false, result: "permission denied"})}
 											else{
-												console.log(id)
-												App.deleteOne({appName : id+'.py'},function(err, result) {
-													if(err) {res.send({status: false, result:err})}
-													if(!result) {res.send({status: false, result: result})}
-													else {
-														res.send({status: true, result: result})
+
+												App.findOneAndRemove({appName : id+'.py'}, function(err, app) {
+													if(err) throw err
+													if(app){
+														console.log("findOneAndRemove"+ app)
+														Users.update(
+															{"apps" : app._id},
+															{"$pull" : {"apps" : app._id}},
+															function(err, result){
+																if(err) throw err
+																if (result){
+																	res.send({status: true, result: result})
+																}
+															}
+														)
 													}
-												})													
+												})
+
+
+
+												// App.deleteOne({appName : id+'.py'},function(err, result) {
+													
+												// 	if(err) {res.send({status: false, result:err})}
+												// 	if(!result) {res.send({status: false, result: result})}
+												// 	else {
+												// 		console.log(result)
+												// 		res.send({status: true, result: result})
+												// 	}
+												// })													
 											}
 										})
 									 }

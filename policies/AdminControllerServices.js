@@ -18,7 +18,7 @@ module.exports = {
 	saveInfo(req, res) {
 		const body = req.info
 		const info = JSON.parse(fs.readFileSync(conf.AppFolder+body.split('.')[0]+'/'+body,'utf8'))
-		//console.log(info.appName)
+		console.log(info.appName)
 		App.findOne({"appName": info.appName}, function(err, app){
 			if(err) {res.send({status:false, result: err})}
 			if(!app){
@@ -171,8 +171,9 @@ module.exports = {
 	 * @param {Object} res
 	 */
 	delApp(req, res) {
-		const id = req.query.id
+		const id = req.query.id.split('.')[0]
 		let path = conf.AppFolder+id+'/'+id+'.py'
+		console.log('id='+id)
 		fs.exists(path, function(appExists) {
 			if(!appExists) {res.send({status: false, result: "not exists"})}
 			else {
@@ -190,14 +191,35 @@ module.exports = {
 										fs.rmdir(path, function(err){
 											if(err) {res.send({status: false, result: "permission denied"})}
 											else{
-												console.log(id)
-												App.deleteOne({appName : id+'.py'},function(err, result) {
-													if(err) {res.send({status: false, result:err})}
-													if(!result) {res.send({status: false, result: result})}
-													else {
-														res.send({status: true, result: result})
+
+												App.findOneAndRemove({appName : id+'.py'}, function(err, app) {
+													if(err) throw err
+													if(app){
+														console.log("findOneAndRemove"+ app)
+														Users.update(
+															{"apps" : app._id},
+															{"$pull" : {"apps" : app._id}},
+															function(err, result){
+																if(err) throw err
+																if (result){
+																	res.send({status: true, result: result})
+																}
+															}
+														)
 													}
-												})													
+												})
+
+
+
+												// App.deleteOne({appName : id+'.py'},function(err, result) {
+													
+												// 	if(err) {res.send({status: false, result:err})}
+												// 	if(!result) {res.send({status: false, result: result})}
+												// 	else {
+												// 		console.log(result)
+												// 		res.send({status: true, result: result})
+												// 	}
+												// })													
 											}
 										})
 									 }

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema
+const Users = require('../models/users').Users
 
 var parameterSchema = new Schema({
     "name" : String,

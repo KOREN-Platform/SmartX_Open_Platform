@@ -194,7 +194,34 @@
                 <button type="submit" class="sparkRun">Spark Run</button>
                 <!-- <div class="result">app result</div> -->
               </div>
-
+                <!-- Modal -->
+                <div id="myModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+  
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Application Add</h4>
+                      </div>
+                      <div class="modal-body">
+                        <!--add file&app-->
+                        <form action="/admin/saveApp"  method="post" enctype="multipart/form-data" id="fileForm" accept-charset="utf-8">
+                          <input type='file' id='appFile' name='appFile' accept=".py">
+                          <br>
+                          <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8">
+                        </form>
+                        <br>
+                        <textarea id="metaText" rows="10" cols="50"></textarea>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" id="addAppBtn">add app</button>
+                        <button type="button" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+  
+                  </div>
+                </div>
               <!-- Modal -->
               <div id="addModel" class="modal fade" role="dialog">
                 <div class="modal-dialog">

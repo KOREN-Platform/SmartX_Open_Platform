@@ -61,10 +61,15 @@ module.exports = {
 				res.send({status: false, result:"error"})
 			}
 			const data = JSON.parse(stdout).apps.app;
-			const clientData = []
-			for (let i in data) {
-				if(data[i].name == email) {
-					clientData.push(data[i])
+			let clientData = []
+			if (req.user.role == 3){
+				clientData = data
+			}
+			else{
+				for (let i in data) {
+					if(data[i].name == email) {
+						clientData.push(data[i])
+					}
 				}
 			}
 			//console.log(clientData)

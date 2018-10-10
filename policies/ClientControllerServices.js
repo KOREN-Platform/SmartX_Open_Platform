@@ -34,7 +34,7 @@ module.exports = {
 					})
 				}
 			})
-		}else if(role == 1){
+		}else {
 			//user
 			//condtion = {}
 			App.find({}, function(err, appList){
@@ -51,7 +51,8 @@ module.exports = {
 					})
 				}
 			})
-		}else{}
+		}
+		
 		
 	},
 	/**

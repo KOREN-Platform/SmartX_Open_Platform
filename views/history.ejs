@@ -168,38 +168,6 @@
                 </div></div><div class="col-sm-12 col-md-6"><div id="dataTable_filter" class="dataTables_filter">
                   <!-- <label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label> -->
                 </div></div></div><div class="row"><div class="col-sm-12">
-
-                  <!-- running yarn status -->
-                  <h3>Running APP</h3>
-                  <br/>
-                    <table id="dtVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                        <thead>
-                          <tr>
-                            <th class="th-sm">id
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">name
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">elapsedTime
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">startedTime
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">finishedTime
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                            <th class="th-sm">state
-                              <i class="fa fa-sort float-right" aria-hidden="true"></i>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody id="runState1">
-                        </tbody>
-                      </table>
-                        
-                      <br /> <br />  <br />  <br />
                       
                       <!-- finished yarn status -->
                       <h3>Finished APP</h3>
@@ -305,11 +273,6 @@
       })
 
       $(document).ready(function() {
-        var table1 = $('#dtVerticalScrollExample').DataTable({
-          "scrollY": "200px",
-          "scrollCollapse": true,
-          "order" : [[1, "desc"]]
-      });
           var table2 = $('#dtVerticalScrollExample1').DataTable({
           "scrollY": "200px",
           "scrollCollapse": true,
@@ -353,8 +316,6 @@
           method:'get',
           success: function(result){
               var stateLen = result.result.length;
-             //$('#runState1').empty()
-              //$('#doneState1').empty()
               let runningData =[]
               let finishedData = []
               let RunningLen = 0
@@ -391,16 +352,9 @@
                     finishedTime : finishedTime
                   })
                 }
-                // if(state == "RUNNING") {
-                // $('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+hour_gap + "시" + min_gap+ "분" +sec_gap + "초"+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>').appendTo('#runState1')
-                // } else if(state=="FINISHED") {
-                // $('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+hour_gap + "시" + min_gap+ "분" +sec_gap + "초"+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>').appendTo('#doneState1')
-                // }
               }
               if (RunningLen != beforeRunningLen) {
                 $('#runState1').empty()
-                $('#dtVerticalScrollExample').DataTable().clear()
-                $('#dtVerticalScrollExample').DataTable().destroy()
                 for (var i=0; i<runningData.length; i++) {
                   let id = runningData[i].id
                   let name = runningData[i].name
@@ -408,20 +362,11 @@
                   let elapsedTime = runningData[i].elapsedTime
                   let startedTime = runningData[i].startedTime
                   let finishedTime = runningData[i].finishedTime
-                  // $('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+elapsedTime+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>').appendTo('#runState1')
-                  $('#dtVerticalScrollExample').find('tbody').append('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+elapsedTime+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>')
                 }
-                $('#dtVerticalScrollExample').DataTable({
-                  "scrollY": "200px",
-                  "scrollCollapse": true,
-                  "order" : [[1, "desc"]]
-                }).draw()  
                 beforeRunningLen = RunningLen
                 RunningLen = 0
               } 
               if (FinishedLen != beforeFinishedLen) {
-                // console.log(FinishedLen)
-                // console.log(beforeFinishedLen)
                 $('#doneState1').empty()
                 $('#dtVerticalScrollExample1').DataTable().clear()
                 $('#dtVerticalScrollExample1').DataTable().destroy()
@@ -432,7 +377,6 @@
                   let elapsedTime = finishedData[i].elapsedTime
                   let startedTime = finishedData[i].startedTime
                   let finishedTime = finishedData[i].finishedTime
-                  // $('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+elapsedTime+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>').appendTo('#doneState1')
                   $('#dtVerticalScrollExample1').find('tbody').append('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+elapsedTime+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>')
                 }
                 $('#dtVerticalScrollExample1').DataTable({

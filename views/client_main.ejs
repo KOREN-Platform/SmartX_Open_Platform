@@ -260,13 +260,13 @@
                         <tr>
                           <th scope="col"></th>
                           <th scope="col">Data name</th>
-                          <th scope="col">Descriptionc</th>
-                          <th scope="col">File size</th>
+                          <th scope="col">File Size</th>
+                          <th scope="col">Description</th>
                           <th scope="col">Uploader</th>
                         </tr>
                       </thead>
-                      <tbody id='select_APP'>
-                        <tr>
+                      <tbody id='select_data'>
+                        <!-- <tr>
                           <th scope="row">
                             
                             <div class="checkbox">
@@ -313,7 +313,7 @@
                           <td>4.0.0</td>
                           <td>Various marketing information for beginners</td>
                           <td>Dr.Sorry</td>
-                        </tr>
+                        </tr> -->
                       </tbody>
                     </table>
 
@@ -540,8 +540,29 @@
               }
               
 	            for(var i=0 ; i<result.datalist.length ; i++){
-                $('#select_data').append('<option value='+result.datalist[i].dataName+'>'+result.datalist[i].dataName+'</option>');
-	            }
+                $('#select_data').append(
+                '<tr><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" value="'+result.datalist[i].dataName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.datalist[i].dataName+'</td><td>'+result.datalist[i].size+'</td><td>'+result.datalist[i].description+'</td><td>'+result.datalist[i].Uploader+'</td></tr></tr>'
+                );
+
+                // '<tr>
+                //           <th scope="row">
+                            
+                //             <div class="checkbox">
+                //               <label style="font-size: 1em">
+                //                   <input type="checkbox" value="'+result.datalist[i]dataName+'">
+                //                   <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                //               </label>
+                //             </div>
+                            
+                //           </th>
+                //           <td>'+result.datalist[i].dataName+'</td>
+                //           <td>'+result.datalist[i].size+'</td>
+                //           <td>'+result.datalist[i].description+'</td>
+                //           <td>'+result.datalist[i].Uploader+'</td>
+                //         </tr>
+                // </tr>'
+
+              }
 	          }
 	        }
         })

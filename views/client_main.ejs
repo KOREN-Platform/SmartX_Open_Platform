@@ -243,7 +243,7 @@
     
                   <!-- <input type="button" id='ready_button' onclick='readyToRun();' value='Ready To Run'> -->
                   
-                  <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();'><b>READY TO RUN</b></button>
+                  <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();' style="display: none"><b>READY TO RUN</b></button>
                   <% if (user.role == 2)  { %>
                     <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#myModal">Add</button>
                     <button type="button" class="btn btn-dark"  id='delApp'>Delete</button>
@@ -481,8 +481,11 @@
         //if ($('#select_APP option:selected').val() == null){
         if ($('input:checkbox[id=APP_check]').is(':checked') == false){
           alert('please select Application')
+        } else if($('input:checkbox[id=APP_check]:checked').length > 1){
+          alert('please check only one Application')
         } else{//show
           document.all.readyToSpark.style.display=""
+          makeParaBlank()
         }
       }      
       $('#logoutBtn').click(function(){
@@ -515,14 +518,47 @@
           }
         })
       }
-      // $('#select_data').click( function() {
-      //             var x = document.getElementById("select_data")
-      //             x.style.fontSize = "25px"
-      //             x.style.color = "blue"
-      //             x.style.backgroundColor = "yellow"
-      // })
 
-      $('#select_APP').click(changeTabelColor())
+      function makeParaBlank(){
+        $.ajax({
+          url: '/client/makeParameterBlank',
+          method: 'post',
+          data: {
+	          // 'appname' : $('#select_APP option:selected').val()
+            'appname' : $('input:checkbox[id=APP_check]:checked').val()
+	        },
+          dataType: 'json',
+          success: function(result) {
+            if(result){
+        	    //파라미터 입력 공간 초기화
+	            $('#parameter_blank').empty();
+	            parameterKey = []
+
+	            //모든 파라미터 체크
+	            for(var i=0 ; i<result.nameList.length ; i++){
+
+	              //파라미터 키 리스트 작성
+	              parameterKey[i] = result.nameList[i]
+
+	              //파라미터 입력 타입 체크
+	              if(result.typeList[i] == 'text'){
+		            //text 방식 입력 공간 생성
+  		            $('#parameter_blank').append(
+		              result.nameList[i]+' '+'<input id='+result.nameList[i]+' type="text" maxlength="'+result.typeMaxList[i]+'"> ['+result.descriptionList[i]+']'+'<br>'
+		              )
+	              }else if(result.typeList[i] == 'radio' || result.typeList[i] == 'checkbox'){		//make radio or checkbox blank
+  		            $('#parameter_blank').append(result.nameList[i]+' ['+result.descriptionList[i]+']'+'<br>')
+		              for(var j = 0 ; j < result.typeDataList[i].length ; j++){
+  		              $('#parameter_blank').append(
+		                '<input id='+result.nameList[i]+' type="'+result.typeList[i]+'" value='+result.typeDataList[i][j]+' name='+result.nameList[i]+'/>'+result.typeDataList[i][j]+'<br>'
+		                )
+		              }
+	              }
+    	        }
+            }
+          }
+        })
+      }
 
       function listRef() {
         $.ajax({
@@ -610,7 +646,6 @@
 	          }
           }
         }
-      
         console.log(parameterValue)
 
         //예외처리
@@ -620,20 +655,19 @@
         // } else if ($('#select_APP option:selected').val() == null){
         } else if($('input:checkbox[id=data_check]:checked').length > 1){
           alert('please check only one data')
-        } else if($('input:checkbox[id=data_check]:checked').length > 1){
-          alert('please check only one App')
+        } else if($('input:checkbox[id=APP_check]:checked').length > 1){
+          alert('please check only one Application')
         }else if ($('input:checkbox[id=APP_check]').is(':checked') == false){
           alert('please select Application')
         } else{
-          $('.result').html('prosessing');
           var check = confirm("Do you want running selected app?")
           if(check){
             $.ajax({
             url: '/client/sparkSubmit',
             method: 'post',
             data: {
-				    	'APP' : $('input:checkbox[id=APP_check]').val(),
-				    	'data' : $('input:checkbox[id=data_check]').val(),
+				    	'APP' : $('input:checkbox[id=APP_check]:checked').val(),
+				    	'data' : $('input:checkbox[id=data_check]:checked').val(),
 				    	'parameter' : parameterValue,
 					    'target': $('input[name="sendRadio"]:checked').val(),
 					    'user' : $('#user').val()
@@ -652,45 +686,16 @@
       $(document).ready(function(){
         listRef();
       })
+
       $('#select_APP').click( function() {
-        $.ajax({
-          url: '/client/makeParameterBlank',
-          method: 'post',
-          data: {
-	          // 'appname' : $('#select_APP option:checked').val()
-            'appname' : $('input:checkbox[id=APP_check]').val()
-	        },
-          dataType: 'json',
-          success: function(result) {
-            if(result){
-        	    //파라미터 입력 공간 초기화
-	            $('#parameter_blank').empty();
-	            parameterKey = []
-
-	            //모든 파라미터 체크
-	            for(var i=0 ; i<result.nameList.length ; i++){
-
-	              //파라미터 키 리스트 작성
-	              parameterKey[i] = result.nameList[i]
-
-	              //파라미터 입력 타입 체크
-	              if(result.typeList[i] == 'text'){
-		            //text 방식 입력 공간 생성
-  		            $('#parameter_blank').append(
-		              result.nameList[i]+' '+'<input id='+result.nameList[i]+' type="text" maxlength="'+result.typeMaxList[i]+'"> ['+result.descriptionList[i]+']'+'<br>'
-		              )
-	              }else if(result.typeList[i] == 'radio' || result.typeList[i] == 'checkbox'){		//make radio or checkbox blank
-  		            $('#parameter_blank').append(result.nameList[i]+' ['+result.descriptionList[i]+']'+'<br>')
-		              for(var j = 0 ; j < result.typeDataList[i].length ; j++){
-  		              $('#parameter_blank').append(
-		                '<input id='+result.nameList[i]+' type="'+result.typeList[i]+'" value='+result.typeDataList[i][j]+' name='+result.nameList[i]+'/>'+result.typeDataList[i][j]+'<br>'
-		                )
-		              }
-	              }
-    	        }
-            }
-          }
-        })
+        if($('input:checkbox[id=APP_check]:checked').length == 1){
+          document.all.ready_button.style.display=""
+        } else if($('input:checkbox[id=APP_check]:checked').length > 1){
+          document.all.readyToSpark.style.display="none"
+        }else {
+          document.all.ready_button.style.display="none"
+          document.all.readyToSpark.style.display="none"
+        }
       })
 
         //      $('#delApp').click(function(){
@@ -717,9 +722,12 @@
         // })
 
       $('#delApp').click(function(){
-            var check = confirm("Do you want delete selected app?")
+            var check = confirm("Do you want delete checked app?")
+            
             if(check) {
-                var selectedApp = $('#select_APP option:selected').val()
+              for(var i = 0 ; i < $('input:checkbox[id=APP_check]:checked').length ; i++){
+                
+                var selectedApp = $('input:checkbox[id=APP_check]:checked')[i].value
                 $.ajax({
                     url: "/admin/delApp",
                     dataType: "json",
@@ -736,6 +744,8 @@
                         console.log(error)
                     }
                 })
+              }
+                
             }
         })
 

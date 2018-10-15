@@ -243,7 +243,7 @@
     
                   <!-- <input type="button" id='ready_button' onclick='readyToRun();' value='Ready To Run'> -->
                   
-                  <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();' style="display: none"><b>READY TO RUN</b></button>
+                  <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
                   <% if (user.role == 2)  { %>
                     <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#myModal">Add</button>
                     <button type="button" class="btn btn-dark"  id='delApp'>Delete</button>
@@ -622,6 +622,16 @@
         })
       }
 
+      function buttonAndReadyView(){
+
+        if($('input:checkbox[id=APP_check]:checked').length == 1){
+          document.getElementById('ready_button').disabled = false
+        } else if ($('input:checkbox[id=APP_check]:checked').length |= 1){
+          document.getElementById('ready_button').disabled = true
+          document.all.readyToSpark.style.display="none"
+        }
+      }
+
       var parameterKey = new Array()
 
       $('.sparkRun').click( function() {
@@ -687,39 +697,11 @@
         listRef();
       })
 
-      $('#select_APP').click( function() {
-        if($('input:checkbox[id=APP_check]:checked').length == 1){
-          document.all.ready_button.style.display=""
-        } else if($('input:checkbox[id=APP_check]:checked').length > 1){
-          document.all.readyToSpark.style.display="none"
-        }else {
-          document.all.ready_button.style.display="none"
-          document.all.readyToSpark.style.display="none"
-        }
-      })
 
-        //      $('#delApp').click(function(){
-        //     var check = confirm("really?")
-        //     if(check) {
-        //         var clickedId = $('#appList').val()
-        //         $.ajax({
-        //             url: "/admin/delApp",
-        //             dataType: "json",
-        //             method: "GET",
-        //             data : {"id" : clickedId},
-        //             success: function(result) {
-        //                 if(!result.result) {
-        //                     alert("failed metadata delete ")
-        //                 } else {
-        //                     appListRef()
-        //                 }
-        //             }, 
-        //             error : function(error) {
-        //                 console.log(error)
-        //             }
-        //         })
-        //     }
-        // })
+
+      $('#select_APP').click(function(){
+        buttonAndReadyView()
+      })
 
       $('#delApp').click(function(){
             var check = confirm("Do you want delete checked app?")
@@ -738,24 +720,24 @@
                             alert("failed metadata delete ")
                         } else {
                           listRef()
+                          buttonAndReadyView()
                         }
                     }, 
                     error : function(error) {
                         console.log(error)
                     }
                 })
-              }
-                
+              }            
             }
         })
 
         $('#addAppBtn').click(function() {
 
-          //info = JSON.parse($('#metaText').html())
+          info = JSON.parse($('#metaText').html())
           //console.log(info)
 
           var appValue = $('#appFile').val().split("\\");
-          //info.appName = appValue[appValue.length-1];
+          info.appName = appValue[appValue.length-1];
           var jsonValue = $('#metaFile').val().split("\\")
           if (appValue[appValue.length-1].split(".")[0] == jsonValue[jsonValue.length-1].split(".")[0]) {
               //app data

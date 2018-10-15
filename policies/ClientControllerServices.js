@@ -197,6 +197,7 @@ module.exports = {
 					//데이터 넘기기
 					res.send({	
 						// appname : metadata.appName,
+			
 						// author : metadata.author,
 						// version : metadata.version,
 						// description : metadata.description,
@@ -360,23 +361,34 @@ module.exports = {
 			let path = files.appFile[0].path
 			let originalName = files.appFile[0].originalFilename
 			let splitName = originalName.split('.')[0]
-			fs.mkdir(conf.AppFolder+splitName, function(err){
-				if(err) {res.send({status: false, result: err})}
-				else {
-					fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err){
-						if(err) {res.send({status: false, result: err})}
-						else {
-							path = files.appFile[1].path
-							originalName = files.appFile[1].originalFilename
-							fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err) {
-								if(err) {res.send({status:false, result:err})}
-								else {
-									req.info = originalName
-									next()
-								}
-							})
-						}
-					})
+			
+			App.findOne({"appName" : originalFilename}, function(err, data) {
+				if(err){
+					{res.send({status:false, result:err})}
+				} else{
+					if(data == null){
+						{res.send({status:false, result:'A file with the same name exists.'})}
+					} else{
+						fs.mkdir(conf.AppFolder+splitName, function(err){
+							if(err) {res.send({status: false, result: err})}
+							else {
+								fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err){
+									if(err) {res.send({status: false, result: err})}
+									else {
+										path = files.appFile[1].path
+										originalName = files.appFile[1].originalFilename
+										fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err) {
+											if(err) {res.send({status:false, result:err})}
+											else {
+												req.info = originalName
+												next()
+											}
+										})
+									}
+								})
+							}
+						})
+					}
 				}
 			})
 		})

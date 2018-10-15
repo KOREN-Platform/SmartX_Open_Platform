@@ -479,20 +479,12 @@
       //ready to run button event
       function readyToRun(){
         //if ($('#select_APP option:selected').val() == null){
-        if ($('input:checkbox[name=APP_check]').is(':checked') == true){
+        if ($('input:checkbox[id=APP_check]').is(':checked') == false){
           alert('please select Application')
         } else{//show
           document.all.readyToSpark.style.display=""
         }
-      }
-      function readyToApp(){
-        // var popUrl = "admin.ejs"
-        // var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;"
-        // window.open(popUrl,"",popOption);
-        BootstrapDialog.alert('I want banana!');
-      }
-      
-      
+      }      
       $('#logoutBtn').click(function(){
         $.ajax({
 				url: '/logout',
@@ -507,6 +499,31 @@
 			  })
       })
 
+      function changeTabelColor(){
+        $.ajax({
+          url: '/client/makeList',
+          method: 'post',
+          success: function(result){
+            var tableColor = "#0d47al"
+            var app = document.getElementById(result.applist[0].appName);
+            app.style.backgroundColor = "#0d47al"
+
+            var x = document.getElementById("select_data")
+                  x.style.fontSize = "25px"
+                  x.style.color = "blue"
+                  x.style.backgroundColor = "yellow"
+          }
+        })
+      }
+      // $('#select_data').click( function() {
+      //             var x = document.getElementById("select_data")
+      //             x.style.fontSize = "25px"
+      //             x.style.color = "blue"
+      //             x.style.backgroundColor = "yellow"
+      // })
+
+      $('#select_APP').click(changeTabelColor())
+
       function listRef() {
         $.ajax({
           url: '/client/makeList',
@@ -519,9 +536,9 @@
 	            for(var i=0 ; i<result.applist.length ; i++){
                 //$('#select_APP').append('<option value='+result.applist[i].appName+'>'+result.applist[i].appName+'</option>');
                 $('#select_APP').append(
-                '<tr><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td></tr><tr>'
+                '<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td></tr><tr>'
                 );
-                //'<tr>
+                //'<tr id="'+result.applist[i].appName+'">
                 //         <th scope="row">
                 //           <div class="checkbox">
                 //             <label style="font-size: 1em">
@@ -537,11 +554,12 @@
                 //         <td>'+result.applist[i].author.email+'</td>
                 //       </tr>
                 // <tr>'
+
               }
               
 	            for(var i=0 ; i<result.datalist.length ; i++){
                 $('#select_data').append(
-                '<tr><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" value="'+result.datalist[i].dataName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.datalist[i].dataName+'</td><td>'+result.datalist[i].size+'</td><td>'+result.datalist[i].description+'</td><td>'+result.datalist[i].Uploader+'</td></tr></tr>'
+                '<tr id="'+result.datalist[i].dataName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" value="'+result.datalist[i].dataName+'" id="data_check"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.datalist[i].dataName+'</td><td>'+result.datalist[i].size+'</td><td>'+result.datalist[i].description+'</td><td>'+result.datalist[i].Uploader+'</td></tr></tr>'
                 );
 
                 // '<tr>
@@ -549,7 +567,7 @@
                             
                 //             <div class="checkbox">
                 //               <label style="font-size: 1em">
-                //                   <input type="checkbox" value="'+result.datalist[i]dataName+'">
+                //                   <input type="checkbox" value="'+result.datalist[i]dataName+'" id="data_check">
                 //                   <span class="cr"><i class="cr-icon fa fa-check"></i></span>
                 //               </label>
                 //             </div>
@@ -596,10 +614,15 @@
         console.log(parameterValue)
 
         //예외처리
-        if($('#select_data option:selected').val() == null){
+        // if($('#select_data option:selected').val() == null){
+        if ($('input:checkbox[id=data_check]').is(':checked') == false){
           alert('please select data file')
         // } else if ($('#select_APP option:selected').val() == null){
-        } else if ($('input:checkbox[name=APP_check]').is(':checked') == true){
+        } else if($('input:checkbox[id=data_check]:checked').length > 1){
+          alert('please check only one data')
+        } else if($('input:checkbox[id=data_check]:checked').length > 1){
+          alert('please check only one App')
+        }else if ($('input:checkbox[id=APP_check]').is(':checked') == false){
           alert('please select Application')
         } else{
           $('.result').html('prosessing');
@@ -610,7 +633,7 @@
             method: 'post',
             data: {
 				    	'APP' : $('input:checkbox[id=APP_check]').val(),
-				    	'data' : $('#select_data option:selected').val(),
+				    	'data' : $('input:checkbox[id=data_check]').val(),
 				    	'parameter' : parameterValue,
 					    'target': $('input[name="sendRadio"]:checked').val(),
 					    'user' : $('#user').val()
@@ -665,11 +688,6 @@
 		              }
 	              }
     	        }
-	            // $('#parameter_blank').append('<br>'+'Appname : '+result.appname)
-	            // $('#parameter_blank').append('<br>'+'App Version : '+result.version)
-	            // $('#parameter_blank').append('<br>'+'Description : '+result.description)
-	            // $('#parameter_blank').append('<br>'+'Author : '+result.author.name)
-	            // $('#parameter_blank').append('<br>'+'Email : '+result.author.email)
             }
           }
         })

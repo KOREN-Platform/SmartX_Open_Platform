@@ -153,13 +153,14 @@
 
               <select name='textfile' size='6' id='select_data' >
               </select>
-              
+              <br>
+              <br>
               <!--upload data file-->
               <p>upload data file</p>
               <form id='fileForm' method='post' enctype='multipart/form-data' action='/upload'>
                 <input type='file' id='fileInput' name='fileInput' accept=".txt, .log" size="500MB">
               </form>
-              <textarea id="description" rows="3" cols="60" placeholder="please input description of upload data"></textarea>
+              <textarea id="description" rows="3" cols="60" style="resize: none" placeholder="please input description of upload data"></textarea>
               <br>
               <!--upload data file-->
               <button class='data_upload'>DATA FILE UPLOAD</button>
@@ -223,36 +224,33 @@
     <script src="js/demo/chart-area-demo.js"></script>
 
     <script>
-    //work
+
+    //Run when page starts
     $(document).ready(function(){
       listRef()
     });
-    function listRef(){
-			$.ajax({
-        url: '/client/makeList',
-        method: 'post',
-        success: function(result) {
-          if(result){
-			      for(var i=0 ; i<result.datalist.length ; i++){
-              $('#select_data').append('<option value='+result.datalist[i].dataName+'>'+result.datalist[i].dataName+'</option>');
+    //list refresh function
+    function listRef() {
+        $.ajax({
+          url: '/client/makeList',
+          method: 'post',
+          success: function(result) {
+            if(result){
+              $('#select_data').empty();
+	            for(var i=0 ; i<result.datalist.length ; i++){
+                $('#select_data').append('<option value='+result.datalist[i].dataName+'>'+result.datalist[i].dataName+'</option>');
+	            }
 	          }
 	        }
-	      }
-      })
-		}
-
+        })
+      }
+    //upload button function
     $('.data_upload').click(function(){
 	    var form = $('#fileForm')[0]
       var formData = new FormData(form)
       var fileSize = fileInput.files[0].size
 
-
-      // formData.append("metaFile",$('#metaFile'))
-       var jsonStr = "{'description' : '"+$('#description').val()+"', 'fileSize' : "+fileSize+"}"
-       console.log(jsonStr)
-      // var jsonObj = JSON.parse(jsonStr)
-
-      // formData.append("data",jsonStr)
+      //add file data to form
       formData.append("description",$('#description').val())
       formData.append("fileSize",fileSize)
 
@@ -264,10 +262,6 @@
 	        processData: false,
           contentType: false,
           data : formData,
-          // &{
-		    	// 	'description' : $('#description').val(),
-    			// 	'fileSize' : fileSize
-			    // },
 	        type: 'POST',
 	        success: function(result){
             if(result){
@@ -277,6 +271,7 @@
         })
 	    }
     })
+    //delete button function
     $('.delete').click( function() {
       if($('#select_data option:selected').val() == null){
           alert('please select data file')
@@ -297,13 +292,5 @@
       }
 		})
     </script>
-  
-
-
-
-
-
-
-
 </body>
 </html>

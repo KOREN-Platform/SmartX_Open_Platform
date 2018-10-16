@@ -48,12 +48,6 @@
               <% } else { %>
                 <h4 class="text-danger"> <span class="badge badge-pill badge-danger">Manager Mode</span></h4>
                 <% } %>
-          <!--<input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="button">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>-->
         </div>
       </form>
 
@@ -155,20 +149,7 @@
           </ol>
           <!-- Icon Cards-->
           <div class="card mb-3">
-            <!-- <div class="card-header">
-              <i class="fas fa-table"></i>
-              Data Table Example</div> -->
             <div class="card-body">
-
-              
-              <!--working space-->
-
-              <!--<div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                  <<h1 class="display-4">Hello John, Welcome to Nilab!</h1>
-                  <p class="lead">This page can be used by the primary user <span class="badge badge-pill badge-primary">Primary</span>. Select the app, then run with the 'Ready to Run' button.</p>
-                  <!--<select class="custom-select" id='select_APP' >
-                  </select>-->
 
                   <h2><ion-icon name="list-box"></ion-icon> App List</h2>
                   <!-- icon link: https://ionicons.com/ -->
@@ -186,63 +167,8 @@
                       </tr>
                     </thead>
                     <tbody id='select_APP'>
-                      <!--<tr>
-                        <th scope="row">
-                          
-                          <div class="checkbox">
-                            <label style="font-size: 1em">
-                                <input type="checkbox" value="" checked>
-                                <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                            </label>
-                          </div>
-                          
-                        </th>
-                        <td>Wordcount search</td>
-                        <td>0.0.1</td>
-                        <td>Apps that count number of specific characters</td>
-                        <td>Choi</td>
-                        <td>ghwlchlaks@gmail.com</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          
-                          <div class="checkbox">
-                              <label style="font-size: 1em">
-                                  <input type="checkbox" value="">
-                                  <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                              </label>
-                            </div>
-                          
-                        </th>
-                        <td>Internet security</td>
-                        <td>1.0.2</td>
-                        <td>Protect your computer from threats</td>
-                        <td>Park</td>
-                        <td>Park@gmail.com</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          
-                          <div class="checkbox">
-                              <label style="font-size: 1em">
-                                  <input type="checkbox" value="">
-                                  <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                              </label>
-                            </div>
-                          
-                        </th>
-                        <td>Marketing manager</td>
-                        <td>4.0.0</td>
-                        <td>Various marketing information for beginners</td>
-                        <td>Dr.Sorry</td>
-                        <td>Thanks@gmail.com</td>
-                      </tr>-->
                     </tbody>
                   </table>
-    
-    
-                  <!-- <input type="button" id='ready_button' onclick='readyToRun();' value='Ready To Run'> -->
-                  
                   <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
                   <% if (user.role == 2)  { %>
                     <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#myModal">Add</button>
@@ -254,7 +180,6 @@
                     <h2><ion-icon name="document"></ion-icon> Data List</h2>
                     <!-- icon link: https://ionicons.com/ -->
                     <p class="lead">Select data and get results by <ion-icon name="mail"></ion-icon><b>E-mail</b> or <ion-icon name="logo-slack"></ion-icon><b>Slack</b>.</p>
-                    <!-- <h5>Select the App, then run with the <kbd>READY TO RUN</kbd> button.</h5> -->
                     <table class="table table-hover"> <!-- .table thead th -->
                       <thead>
                         <tr>
@@ -266,61 +191,10 @@
                         </tr>
                       </thead>
                       <tbody id='select_data'>
-                        <!-- <tr>
-                          <th scope="row">
-                            
-                            <div class="checkbox">
-                              <label style="font-size: 1em">
-                                  <input type="checkbox" value="" checked>
-                                  <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                              </label>
-                            </div>
-                            
-                          </th>
-                          <td>Wordcount search</td>
-                          <td>0.0.1</td>
-                          <td>Apps that count number of specific characters</td>
-                          <td>Choi</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            
-                            <div class="checkbox">
-                                <label style="font-size: 1em">
-                                    <input type="checkbox" value="">
-                                    <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                                </label>
-                              </div>
-                            
-                          </th>
-                          <td>Internet security</td>
-                          <td>1.0.2</td>
-                          <td>Protect your computer from threats</td>
-                          <td>Park</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            
-                            <div class="checkbox">
-                                <label style="font-size: 1em">
-                                    <input type="checkbox" value="">
-                                    <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                                </label>
-                              </div>
-                            
-                          </th>
-                          <td>Marketing manager</td>
-                          <td>4.0.0</td>
-                          <td>Various marketing information for beginners</td>
-                          <td>Dr.Sorry</td>
-                        </tr> -->
                       </tbody>
                     </table>
 
-                    <!--
-                    <select class="custom-select" id='select_data' >
-                    </select> <br>
-                    -->
+            
 
                     <div class="btn-group" role="group" aria-label="Basic example">
                       <button type="button" class="btn btn-secondary"><ion-icon name="mail"></ion-icon>E-mail</button>
@@ -329,16 +203,11 @@
                       <button type="button" class="sparkRun btn btn-Danger"><ion-icon name="play"></ion-icon><b>SPARK RUN</b></button>
                     </div>
                     <div class="alert alert-secondary" role="alert">
-                                          <form id='parameter_blank'></form>
-                  </div>
+                      <form id='parameter_blank'></form>
                     </div>
-
-<!--
-                    <input type="radio" value='slack' id="slackBtn" name="sendRadio" checked />slack
-                    <input type="radio" value='email' id="emailBtn" name="sendRadio" />email
-                    <input type="text" name="sendName" id="user"/>  
-                    <button type="submit" class="sparkRun">Spark Run</button>  
-                  </div> -->
+                    </div>
+                    
+                  </div>
                 </div>
               </div>
                 <!-- Modal -->
@@ -398,26 +267,9 @@
                   </div>
                 </div>
               </div>
-              <!-- <style>
-                .modal-dialog {
-                height: 85% !important;
-                padding-top:10%;
-                }
-
-                .modal-content {
-                height: 100% !important;
-                overflow:visible;
-                }
-
-                .modal-body {
-                height: 80%;
-                overflow: auto;
-                }
-              </style> -->
-
 
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
           </div>
         </div>
         <!-- /.container-fluid -->
@@ -427,6 +279,7 @@
     </div>
     <!-- /#wrapper -->
     <!-- Scroll to Top Button-->
+  
     <a class="scroll-to-top rounded" href="#page-top" style="display: none;">
       <i class="fas fa-angle-up"></i>
     </a>
@@ -451,7 +304,7 @@
     </div>
 
     <!-- icon -->
-    <script  src = "https://unpkg.com/ionicons@4.4.4/dist/ionicons.js" ></script >
+    <script  src = "https://unpkg.com/ionicons@4.4.4/dist/ionicons.js" ></script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -654,7 +507,7 @@
 	          }
           }
         }
-        console.log(parameterValue)
+        //console.log(parameterValue)
 
         //예외처리
         // if($('#select_data option:selected').val() == null){

@@ -45,9 +45,9 @@ db.once('open', function (callback) {
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views/pages/'));
 app.set('view engine', 'ejs');
-// basic set
+
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
@@ -124,9 +124,6 @@ app.use('/data', express.static(__dirname +'/node_modules/bootstrap/data'));
 app.use('/dist', express.static(__dirname +'/node_modules/bootstrap/dist'));
 app.use('/scss', express.static(__dirname +'/node_modules/bootstrap/scss'));
 
-//app.use('/slack', clientRouter)
-//app.use('/slacklist', clientRouter)
-//app.use('/clientYarnAll', clientRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

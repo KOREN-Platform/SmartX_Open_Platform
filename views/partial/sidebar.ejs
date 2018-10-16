@@ -12,11 +12,11 @@
                   <i class="fas fa-fw fa-tachometer-alt"></i>
                   <span>Apps</span>
                 </a>
-                <div class="dropdown-menu show" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
+                <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
                   <!-- <h6 class="dropdown-header">App</h6> -->
-                  <a class="dropdown-item active" href="client_main">List</a>
-                  <a class="dropdown-item" href="app_Status">Status</a>
-                  <a class="dropdown-item" href="history">History</a>
+                  <a class="dropdown-item" id="client_main" href="client_main">List</a>
+                  <a class="dropdown-item" id="app_Status" href="app_Status">Status</a>
+                  <a class="dropdown-item" id="history" href="history">History</a>
                 </div>
               </li>
             <li class="nav-item dropdown">
@@ -26,7 +26,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
                 <!-- <h6 class="dropdown-header">Developer Page</h6> -->
-                <a class="dropdown-item" href="developer_main">List</a>
+                <a class="dropdown-item" id="developer_main" href="developer_main">List</a>
               </div>
             </li>
             <li class="nav-item dropdown">
@@ -35,11 +35,19 @@
                 <span>Spark</span>
               </a>
               <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
-                <h6 class="dropdown-header">Status</h6>
-                <a class="dropdown-item" href="Cluster">Cluster</a>
-                <a class="dropdown-item" href="Hdfs">Hdfs</a>
-                <a class="dropdown-item" href="Yarn">Yarn</a>
-                <a class="dropdown-item" href="zoo">Zookeeper</a> 
+                <!-- <h6 class="dropdown-header">Status</h6> -->
+                <a class="dropdown-item" id="Cluster" href="Cluster">Cluster</a>
+                <a class="dropdown-item" id="Hdfs" href="Hdfs">Hdfs</a>
+                <a class="dropdown-item" id="Yarn" href="Yarn">Yarn</a>
+                <a class="dropdown-item" id="zoo" href="zoo">Zookeeper</a> 
               </div>
             </li>
           </ul>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+    let url = (window.location.href).split("/")
+    $("#"+url[url.length -1]).addClass('active')
+    $("#"+url[url.length -1]).parent().addClass('show')
+  })
+</script>

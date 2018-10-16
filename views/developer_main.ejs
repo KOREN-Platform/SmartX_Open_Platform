@@ -7,8 +7,9 @@
     <meta name="author" content="">
 
     <title>NILAB - Dashboard</title>
+
     <!-- Bootstrap core CSS-->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -19,8 +20,9 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
 
+    <!-- main color: #343a40(B), #dee2e6 -->
+    
   <style type="text/css">/* Chart.js */
-@-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style><style type="text/css">/* Chart.js */
@@ -28,24 +30,24 @@
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style></head>
 
   <body id="page-top">
-
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-      <a class="navbar-brand mr-1" href="index.html">NILAB</a>
-
+      <a class="navbar-brand mr-1" href="client_main">NILAB</a>
+      
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
       </button>
 
       <!-- Navbar Search -->
-      <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-10 my-5 my-md-0">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="button">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
+          <% if (user.role == 1) { %>
+            <h4 class="text-primary"> <span class="badge badge-pill badge-primary">User Mode</span></h4>
+            <% } else if (user.role == 2) { %>
+              <h4 class="text-success"> <span class="badge badge-pill badge-success">Developer Mode</span></h4>
+              <% } else { %>
+                <h4 class="text-danger"> <span class="badge badge-pill badge-danger">Manager Mode</span></h4>
+                <% } %>
         </div>
       </form>
 
@@ -83,19 +85,22 @@
             <a class="dropdown-item" href="#">Settings</a>
             <a class="dropdown-item" href="/profile">Profile</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+            <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">Logout</a>
           </div>
         </li>
       </ul>
+
+      
 
     </nav>
 
     <div id="wrapper">
 
+
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav">
         <li class="nav-item active">
-          <a class="nav-link" href="index.html">
+          <a class="nav-link" href="client_main">
             <i class="fas fa-fw fa-table"></i>
             <span>Main</span>
           </a>
@@ -112,16 +117,16 @@
               <a class="dropdown-item" href="history">History</a>
             </div>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-fw fa-chart-area"></i>
-              <span>Data</span>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
-              <!-- <h6 class="dropdown-header">Developer Page</h6> -->
-              <a class="dropdown-item" href="developer_main">List</a>
-            </div>
-          </li>
+          <li class="nav-item dropdown show">
+              <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Data</span>
+              </a>
+              <div class="dropdown-menu show" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
+                <!-- <h6 class="dropdown-header">Developer Page</h6> -->
+                <a class="dropdown-item active" href="developer_main">List</a>
+              </div>
+            </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-chart-area"></i>
@@ -132,10 +137,9 @@
             <a class="dropdown-item" href="Cluster">Cluster</a>
             <a class="dropdown-item" href="Hdfs">Hdfs</a>
             <a class="dropdown-item" href="Yarn">Yarn</a>
-            <a class="dropdown-item" href="zoo">Zookeeper</a>
+            <a class="dropdown-item" href="zoo">Zookeeper</a> 
           </div>
         </li>
-       
       </ul>
       <div id="content-wrapper">
         <div class="container-fluid">

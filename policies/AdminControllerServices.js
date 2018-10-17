@@ -18,7 +18,6 @@ module.exports = {
 	saveInfo(req, res) {
 		const body = req.info
 		const info = JSON.parse(fs.readFileSync(conf.AppFolder+body.split('.')[0]+'/'+body,'utf8'))
-		console.log(info.appName)
 		App.findOne({"appName": info.appName}, function(err, app){
 			if(err) {res.send({status:false, result: err})}
 			if(!app){
@@ -60,35 +59,6 @@ module.exports = {
 				res.send({status: false, result: "file exists"})
 			}
 		})
-
-		// App.findOne({"appName" : info.appName}, function(err, user) {
-		// 	if(err) {
-		// 		res.send({status:false, result: err})
-		// 	}
-		// 	if(!user) {
-		// 		//save data
-		// 		parameter = []
-
-		// 		for (let data of info.parameters){
-		// 			parameter.push(data)
-		// 		}
-		// 		app = new App({
-		// 			"appName" : info.appName,
-		// 			"description" : info.description,
-		// 			"author" : info.author,
-		// 			"parameters" : parameter,
-		// 			"version" : info.version,
-		// 			"type" :info.type
-		// 		})
-		// 		app.save(function(err, user) {
-		// 			//console.log('create', user)
-		// 			res.send({status: true, result: user})
-		// 		})
-		// 	} 
-		// 	else {
-		// 		res.send({status: false, result: "file exists"})
-		// 	}
-		// })
 	},
 	
 	/**
@@ -109,7 +79,22 @@ module.exports = {
 			let originalName = files.appFile[0].originalFilename
 			let splitName = originalName.split('.')[0]
 			fs.mkdir(conf.AppFolder+splitName, function(err){
-				if(err) {res.send({status: false, result: err})}
+				if(err) {
+					fs.unlink(path, function(err){
+						if(!err){
+							fs.unlink(files.appFile[1].path, function(err){
+								if(!err){
+									res.send({status: false, result: "file exists"})
+								} else{
+									res.send({status:false, result: err})
+								}
+							})
+						}
+						else{
+							res.send({status:false, result: err})		
+						}
+					})
+				}
 				else {
 					fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err){
 						if(err) {res.send({status: false, result: err})}
@@ -207,19 +192,7 @@ module.exports = {
 															}
 														)
 													}
-												})
-
-
-
-												// App.deleteOne({appName : id+'.py'},function(err, result) {
-													
-												// 	if(err) {res.send({status: false, result:err})}
-												// 	if(!result) {res.send({status: false, result: result})}
-												// 	else {
-												// 		console.log(result)
-												// 		res.send({status: true, result: result})
-												// 	}
-												// })													
+												})				
 											}
 										})
 									 }

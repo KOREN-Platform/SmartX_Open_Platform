@@ -453,7 +453,6 @@
         $('#addAppBtn').click(function() {
 
           info = JSON.parse($('#metaText').html())
-          //console.log(info)
 
           var appValue = $('#appFile').val().split("\\");
           info.appName = appValue[appValue.length-1];
@@ -462,9 +461,8 @@
               //app data
               var form = $('#fileForm')[0];
               var formData = new FormData(form);
-    
+            
               formData.append("metaFile",$('#metaFile'))
-              //console.log(formData)
               //save : app(.py..) + parameterFile(.json..) in mongodb 
               $.ajax({
                   url: '/admin/saveApp',
@@ -473,7 +471,6 @@
                   processData: false,
                   contentType: false,
                   success: function (result) {
-                      //console.log(result);
                       if(result.status) {
                           alert("App 업로드에 성공하였습니다.")
                       } else {

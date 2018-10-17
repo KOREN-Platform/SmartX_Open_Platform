@@ -119,8 +119,7 @@ module.exports = {
 												console.log('error : db save error')
 												console.log(err)
 											}else{
-												console.log('db upload success')
-												// res.send({status: true, result: user})
+												res.send({status: true, result: user})
 											}
 										})
 									}
@@ -149,7 +148,7 @@ module.exports = {
 				if(err){
 					console.log('error : db delete error')
 				}else{
-					console.log('db delete success')
+					res.send({status: true, result: result})
 				}
 			})
 		})

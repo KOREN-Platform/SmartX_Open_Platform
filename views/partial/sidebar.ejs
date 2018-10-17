@@ -7,7 +7,7 @@
                 <span>Main</span>
               </a>
             </li>
-            <li class="nav-item dropdown show">
+            <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                   <i class="fas fa-fw fa-tachometer-alt"></i>
                   <span>Apps</span>
@@ -49,5 +49,9 @@
     let url = (window.location.href).split("/")
     $("#"+url[url.length -1]).addClass('active')
     $("#"+url[url.length -1]).parent().addClass('show')
+  })
+
+  $('.sidebar').click(function(){
+    $('.dropdown-menu').removeClass('show')
   })
 </script>

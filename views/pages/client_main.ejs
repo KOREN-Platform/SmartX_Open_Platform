@@ -1,10 +1,8 @@
-<html lang="en"><head>
+<html lang="en">
     <% include ../partial/head %>
-
   <body id="page-top">
       <% include ../partial/toolbar %>
     <div id="wrapper">
-
       <% include ../partial/sidebar %>
       <div id="content-wrapper">
         <div class="container-fluid">
@@ -39,7 +37,7 @@
                   </table>
                   <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
                   <% if (user.role == 2)  { %>
-                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#myModal">Add</button>
+                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModel">Add</button>
                     <button type="button" class="btn btn-dark"  id='delApp'>Delete</button>
                   <% } %>
                   <div id='readyToSpark' style="display: none">
@@ -68,46 +66,16 @@
                       <form id='parameter_blank'></form>
                     </div>
 
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                      <button type="button" class="btn btn-secondary"><ion-icon name="mail"></ion-icon> E-mail</button>
-                      <button type="button" class="btn btn-secondary"><ion-icon name="logo-slack"></ion-icon> Slack</button>
-                      <input type="email" class="form-control-smail" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                      <button type="button" class="sparkRun btn btn-Danger"><ion-icon name="play"></ion-icon><b>SPARK RUN</b></button>
+                    <div class="btn-group" id="selector" role="group" aria-label="Basic example">
+                      <button type="button" value="email" id="emailBtn" class="btn btn-secondary active"><ion-icon name="mail"></ion-icon> E-mail</button>
+                      <button type="button" value="slack" id="slackBtn" class="btn btn-secondary"><ion-icon name="logo-slack"></ion-icon> Slack</button>
+                      <input type="text" name="sendName" class="form-control-smail" id="user" aria-describedby="emailHelp" placeholder="Enter user id">
                     </div>
+                    <button type="button" class="sparkRun btn btn-Danger"><ion-icon name="play"></ion-icon><b>SPARK RUN</b></button>
                     </div>
-                    
                   </div>
                 </div>
               </div>
-                <!-- Modal -->
-
-                <div id="myModal" class="modal fade" role="dialog">
-                  <div class="modal-dialog"></div>
-  
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Application Add</h4>
-                      </div>
-                      <div class="modal-body">
-                        <!--add file&app-->
-                        <form action="/admin/saveApp"  method="post" enctype="multipart/form-data" id="fileForm" accept-charset="utf-8">
-                          <input type='file' id='appFile' name='appFile' accept=".py">
-                          <br>
-                          <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8">
-                        </form>
-                        <br>
-                        <textarea id="metaText" rows="10" cols="50"></textarea>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" id="addAppBtn">add app</button>
-                        <button type="button" data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-  
-                  </div>
-                </div>
               <!-- Modal -->
               <div id="addModel" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -353,7 +321,9 @@
       }
 
       var parameterKey = new Array()
-
+      $('#selector button').click(function() {
+        $(this).addClass('active').siblings().removeClass('active');
+      });
       $('.sparkRun').click( function() {
 
 	      //파라미터값 초기화
@@ -392,6 +362,7 @@
         } else{
           var check = confirm("Do you want running selected app?")
           if(check){
+            //console.log($(".btn-group > button.active").val())
             $.ajax({
             url: '/client/sparkSubmit',
             method: 'post',
@@ -399,7 +370,8 @@
 				    	'APP' : $('input:checkbox[id=APP_check]:checked').val(),
 				    	'data' : $('input:checkbox[id=data_check]:checked').val(),
 				    	'parameter' : parameterValue,
-					    'target': $('input[name="sendRadio"]:checked').val(),
+              //'target': $('input[name="sendRadio"]:checked').val(),
+              'target': $(".btn-group > button.active").val(),
 					    'user' : $('#user').val()
 				    },
             dataType: 'json',
@@ -409,6 +381,7 @@
               }
             }
             })
+            location.replace("app_status")
           }
           }
         })

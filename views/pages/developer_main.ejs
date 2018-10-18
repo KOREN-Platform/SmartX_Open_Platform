@@ -19,17 +19,12 @@
           </ol>
           <!-- Icon Cards-->
           <div class="card mb-3">
-            <div class="card-header">
+            <div class="card-body">
               <!--working space-->
-
-
-
-asdasdasdsdasd
-
 
               <h2><ion-icon name="document"></ion-icon> Data List</h2>
               <!-- icon link: https://ionicons.com/ -->
-              <p class="lead">You can check a list of data, upload it, and delete it.</p>
+              <p class="lead">You can check a list of data, <kbd>Upload</kbd> it, or <kbd>Delete</kbd> it.</p>
               <table class="table table-hover"> <!-- .table thead th -->
                 <thead>
                   <tr>
@@ -44,38 +39,42 @@ asdasdasdsdasd
                 </tbody>
               </table>
 
-              <div class="alert alert-secondary" role="alert">
-                  <h5><ion-icon name="add-circle"></ion-icon> App detail</h5>
-                <hr class="my-2">
-                <form id='parameter_blank'></form>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Upload</span>
+                </div>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="inputGroupFile01">
+                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                </div>
               </div>
 
+              <div class="alert alert-secondary" role="alert">
+                  <h5><ion-icon name="create"></ion-icon> App description</h5>
+                <hr class="my-2">
+                <div class="form-group">
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="please input description of upload data"></textarea>
+                </div>
+              </div>
+              <button type="button" class="sparkRun btn btn-success"><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
+              <button type="button" class="sparkRun btn btn-Dark"><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>
 
-                
-                <br><br>
-
-
-
-
-
-
-
-
+       <!--
 
               <select name='textfile' size='6' id='select_data' >
               </select>
               <br>
               <br>
-              <!--upload data file-->
+
               <p>upload data file</p>
               <form id='fileForm' method='post' enctype='multipart/form-data' action='/upload'>
                 <input type='file' id='fileInput' name='fileInput' accept=".txt, .log" size="500MB">
               </form>
               <textarea id="description" rows="3" cols="60" style="resize: none" placeholder="please input description of upload data"></textarea>
               <br>
-              <!--upload data file-->
+
               <button class='data_upload'>DATA FILE UPLOAD</button>
-              <!--delete data file-->
+
               <button class='delete'>DATA FILE DELETE</button>
 
 

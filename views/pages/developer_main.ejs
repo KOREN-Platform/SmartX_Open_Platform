@@ -44,41 +44,22 @@
                   <span class="input-group-text">Upload</span>
                 </div>
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="inputGroupFile01">
-                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                  <form id='fileForm' method='post' enctype='multipart/form-data' action=''>
+                    <input type="file" class="custom-file-input" id="fileInput" name="fileInput" accept=".txt, .log">
+                    <label class="custom-file-label" for="fileInput">Choose a file</label>
+                  </form>
                 </div>
               </div>
-
-              <div class="alert alert-secondary" role="alert">
-                  <h5><ion-icon name="create"></ion-icon> App description</h5>
+              <div class="alert alert-secondary" role="alert" id="data_description" style="display: none">
+                  <h5 id="decription_title"><ion-icon name="create"></ion-icon>Data description</h5>
                 <hr class="my-2">
                 <div class="form-group">
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="please input description of upload data"></textarea>
+                  <textarea class="form-control" id="description" rows="3" placeholder="please input description of upload data"></textarea>
                 </div>
               </div>
-              <button type="button" class="sparkRun btn btn-success"><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
-              <button type="button" class="sparkRun btn btn-Dark"><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>
+              <button type="button" class="sparkRun btn btn-success" id="data_upload" disabled><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
+              <button type="button" class="sparkRun btn btn-Dark" id="delete" disabled><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>
 
-       <!--
-
-              <select name='textfile' size='6' id='select_data' >
-              </select>
-              <br>
-              <br>
-
-              <p>upload data file</p>
-              <form id='fileForm' method='post' enctype='multipart/form-data' action='/upload'>
-                <input type='file' id='fileInput' name='fileInput' accept=".txt, .log" size="500MB">
-              </form>
-              <textarea id="description" rows="3" cols="60" style="resize: none" placeholder="please input description of upload data"></textarea>
-              <br>
-
-              <button class='data_upload'>DATA FILE UPLOAD</button>
-
-              <button class='delete'>DATA FILE DELETE</button>
-
-
-            </div>
         <!-- /.container-fluid -->
 
         <!-- Sticky Footer -->
@@ -151,62 +132,115 @@
             if(result){
               $('#select_data').empty();
 	            for(var i=0 ; i<result.datalist.length ; i++){
-                $('#select_data').append('<option value='+result.datalist[i].dataName+'>'+result.datalist[i].dataName+'</option>');
-	            }
+                $('#select_data').append(
+                '<tr id="'+result.datalist[i].dataName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" value="'+result.datalist[i].dataName+'" id="data_check"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.datalist[i].dataName+'</td><td>'+result.datalist[i].size+'</td><td>'+result.datalist[i].description+'</td><td>'+result.datalist[i].Uploader+'</td></tr></tr>'
+                );
+                // '<tr>
+                //           <th scope="row">
+                            
+                //             <div class="checkbox">
+                //               <label style="font-size: 1em">
+                //                   <input type="checkbox" value="'+result.datalist[i]dataName+'" id="data_check">
+                //                   <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                //               </label>
+                //             </div>
+                            
+                //           </th>
+                //           <td>'+result.datalist[i].dataName+'</td>
+                //           <td>'+result.datalist[i].size+'</td>
+                //           <td>'+result.datalist[i].description+'</td>
+                //           <td>'+result.datalist[i].Uploader+'</td>
+                //         </tr>
+                // </tr>'
+              }
 	          }
 	        }
         })
       }
+
+    function buttondDisabled(){
+      if($('input:checkbox[id=data_check]:checked').length > 0){
+        document.getElementById('delete').disabled = false
+      } else{
+        document.getElementById('delete').disabled = true
+      }
+    }
+
+    $('#select_data').click(function(){
+      buttondDisabled()
+    })
+
+
+    $('#fileForm').change(function(){
+      document.getElementById('data_upload').disabled = false
+      document.getElementById("decription_title").innerHTML = fileInput.files[0].name + "'s decription"
+      document.all.data_description.style.display=""
+    })
+
     //upload button function
-    $('.data_upload').click(function(){
+    $('#data_upload').click(function(){
 	    var form = $('#fileForm')[0]
       var formData = new FormData(form)
       var fileSize = fileInput.files[0].size
+
+      console.log(fileSize)
 
       //add file data to form
       formData.append("description",$('#description').val())
       formData.append("fileSize",fileSize)
 
+      const check = confirm("Do you want upload "+fileInput.files[0].name+"?")
+      
+
 	    if($('#fileInput').val() == ""){
           alert('please select upload file')
       }else{
-    	  $.ajax({
-  	      url:'/client/dataUpload',
-	        processData: false,
-          contentType: false,
-          data : formData,
-	        type: 'POST',
-	        success: function(result){
-            if(result){
-              listRef()
-            }
-	        }
-        })
+        if(check){
+          $.ajax({
+  	        url:'/client/dataUpload',
+	          processData: false,
+            contentType: false,
+            data : formData,
+	          type: 'POST',
+	          success: function(result){
+              if(result){
+                listRef()
+                buttondDisabled()
+              }
+	          }
+          })
+        }
 	    }
     })
     //delete button function
-    $('.delete').click( function() {
-      if($('#select_data option:selected').val() == null){
+    $('#delete').click( function() {
+      const check = confirm("Do you want delete checked data?")
+      if(check){
+        if ($('input:checkbox[id=data_check]').is(':checked') == false){
           alert('please select data file')
-      }else{
-      $.ajax({
-        url: '/client/dataDelete',
-        method: 'post',
-        data: {
-	        'data' : $('#select_data option:selected').val()
-      	},
-        dataType: 'json',
-        success: function(result) {
-          if(result){
-      	    listRef()
+        }else{
+          for(let i = 0 ; $('input:checkbox[id=data_check]:checked').length > 0 ; i++){
+            $.ajax({
+              url: '/client/dataDelete',
+              method: 'post',
+              data: {
+                'data' : $('input:checkbox[id=data_check]:checked')[i].value
+      	      },
+              dataType: 'json',
+              success: function(result) {
+                if(!result.result){
+                  alert('delete failed')
+                }else{
+                  listRef()
+                  buttondDisabled()
+                }
+              }
+            })
           }
         }
-      })
       }
+      
 		})
-
-    //
-    
     </script>
 </body>
 </html>

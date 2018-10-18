@@ -3,14 +3,14 @@
       <ul class="sidebar navbar-nav">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                  <i class="fas fa-fw fa-tachometer-alt"></i>
-                  <span>Apps</span>
+                  <i class="fas fa-fw"><ion-icon name="list-box"></ion-icon></i>
+                  <span><b>Apps</b></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
                   <!-- <h6 class="dropdown-header">App</h6> -->
-                  <a class="dropdown-item" id="client_main" href="client_main">List</a>
-                  <a class="dropdown-item" id="app_Status" href="app_Status">Status</a>
-                  <a class="dropdown-item" id="history" href="history">History</a>
+                  <a class="dropdown-item" id="client_main" href="client_main"><ion-icon name="arrow-dropright"></ion-icon> List</a>
+                  <a class="dropdown-item" id="app_Status" href="app_Status"><ion-icon name="arrow-dropright"></ion-icon> Status</a>
+                  <a class="dropdown-item" id="history" href="history"><ion-icon name="arrow-dropright"></ion-icon> History</a>
                 </div>
               </li>
             <li class="nav-item dropdown">
@@ -41,7 +41,7 @@
 <script>
   $(document).ready(function(){
     let url = (window.location.href).split("/")
-    $("#"+url[url.length -1]).addClass('active')
+    $("#"+url[url.length -1]).addClass('act')
     $("#"+url[url.length -1]).parent().addClass('show')
   })
 

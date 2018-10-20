@@ -88,25 +88,25 @@
                     </div>
                     <div class="modal-body">
                       <!--add file&app-->
-                      <p class="lead" disabled>You can upload only <kbd>.py</kbd> or <kbd>.json</kbd> extension.</p>
+                      <p class="lead" disabled>please choose <kbd>Application</kbd> and <kbd>Mata data</kbd></p>
                       <form action="/admin/saveApp"  method="post" enctype="multipart/form-data" id="fileForm" accept-charset="utf-8">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                              <span class="input-group-text">.py</span>
+                              <span class="input-group-text">App</span>
                             </div>
                             <div class="custom-file">
-                              <input type="file" class="custom-file-input" id="inputGroupFile01">
-                              <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                              <input type="file" class="custom-file-input" id="appFile" name="appFile" accept=".py">
+                              <label class="custom-file-label" id="appFileName" for="appFile">Choose a file</label>
                             </div>
                           </div>
                         <!-- <input type='file' id='appFile' name='appFile' accept=".py"><br> -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                              <span class="input-group-text">.json</span>
+                              <span class="input-group-text">Meta</span>
                             </div>
                             <div class="custom-file">
-                              <input type="file" class="custom-file-input" id="inputGroupFile01">
-                              <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                              <input type="file" class="custom-file-input" id="metaFile" name="appFile" accept=".json">
+                              <label class="custom-file-label" id="metaFileName" for="metaFile">Choose a file</label>
                             </div>
                           </div>
                         <!-- <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8"> -->
@@ -114,10 +114,10 @@
                       <!-- meta JSON text -->
                       <!-- <textarea id="metaText" rows="10" cols="50"></textarea> -->
                       <div class="alert alert-secondary" role="alert">
-                          <h5><ion-icon name="create"></ion-icon> App description</h5>
+                          <!-- <h5><ion-icon name="create"></ion-icon> App description</h5> -->
                         <hr class="my-2">
                         <div class="form-group">
-                          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="please input description of upload data"></textarea>
+                          <textarea class="form-control" id="metaText" rows="3" readonly></textarea>
                         </div>
                       </div>
                     <div class="modal-footer">
@@ -505,9 +505,17 @@
                 }
             }
             rawFile.send(null);
-        }  
+        }
+
+        $('#appFile').change(function() {
+            document.getElementById("appFileName").innerHTML = appFile.files[0].name
+        })
+
         
         $('#metaFile').change(function(e) {
+
+            document.getElementById("metaFileName").innerHTML = metaFile.files[0].name
+
             const files = e.target.files;
             // console.log(files)
             if(files && files.length > 0) {

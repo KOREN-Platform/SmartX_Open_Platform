@@ -46,7 +46,7 @@
                 <div class="custom-file">
                   <form id='fileForm' method='post' enctype='multipart/form-data' action=''>
                     <input type="file" class="custom-file-input" id="fileInput" name="fileInput" accept=".txt, .log">
-                    <label class="custom-file-label" for="fileInput">Choose a file</label>
+                    <label class="custom-file-label" id="dataFileName" for="fileInput">Choose a file</label>
                   </form>
                 </div>
               </div>
@@ -170,7 +170,8 @@
 
     $('#fileForm').change(function(){
       document.getElementById('data_upload').disabled = false
-      document.getElementById("decription_title").innerHTML = fileInput.files[0].name + "'s decription"
+      // document.getElementById("decription_title").innerHTML = fileInput.files[0].name + "'s decription"
+      document.getElementById("dataFileName").innerHTML = fileInput.files[0].name
       document.all.data_description.style.display=""
     })
 

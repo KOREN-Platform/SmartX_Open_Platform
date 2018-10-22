@@ -37,8 +37,8 @@
                   </table>
                   <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
                   <% if (user.role == 2)  { %>
-                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModel">Add</button>
-                    <button type="button" class="btn btn-dark"  id='delApp'>Delete</button>
+                    <button type="button" class="btn btn-dark" id="addApp" data-toggle="modal" data-target="#addModel">Add</button>
+                    <button type="button" class="btn btn-dark"  id='delApp' disabled >Delete</button>
                   <% } %>
                   <div id='readyToSpark' style="display: none">
                     <hr class="my-4">
@@ -164,7 +164,7 @@
     </div>
 
     <!-- icon -->
-    <script  src = "https://unpkg.com/ionicons@4.4.4/dist/ionicons.js" ></script>
+    <script  src = "https://unpkg.com/ionicons@4.4.6/dist/ionicons.js" ></script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -333,14 +333,23 @@
         })
       }
 
-      function buttonAndReadyView(){
+      function buttonDisable(){
 
         if($('input:checkbox[id=APP_check]:checked').length == 1){
           document.getElementById('ready_button').disabled = false
+          document.getElementById('delApp').disabled = false
+          document.getElementById('addApp').disabled = true
         } else if ($('input:checkbox[id=APP_check]:checked').length |= 1){
           document.getElementById('ready_button').disabled = true
+          document.getElementById('delApp').disabled = true
+          document.getElementById('addApp').disabled = true
           document.all.readyToSpark.style.display="none"
         }
+        
+        if ($('input:checkbox[id=APP_check]:checked').length == 0){
+          document.getElementById('addApp').disabled = false
+        }
+        
       }
 
       var parameterKey = new Array()
@@ -416,7 +425,7 @@
 
 
       $('#select_APP').click(function(){
-        buttonAndReadyView()
+        buttonDisable()
       })
 
       $('#delApp').click(function(){
@@ -436,7 +445,7 @@
                             alert("failed metadata delete ")
                         } else {
                           listRef()
-                          buttonAndReadyView()
+                          buttonDisable()
                         }
                     }, 
                     error : function(error) {

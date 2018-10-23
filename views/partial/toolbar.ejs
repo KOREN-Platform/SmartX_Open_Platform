@@ -13,11 +13,11 @@
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-10 my-5 my-md-0">
           <div class="input-group">
             <% if (user.role == 1) { %>
-              <h4 class="text-primary"> <span class="badge badge-pill badge-primary">User Mode</span></h4>
+              <h4 class="text-primary ml-auto mr-0 mr-md-10 my-5 my-md-0" > <span class="badge badge-pill badge-primary">User Mode</span></h4>
               <% } else if (user.role == 2) { %>
-                <h4 class="text-success"> <span class="badge badge-pill badge-success">Developer Mode</span></h4>
+                <h4 class="text-success ml-auto mr-0 mr-md-10 my-5 my-md-0"> <span class="badge badge-pill badge-success">Developer Mode</span></h4>
                 <% } else { %>
-                  <h4 class="text-danger"> <span class="badge badge-pill badge-danger">Manager Mode</span></h4>
+                  <h4 class="text-danger ml-auto mr-0 mr-md-10 my-5 my-md-0"> <span class="badge badge-pill badge-danger">Manager Mode</span></h4>
                   <% } %>
           </div>
         </form>
@@ -26,7 +26,7 @@
         <ul class="navbar-nav ml-auto ml-md-0">
           <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-user-circle fa-fw"></i>
+            <b>Settings</b> <ion-icon name="settings"></ion-icon>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">Logout</a>

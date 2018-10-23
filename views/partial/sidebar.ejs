@@ -15,29 +15,34 @@
               </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Data</span>
+                <!--<i class="fas fa-fw fa-chart-area"></i>-->
+                <i class="fas fa-fw"><ion-icon name="document"></ion-icon></i>
+                <span><b>Data</b></span>
               </a>
               <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
                 <!-- <h6 class="dropdown-header">Developer Page</h6> -->
-                <a class="dropdown-item" id="developer_main" href="developer_main">List</a>
+                <a class="dropdown-item" id="developer_main" href="developer_main"><ion-icon name="arrow-dropright"></ion-icon> List</a>
               </div>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Spark</span>
+                <!-- <i class="fas fa-fw fa-chart-area"></i>-->
+                <i class="fas fa-fw"><ion-icon name="save"></ion-icon></i>
+                <span><b>Spark</b></span>
               </a>
               <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
                 <!-- <h6 class="dropdown-header">Status</h6> -->
-                <a class="dropdown-item" id="Cluster" href="Cluster">Cluster</a>
-                <a class="dropdown-item" id="Hdfs" href="Hdfs">Hdfs</a>
-                <a class="dropdown-item" id="Yarn" href="Yarn">Yarn</a>
-                <a class="dropdown-item" id="zoo" href="zoo">Zookeeper</a> 
+                <a class="dropdown-item" id="Cluster" href="Cluster"><ion-icon name="arrow-dropright"></ion-icon> Cluster</a>
+                <a class="dropdown-item" id="Hdfs" href="Hdfs"><ion-icon name="arrow-dropright"></ion-icon> Hdfs</a>
+                <a class="dropdown-item" id="Yarn" href="Yarn"><ion-icon name="arrow-dropright"></ion-icon> Yarn</a>
+                <a class="dropdown-item" id="zoo" href="zoo"><ion-icon name="arrow-dropright"></ion-icon> Zookeeper</a> 
               </div>
             </li>
           </ul>
 <script src="vendor/jquery/jquery.min.js"></script>
+<!-- icon -->
+<script src="https://unpkg.com/ionicons@4.4.6/dist/ionicons.js"></script>
+
 <script>
   $(document).ready(function(){
     let url = (window.location.href).split("/")

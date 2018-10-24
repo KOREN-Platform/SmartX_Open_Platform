@@ -2,5 +2,6 @@
     "HDFSPort" : "9870",
     "AppFolder" : "./sparkApps/",
     "DataFolder" : "/data",
+    "ResultFolder" : "/result",
     "ManagerIp" : "192.168.2.12"
 }

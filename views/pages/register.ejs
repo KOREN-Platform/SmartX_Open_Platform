@@ -3,77 +3,68 @@
     <% include ../partial/head %>
   <body class="bg-dark">
 
-    <div class="container">
-      <div class="card card-register mx-auto mt-5">
-        <div class="card-header">Register an Account</div>
-        <div class="card-body">
-          <form>
-            <div class="form-group">
-              <div class="form-row">
-                <div class="col-md-6">
-                  <div class="form-label-group">
-                    <input type="text" id="firstName" class="form-control" placeholder="First name" required="required" autofocus="autofocus">
-                    <label for="firstName">First name</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-label-group">
-                    <input type="text" id="lastName" class="form-control" placeholder="Last name" required="required">
-                    <label for="lastName">Last name</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="form-label-group">
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required">
-                <label for="inputEmail">Email address</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="form-row">
-                <div class="col-md-6">
-                  <div class="form-label-group">
-                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
-                    <label for="inputPassword">Password</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-label-group">
-                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm password" required="required">
-                    <label for="confirmPassword">Confirm password</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Default inline 1-->
-            <div id="roleRadio">
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" class="custom-control-input" id="userRadio" name="roleRadio" checked value=1>
-              <label class="custom-control-label" for="userRadio">User</label>
-            </div>
-            <!-- Default inline 2-->
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" class="custom-control-input" id="developerRadio" name="roleRadio" value=2>
-              <label class="custom-control-label" for="developerRadio">Developer</label>
-            </div>
-            <!-- Default inline 3-->
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" class="custom-control-input" id="managerRadio" name="roleRadio" value=3>
-              <label class="custom-control-label" for="managerRadio">Manager</label>
-            </div>
-          </div>
-            <!-- <a class="btn btn-primary btn-block" href="login">Register</a> -->
-            <a class="btn btn-primary btn-block" id="registerBtn">Register</a>
-          </form>
-          <div class="text-center">
-            <a class="d-block small mt-3" href="login">Login Page</a>
-            <!-- <a class="d-block small" href="forgot-password.html">Forgot Password?</a> -->
-          </div>
-        </div>
-      </div>
-    </div>
 
+<div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="md-form mb-5">
+                    <i class="fa fa-envelope prefix grey-text"></i>
+                    <input type="text" id="firstName" class="form-control validate" placeholder="First name" autofocus="autofocus">
+                    <label data-error="wrong" data-success="right" for="defaultForm-email">Your First name</label>
+                </div>
+
+                <div class="md-form mb-4">
+                    <i class="fa fa-lock prefix grey-text"></i>
+                    <input type="text" id="lastName" class="form-control validate" placeholder="Last name">
+                    <label data-error="wrong" data-success="right" for="defaultForm-pass">Your last name</label>
+                </div>
+
+                <div class="md-form mb-4">
+                    <i class="fa fa-lock prefix grey-text"></i>
+                    <input type="email" id="inputEmail" class="form-control validate" placeholder="Email address">
+                    <label data-error="wrong" data-success="right" for="defaultForm-pass">Your email</label>
+                </div>
+                
+                <div class="md-form mb-4">
+                    <i class="fa fa-lock prefix grey-text"></i>
+                    <input type="password" id="inputPassword" class="form-control validate" placeholder="Password">
+                    <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+                </div>
+            </div>
+
+            <div id="roleRadio">
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" class="custom-control-input" id="userRadio" name="roleRadio" checked value=1>
+                  <label class="custom-control-label" for="userRadio">User</label>
+                </div>
+                <!-- Default inline 2-->
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" class="custom-control-input" id="developerRadio" name="roleRadio" value=2>
+                  <label class="custom-control-label" for="developerRadio">Developer</label>
+                </div>
+                <!-- Default inline 3-->
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" class="custom-control-input" id="managerRadio" name="roleRadio" value=3>
+                  <label class="custom-control-label" for="managerRadio">Manager</label>
+                </div>
+              </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button id="registerBtn" class="btn btn-default">Register</button>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-default">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -97,7 +88,7 @@
                 data: inputUser,
                 success: function(result) {
                     alert("success!")
-                    location.href = "/login"
+                    location.href = "/"
                 },
                 error : function(error) {
                     alert("failed regist")

@@ -26,64 +26,31 @@
 		<style type="text/css">.gm-style {font: 400 11px Roboto, Arial, sans-serif;text-decoration: none;} .gm-style img { max-width: none; }</style><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/34/4/intl/ko_ALL/onion.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/34/4/intl/ko_ALL/controls.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/34/4/intl/ko_ALL/marker.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/34/4/intl/ko_ALL/stats.js"></script>
 	</head>
 <body>
+		<% include ./login %>
+		<% include ./register %>
 	<div class="jumbotron home home-fullscreen" id="home" style="height: 925px;margin-bottom: 0px;">
 		<div class="mask"></div>
 		<a href="#" class="logo">
 			<img src="img/logo.png" alt="Moderno - Theme by GraphBerry.com">
 		</a>
 		
-		
-		
 		<div class="container">
 			<div class="header-info">
 				<h1>NILAB</h1>
 				<p>Big Data App Container Service<br>Intelligence OpenAPI</p>
-				<a href="login" class="btn btn-primary">Start</a>
+				<!-- <a href="login" class="btn btn-primary">Start</a> -->
+				<a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm">Launch Modal Login Form</a>
+				<a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalRegisterForm">Launch Modal register Form</a>
 			</div>
 		</div>
 	</div>
-	<!-- Services section start -->
-	
-	
-	
-	
-	
-	
-	
-	<!-- Contact section end -->
-	<!-- Footer start -->
-	<footer>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8">
-					<p>Create <i class="fa fa-love"></i><a href="https://www.anyang.ac.kr">AYU_NILAB</a>
-</p>
-				</div>
-				<div class="col-md-4">
-					<ul class="social-icons">
-						<li><a href=""><i class="fa fa-facebook"></i></a></li>
-						<li><a href=""><i class="fa fa-twitter"></i></a></li>
-						<li><a href=""><i class="fa fa-dribbble"></i></a></li>
-						<li><a href=""><i class="fa fa-behance"></i></a></li>
-						<li><a href=""><i class="fa fa-pinterest"></i></a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</footer>
-	<!-- Footer end  -->
 
-	<!-- Load jQuery -->
 	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
 
 	<!-- Load Booststrap -->
 	<script type="text/javascript" src="js/bootstrap.js"></script>
 
 	<script type="text/javascript" src="js/smooth-scroll.js"></script>
-
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
-	<!-- Load custom js for theme -->
-	<script type="text/javascript" src="js/app.js"></script>
+	
 
 </body></html>

@@ -337,16 +337,22 @@
 
         if($('input:checkbox[id=APP_check]:checked').length == 1){
           document.getElementById('ready_button').disabled = false
-          document.getElementById('delApp').disabled = false
-          document.getElementById('addApp').disabled = true
+          if (user.role == 2)  {
+            document.getElementById('delApp').disabled = false
+            document.getElementById('addApp').disabled = true
+          }
         } else if ($('input:checkbox[id=APP_check]:checked').length |= 1){
           document.getElementById('ready_button').disabled = true
-          document.getElementById('addApp').disabled = true
           document.all.readyToSpark.style.display="none"
+          if (user.role == 2)  {
+            document.getElementById('addApp').disabled = true
+          }
         }
         
         if ($('input:checkbox[id=APP_check]:checked').length == 0){
-          document.getElementById('addApp').disabled = false
+          if (user.role == 2)  {
+            document.getElementById('addApp').disabled = false
+          }
         }
         
       }

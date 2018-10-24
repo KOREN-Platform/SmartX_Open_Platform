@@ -101,6 +101,10 @@ app.use('/makeList', clientRouter)
 //App 선택시 해당 App에서 필요한 Parameter를 입력하는 빈칸을 생성
 app.use('/makeParamaterBlank', clientRouter)
 
+//result save and load
+app.use('/resultSave', clientRouter)
+app.use('/resultLoad', clientRouter)
+
 //yarn 전체 상태
 app.use('/yarnAllState', clientRouter)
 //yarn 상세 데이터
@@ -138,7 +142,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-app.listen(process.env.PORT || 3000, function() {
+const SparkPolicy = require('./policies/SparkPolicy')
+app.listen(process.env.PORT || 3000,function() {
+  SparkPolicy.startCount()
 	console.log("server running")
 })
 module.exports = app;

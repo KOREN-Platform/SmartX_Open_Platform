@@ -18,6 +18,7 @@ module.exports = {
 				res.send({status: false, result:"error"})
 			}
 			const data = JSON.parse(stdout).apps.app;
+			console.log(data)
 			data.sort(function(a,b){
 				return a.startedTime > b.startedTime ? -1 : a.startedTime < b.startedTime ? 1 : 0;
 			})

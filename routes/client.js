@@ -8,6 +8,7 @@ const ResultSendToServices = require('../policies/ResultSendToServices')
 // yarn 상태 데이터를 가져오는 기능 파일
 const YarnStateServices = require('../policies/YarnStateServices')
 const ClientControllerServices = require('../policies/ClientControllerServices')
+const ResultSaveLoad = require('../policies/resultSave')
 
 /* GET client home page. */
 router.get('/', function(req, res, next) {
@@ -47,6 +48,10 @@ router.get('/delApp', ClientControllerServices.delApp)
 router.post('/saveApp', ClientControllerServices.saveFile, ClientControllerServices.saveInfo);
 // ClientControllerServices.appData : spark 앱 데이터 가져옴
 router.get('/appData',ClientControllerServices.appData)
+
+// router.post('/resultSave', ResultSaveLoad.resultSave)
+router.post('/resultLoad', ResultSaveLoad.resultLoad)
+
 
 
 

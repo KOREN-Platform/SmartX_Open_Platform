@@ -60,7 +60,6 @@
                             </tr>
                           </thead>
                           <tbody id="doneState1">
-                  
                           </tbody>
                         </table>
   
@@ -247,13 +246,37 @@
                   let elapsedTime = finishedData[i].elapsedTime
                   let startedTime = finishedData[i].startedTime
                   let finishedTime = finishedData[i].finishedTime
-                  $('#dtVerticalScrollExample1').find('tbody').append('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+elapsedTime+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>')
+                  $('#doneState1').append('<tr><td>'+id.split("application_")[1]+'</td><td>'+name+'</td><td>'+state+'</td><td>'+elapsedTime+'</td><td>'+startedTime+'</td><td>'+finishedTime+'</td></tr>')
                 }
-                $('#dtVerticalScrollExample1').DataTable({
+
+                var table2 = $('#dtVerticalScrollExample1').DataTable({
                   "scrollY": "200px",
                   "scrollCollapse": true,
                   "order" : [[1, "desc"]]
-                }).draw()  
+                }).draw()
+
+                $("#doneState1").on('click', 'tr', function(){
+                  // alert(table2.row(this).data()[0].split('_')[1])
+                  $('#resultTextBox').html('processing...')
+                  let app_id = table2.row(this).data()[0].split('_')[1]
+                  app_id *= 1
+                  $.ajax({
+                    url: '/client/resultLoad',
+                    method: 'post',
+                    data: {
+                      'app_id' : app_id
+	                  },
+                    dataType: 'json',
+                    success: function(result) {
+                      if(result){
+                        $('#resultTextBox').html(result.result)
+                        // document.getElementById("resultTextBox").val() = result.result
+                        // alert(result.result)
+                      }
+                    }
+                  })
+                })
+
                 beforeFinishedLen = FinishedLen
                 FinishedLen =0
               }
@@ -264,15 +287,6 @@
                 }
             })
         }
-
-        $("#dtVerticalScrollExample1 tr").click(function(){
-
-          let tr = $(this)
-          let td = tr.children()
-
-          console.log('asd'+tr.text())
-
-        })
 
     </script>
 </body>

@@ -36,6 +36,7 @@
                     </tbody>
                   </table>
                   <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
+
                   <% if (user.role == 2)  { %>
                     <button type="button" class="btn btn-dark" id="addApp" data-toggle="modal" data-target="#addModel">Add</button>
                     <button type="button" class="btn btn-dark"  id='delApp' disabled >Delete</button>
@@ -337,21 +338,22 @@
 
         if($('input:checkbox[id=APP_check]:checked').length == 1){
           document.getElementById('ready_button').disabled = false
-          if (user.role == 2)  {
+          if ('<%=user.role%>' == 2)  {
             document.getElementById('delApp').disabled = false
             document.getElementById('addApp').disabled = true
           }
         } else if ($('input:checkbox[id=APP_check]:checked').length |= 1){
           document.getElementById('ready_button').disabled = true
           document.all.readyToSpark.style.display="none"
-          if (user.role == 2)  {
+          if ('<%=user.role%>' == 2)  {
             document.getElementById('addApp').disabled = true
           }
         }
         
         if ($('input:checkbox[id=APP_check]:checked').length == 0){
-          if (user.role == 2)  {
+          if ('<%=user.role%>' == 2)  {
             document.getElementById('addApp').disabled = false
+            document.getElementById('delApp').disabled = true
           }
         }
         

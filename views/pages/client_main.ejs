@@ -36,6 +36,7 @@
                     </tbody>
                   </table>
                   <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
+
                   <% if (user.role == 2)  { %>
                     <button type="button" class="btn btn-dark" id="addApp" data-toggle="modal" data-target="#addModel">Add</button>
                     <button type="button" class="btn btn-dark"  id='delApp' disabled >Delete</button>
@@ -61,7 +62,7 @@
                     </table>
 
                     <div class="alert alert-secondary" role="alert">
-                        <h5><ion-icon name="add-circle"></ion-icon> App detail</h5>
+                        <h5><ion-icon name="add-circle"></ion-icon> App Parameters</h5>
                       <hr class="my-2">
                       <form id='parameter_blank'></form>
                     </div>
@@ -69,7 +70,7 @@
                     <div class="btn-group" id="selector" role="group" aria-label="Basic example">
                       <button type="button" value="email" id="emailBtn" class="btn btn-secondary active"><ion-icon name="mail"></ion-icon> E-mail</button>
                       <button type="button" value="slack" id="slackBtn" class="btn btn-secondary"><ion-icon name="logo-slack"></ion-icon> Slack</button>
-                      <input type="text" name="sendName" class="form-control-smail" id="user" aria-describedby="emailHelp" placeholder="Enter user id">
+                      <input type="text" name="sendName" class="form-control-smail" id="user" aria-describedby="emailHelp" placeholder="Input your Email">
                     </div>
                     <button type="button" class="sparkRun btn btn-Danger"><ion-icon name="play"></ion-icon><b>SPARK RUN</b></button>
                     </div>
@@ -213,22 +214,22 @@
 			  })
       })
 
-      function changeTabelColor(){
-        $.ajax({
-          url: '/client/makeList',
-          method: 'post',
-          success: function(result){
-            var tableColor = "#0d47al"
-            var app = document.getElementById(result.applist[0].appName);
-            app.style.backgroundColor = "#0d47al"
+      // function changeTabelColor(){
+      //   $.ajax({
+      //     url: '/client/makeList',
+      //     method: 'post',
+      //     success: function(result){
+      //       var tableColor = "#0d47al"
+      //       var app = document.getElementById(result.applist[0].appName);
+      //       app.style.backgroundColor = "#0d47al"
 
-            var x = document.getElementById("select_data")
-                  x.style.fontSize = "25px"
-                  x.style.color = "blue"
-                  x.style.backgroundColor = "yellow"
-          }
-        })
-      }
+      //       var x = document.getElementById("select_data")
+      //             x.style.fontSize = "25px"
+      //             x.style.color = "blue"
+      //             x.style.backgroundColor = "yellow"
+      //     }
+      //   })
+      // }
 
       function makeParaBlank(){
         $.ajax({
@@ -255,7 +256,7 @@
 	              if(result.typeList[i] == 'text'){
 		            //text 방식 입력 공간 생성
   		            $('#parameter_blank').append(
-		              result.nameList[i]+' '+'<input id='+result.nameList[i]+' type="text" maxlength="'+result.typeMaxList[i]+'"> ['+result.descriptionList[i]+']'+'<br>'
+		              result.nameList[i]+' '+'<input id='+result.nameList[i]+' type="text" placeholder=" ex) '+result.metadata.parameters[0].default+'" maxlength="'+result.typeMaxList[i]+'"> ['+result.descriptionList[i]+']'+'<br>'
 		              )
 	              }else if(result.typeList[i] == 'radio' || result.typeList[i] == 'checkbox'){		//make radio or checkbox blank
   		            $('#parameter_blank').append(result.nameList[i]+' ['+result.descriptionList[i]+']'+'<br>')
@@ -337,21 +338,22 @@
 
         if($('input:checkbox[id=APP_check]:checked').length == 1){
           document.getElementById('ready_button').disabled = false
-          if (user.role == 2)  {
+          if ('<%=user.role%>' == 2)  {
             document.getElementById('delApp').disabled = false
             document.getElementById('addApp').disabled = true
           }
         } else if ($('input:checkbox[id=APP_check]:checked').length |= 1){
           document.getElementById('ready_button').disabled = true
           document.all.readyToSpark.style.display="none"
-          if (user.role == 2)  {
+          if ('<%=user.role%>' == 2)  {
             document.getElementById('addApp').disabled = true
           }
         }
         
         if ($('input:checkbox[id=APP_check]:checked').length == 0){
-          if (user.role == 2)  {
+          if ('<%=user.role%>' == 2)  {
             document.getElementById('addApp').disabled = false
+            document.getElementById('delApp').disabled = true
           }
         }
         
@@ -360,6 +362,16 @@
       var parameterKey = new Array()
       $('#selector button').click(function() {
         $(this).addClass('active').siblings().removeClass('active');
+
+        let emailBtnClass = document.getElementById("emailBtn").classList
+        let slackBtnClass = document.getElementById("slackBtn").classList
+
+        if(emailBtnClass[emailBtnClass.length-1] == 'active'){
+          $('#user').attr('placeholder', 'Input your Email')
+        } else if(slackBtnClass[slackBtnClass.length-1] == 'active'){
+          $('#user').attr('placeholder', 'Input your Slack channel')
+        }
+
       });
       $('.sparkRun').click( function() {
 

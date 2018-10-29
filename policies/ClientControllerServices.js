@@ -206,7 +206,8 @@ module.exports = {
 						typeList : typeList,
 						typeDataList : typeDataList,
 						typeMaxList : typeMaxList,
-						typeMinList : typeMinList
+						typeMinList : typeMinList,
+						metadata : metadata
 						})
 				}
 		})

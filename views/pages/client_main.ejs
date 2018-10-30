@@ -35,11 +35,17 @@
                     <tbody id='select_APP'>
                     </tbody>
                   </table>
-                  <button type="button" class="btn btn-primary" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
+                  <% if (user.role == 1) { %> <!-- user mode -->
+                    <button type="button" class="btn btn-success" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
+                    <% } else if (user.role == 2) {%> <!-- developer mode -->
+                      <button type="button" class="btn btn-info" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
+                    <% } else {%> <!-- manager mode -->
+                      <button type="button" class="btn btn-danger" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
+                    <% } %>
 
                   <% if (user.role == 2)  { %>
-                    <button type="button" class="btn btn-dark" id="addApp" data-toggle="modal" data-target="#addModel">Add</button>
-                    <button type="button" class="btn btn-dark"  id='delApp' disabled >Delete</button>
+                    <button type="button" class="btn btn-info" id="addApp" data-toggle="modal" data-target="#addModel">Add</button>
+                    <button type="button" class="btn btn-info"  id='delApp' disabled >Delete</button>
                   <% } %>
                   <div id='readyToSpark' style="display: none">
                     <hr class="my-4">
@@ -72,7 +78,7 @@
                       <button type="button" value="slack" id="slackBtn" class="btn btn-secondary"><ion-icon name="logo-slack"></ion-icon> Slack</button>
                       <input type="text" name="sendName" class="form-control-smail" id="user" aria-describedby="emailHelp" placeholder="Input your Email">
                     </div>
-                    <button type="button" class="sparkRun btn btn-Danger"><ion-icon name="play"></ion-icon><b>SPARK RUN</b></button>
+                    <button type="button" class="sparkRun btn btn-info"><ion-icon name="play"></ion-icon><b>SPARK RUN</b></button>
                     </div>
                   </div>
                 </div>

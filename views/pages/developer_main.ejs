@@ -57,8 +57,16 @@
                   <textarea class="form-control" id="description" rows="3" placeholder="please input description of upload data"></textarea>
                 </div>
               </div>
-              <button type="button" class="sparkRun btn btn-success" id="data_upload" disabled><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
-              <button type="button" class="sparkRun btn btn-Dark" id="delete" disabled><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>
+              <% if (user.role == 1) { %> <!-- user mode -->
+                <button type="button" class="sparkRun btn btn-success" id="data_upload" disabled><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
+              <button type="button" class="sparkRun btn btn-success" id="delete" disabled><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>
+                <% } else if (user.role == 2) {%> <!-- developer mode -->
+                  <button type="button" class="sparkRun btn btn-info" id="data_upload" disabled><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
+                  <button type="button" class="sparkRun btn btn-info" id="delete" disabled><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>
+                <% } else {%> <!-- manager mode -->
+                  <button type="button" class="sparkRun btn btn-danger" id="data_upload" disabled><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
+              <button type="button" class="sparkRun btn btn-danger" id="delete" disabled><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>         
+                <% } %>
 
         <!-- /.container-fluid -->
 

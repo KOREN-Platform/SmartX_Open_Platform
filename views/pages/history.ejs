@@ -1,5 +1,9 @@
 <html lang="en"><head>
-
+  <style>
+    .selected td{
+      background-color: yellowgreen
+    }
+    </style>
     <% include ../partial/head %>
 
   <body id="page-top">
@@ -39,22 +43,22 @@
                       <table id="dtVerticalScrollExample1" class="table  table-striped table-bordered table-sm" cellspacing="0" width="100%">
                           <thead >
                             <tr>
-                              <th class="th-sm">id
+                              <th class="th-sm">Id
                                 <i class="fa fa-sort float-right" aria-hidden="true"></i>
                               </th>
-                              <th class="th-sm">name
+                              <th class="th-sm">Name
                                 <i class="fa fa-sort float-right" aria-hidden="true"></i>
                               </th>
-                              <th class="th-sm">state
+                              <th class="th-sm">State
                                 <i class="fa fa-sort float-right" aria-hidden="true"></i>
                               </th>
-                              <th class="th-sm">elapsedTime
+                              <th class="th-sm">Elapsed time
                                 <i class="fa fa-sort float-right" aria-hidden="true"></i>
                               </th>
-                              <th class="th-sm">startedTime
+                              <th class="th-sm">Started time
                                 <i class="fa fa-sort float-right" aria-hidden="true"></i>
                               </th>
-                              <th class="th-sm">finishedTime
+                              <th class="th-sm">Finished time
                                 <i class="fa fa-sort float-right" aria-hidden="true"></i>
                               </th>
                             </tr>
@@ -62,9 +66,8 @@
                           <tbody id="doneState1">
                           </tbody>
                         </table>
-  
-                
-              <!-- </div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 10 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="dataTable_previous"><a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item next disabled" id="dataTable_next"><a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div> -->
+                      <br />
+              <h4>Result</h4>
               <div class="alert alert-secondary" role="alert">
                 <hr class="my-2">
                 <div class="form-group">
@@ -86,28 +89,6 @@
     <a class="scroll-to-top rounded" href="#page-top" style="display: none;">
       <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <button class="btn btn-primary" id="logoutBtn">Logout</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-   
-
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -125,7 +106,6 @@
 
     <!-- Demo scripts for this page-->
     <script src="js/demo/datatables-demo.js"></script>
-    <!-- <script src="js/demo/chart-area-demo.js"></script> -->
     <script>
       $('#logoutBtn').click(function(){
         $.ajax({
@@ -256,6 +236,10 @@
                 }).draw()
 
                 $("#doneState1").on('click', 'tr', function(){
+                  if (!$(this).hasClass('selected')){
+                    table2.$('tr.selected').removeClass('selected')
+                    $(this).addClass('selected')
+                  }
                   // alert(table2.row(this).data()[0].split('_')[1])
                   $('#resultTextBox').html('processing...')
                   let app_id = table2.row(this).data()[0].split('_')[1]

@@ -12,7 +12,7 @@ let isAdminAuthenticated = function(req, res, next) {
 	res.redirect('/')
 }
 router.get('/',isAdminAuthenticated, function(req, res) {
-	res.render('developer_main',{user:req.user});  
+	res.render('developer_main',{user:req.user, title: "Data List"});  
 });
 
 // AdminControllerServices.saveFile :spark app 파일 저장 , AdminControllerServices.saveInfo : spark parameter 저장

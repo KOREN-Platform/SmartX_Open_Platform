@@ -1,13 +1,9 @@
-<html lang="en"><head>
+<html lang="en">
     <% include ../partial/head %>
-
   <body id="page-top">
       <% include ../partial/toolbar %>
-
     <div id="wrapper">
-
         <% include ../partial/sidebar %>
-
       <div id="content-wrapper">
         <div class="container-fluid">
           <!-- Breadcrumbs-->
@@ -21,9 +17,7 @@
           <div class="card mb-3">
             <div class="card-body">
               <!--working space-->
-
               <h2><ion-icon name="document"></ion-icon> Data List</h2>
-              <!-- icon link: https://ionicons.com/ -->
               <p class="lead">You can check a list of data, <kbd>Upload</kbd> it, or <kbd>Delete</kbd> it.</p>
               <table class="table table-hover"> <!-- .table thead th -->
                 <thead>
@@ -67,42 +61,10 @@
                   <button type="button" class="sparkRun btn btn-danger" id="data_upload" disabled><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
               <button type="button" class="sparkRun btn btn-danger" id="delete" disabled><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>         
                 <% } %>
-
-        <!-- /.container-fluid -->
-
-        <!-- Sticky Footer -->
-        
-
       </div>
-      <!-- /.content-wrapper -->
-
     </div>
-    <!-- /#wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top" style="display: none;">
-      <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Page level plugin JavaScript-->
-    <script src="vendor/datatables/jquery.dataTables.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin.min.js"></script>
-
-    <!-- Demo scripts for this page-->
-    <script src="js/demo/datatables-demo.js"></script>
-
+    <% include ../partial/body %>
     <script>
-
     //Run when page starts
     $(document).ready(function(){
       listRef()

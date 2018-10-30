@@ -1,17 +1,12 @@
-<html lang="en"><head>
+<html lang="en">
   <style>
-    .selected td{
-      background-color: yellowgreen
-    }
+   
     </style>
     <% include ../partial/head %>
-
   <body id="page-top">
       <% include ../partial/toolbar %>
     <div id="wrapper">
-
         <% include ../partial/sidebar %>
-
       <div id="content-wrapper">
         <div class="container-fluid">
           <!-- Breadcrumbs-->
@@ -23,20 +18,11 @@
           </ol>
           <!-- Icon Cards-->
           <div class="card mb-3">
-            <!-- <div class="card-header">
-              <i class="fas fa-table"></i>
-              Data Table Example</div> -->
             <div class="card-body">
               <!--table tool-->
-              <!--<div class="table-responsive">-->
                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="dataTable_length">
-                  <!-- <label>Show <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option>
-                  <option value="100">100</option></select> entries</label> -->
-                
                 </div></div><div class="col-sm-12 col-md-6"><div id="dataTable_filter" class="dataTables_filter">
-                  <!-- <label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label> -->
                 </div></div></div><div class="row"><div class="col-sm-12">
-                      
                       <!-- finished yarn status -->
                       <h3><ion-icon name="save"></ion-icon> Finished Apps</h3>
                       <br/>
@@ -76,36 +62,12 @@
               </div>  
             </div>
             </div>
-            <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
           </div>
         </div>
-        <!-- /.container-fluid -->
-        <!-- Sticky Footer -->
       </div>
-      <!-- /.content-wrapper -->
     </div>
-    <!-- /#wrapper -->
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top" style="display: none;">
-      <i class="fas fa-angle-up"></i>
-    </a>
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<% include ../partial/body %>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Page level plugin JavaScript-->
-    <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
-    <script src="vendor/datatables/jquery.dataTables.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin.min.js"></script>
-
-    <!-- Demo scripts for this page-->
-    <script src="js/demo/datatables-demo.js"></script>
     <script>
       $('#logoutBtn').click(function(){
         $.ajax({

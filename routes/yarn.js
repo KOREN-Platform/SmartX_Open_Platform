@@ -9,6 +9,6 @@ let isAuthenticated = function(req, res, next) {
 	res.redirect('/')
 }
 router.get('/',isAuthenticated ,function(req,res) {
-	res.render('yarn',{user:req.user})
+	res.render('yarn',{user:req.user, title:"Yarn"})
 })
 module.exports = router;

@@ -2,8 +2,6 @@
 <html lang="en">
     <% include ../partial/head %>
   <body class="bg-dark">
-
-
 <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -60,38 +58,33 @@
     </div>
 </div>
 </body>
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script>
-      $('#registerBtn').click(function(){
-            inputUser = {
-                email : $('#inputEmail').val(),
-                password : $('#inputPassword').val(),
-                firstName : $('#firstName').val(),
-                lastName : $('#lastName').val(),
-                role : $('input[name="roleRadio"]:checked').val()
+<% include ../partial/body %>
+<script>
+    $('#registerBtn').click(function(){
+        inputUser = {
+            email : $('#inputEmail').val(),
+            password : $('#inputPassword').val(),
+            firstName : $('#firstName').val(),
+            lastName : $('#lastName').val(),
+            role : $('input[name="roleRadio"]:checked').val()
+        }
+        
+        $.ajax({
+            url:'/register',
+            method :'post',
+            dataType:'json',
+            data: inputUser,
+            success: function(result) {
+                alert("success!")
+                location.href = "/"
+            },
+            error : function(error) {
+                alert("failed regist")
+                location.reload()
             }
-            
-            $.ajax({
-                url:'/register',
-                method :'post',
-                dataType:'json',
-                data: inputUser,
-                success: function(result) {
-                    alert("success!")
-                    location.href = "/"
-                },
-                error : function(error) {
-                    alert("failed regist")
-                    location.reload()
-                }
-            })
         })
-    </script>
+    })
+</script>
   </body>
 
 </html>

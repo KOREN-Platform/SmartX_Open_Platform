@@ -16,7 +16,6 @@
           <!-- Icon Cards-->
           <div class="card mb-3">
             <div class="card-body">
-
                   <h2><ion-icon name="list-box"></ion-icon> App List</h2>
                   <!-- icon link: https://ionicons.com/ -->
                   <p class="lead" disabled>Select an App and run it by clicking <kbd>READY TO RUN</kbd> button.</p>
@@ -51,7 +50,6 @@
                     <hr class="my-4">
 
                     <h2><ion-icon name="document"></ion-icon> Data List</h2>
-                    <!-- icon link: https://ionicons.com/ -->
                     <p class="lead">Select a data file and get results by <ion-icon name="mail"></ion-icon><b>E-mail</b> or <ion-icon name="logo-slack"></ion-icon><b>Slack</b>.</p>
                     <table class="table table-hover"> <!-- .table thead th -->
                       <thead>
@@ -134,44 +132,13 @@
                   </div>
                 </div>
               </div>
-
             </div>
-            <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
           </div>
         </div>
-        <!-- /.container-fluid -->
-        <!-- Sticky Footer -->
       </div>
       <!-- /.content-wrapper -->
     </div>
-  
-    <a class="scroll-to-top rounded" href="#page-top" style="display: none;">
-      <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- icon -->
-    <!-- <script  src = "https://unpkg.com/ionicons@4.4.6/dist/ionicons.js" ></script> -->
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Page level plugin JavaScript-->
-    <!-- <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="vendor/datatables/jquery.dataTables.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.js"></script> -->
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin.min.js"></script>
-
-    <!-- Demo scripts for this page-->
-    <!-- <script src="js/demo/datatables-demo.js"></script> -->
-    <!-- <script src="js/demo/chart-area-demo.js"></script> -->
-
-
+    <% include ../partial/body %>
     <script>
       //ready to run button event
       function readyToRun(){

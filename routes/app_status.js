@@ -9,6 +9,6 @@ let isAuthenticated = function(req, res, next) {
 	res.redirect('/')
 }
 router.get('/',isAuthenticated, function(req,res) {
-	res.render('app_status',{user:req.user})
+	res.render('app_status',{user:req.user, title: "App status"})
 })
 module.exports = router;

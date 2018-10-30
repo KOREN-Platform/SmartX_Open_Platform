@@ -6,7 +6,7 @@ const authenticateServices = require('../policies/AuthencationServices')
 /* GET home page. */
 router.get('/', function(req,res) {
 	//res.render('index')
-	res.render('intro')
+	res.render('intro', {title: "Big Data App Container Service"})
 })
 
 // authenticateServices.login : 로그인 처리,authenticateServices.loginResult : 로그인 결과값

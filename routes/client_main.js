@@ -10,6 +10,6 @@ let isAuthenticated = function(req, res, next) {
 }
 
 router.get('/',isAuthenticated, function(req,res) {
-	res.render('client_main',{user:req.user})
+	res.render('client_main',{user:req.user, title:"App List"})
 })
 module.exports = router;

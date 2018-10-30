@@ -166,23 +166,6 @@
 			  })
       })
 
-      // function changeTabelColor(){
-      //   $.ajax({
-      //     url: '/client/makeList',
-      //     method: 'post',
-      //     success: function(result){
-      //       var tableColor = "#0d47al"
-      //       var app = document.getElementById(result.applist[0].appName);
-      //       app.style.backgroundColor = "#0d47al"
-
-      //       var x = document.getElementById("select_data")
-      //             x.style.fontSize = "25px"
-      //             x.style.color = "blue"
-      //             x.style.backgroundColor = "yellow"
-      //     }
-      //   })
-      // }
-
       function makeParaBlank(){
         $.ajax({
           url: '/client/makeParameterBlank',
@@ -238,48 +221,12 @@
                 $('#select_APP').append(
                 '<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td></tr><tr>'
                 );
-                //'<tr id="'+result.applist[i].appName+'">
-                //         <th scope="row">
-                //           <div class="checkbox">
-                //             <label style="font-size: 1em">
-                //                 <input type="checkbox" value="'+result.applist[i].appname+'" id="APP_check" >
-                //                 <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                //             </label>
-                //           </div>
-                //         </th>
-                //         <td>'+result.applist[i].appname+'</td>
-                //         <td>'+result.applist[i].version+'</td>
-                //         <td>'+result.applist[i].description+'</td>
-                //         <td>'+result.applist[i].author.name+'</td>
-                //         <td>'+result.applist[i].author.email+'</td>
-                //       </tr>
-                // <tr>'
-
               }
               
 	            for(var i=0 ; i<result.datalist.length ; i++){
                 $('#select_data').append(
                 '<tr id="'+result.datalist[i].dataName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" value="'+result.datalist[i].dataName+'" id="data_check"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.datalist[i].dataName+'</td><td>'+result.datalist[i].size+'</td><td>'+result.datalist[i].description+'</td><td>'+result.datalist[i].Uploader+'</td></tr></tr>'
                 );
-
-                // '<tr>
-                //           <th scope="row">
-                            
-                //             <div class="checkbox">
-                //               <label style="font-size: 1em">
-                //                   <input type="checkbox" value="'+result.datalist[i]dataName+'" id="data_check">
-                //                   <span class="cr"><i class="cr-icon fa fa-check"></i></span>
-                //               </label>
-                //             </div>
-                            
-                //           </th>
-                //           <td>'+result.datalist[i].dataName+'</td>
-                //           <td>'+result.datalist[i].size+'</td>
-                //           <td>'+result.datalist[i].description+'</td>
-                //           <td>'+result.datalist[i].Uploader+'</td>
-                //         </tr>
-                // </tr>'
-
               }
 	          }
 	        }

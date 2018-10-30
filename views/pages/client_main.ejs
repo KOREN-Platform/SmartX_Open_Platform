@@ -114,12 +114,9 @@
                               <label class="custom-file-label" id="metaFileName" for="metaFile">Choose a file</label>
                             </div>
                           </div>
-                        <!-- <input type='file' id='metaFile' name='appFile' accept=".json" accept-charset="utf-8"> -->
                       </form>
                       <!-- meta JSON text -->
-                      <!-- <textarea id="metaText" rows="10" cols="50"></textarea> -->
                       <div class="alert alert-secondary" role="alert">
-                          <!-- <h5><ion-icon name="create"></ion-icon> App description</h5> -->
                         <hr class="my-2">
                         <div class="form-group">
                           <textarea class="form-control" id="metaText" rows="3" readonly></textarea>
@@ -142,7 +139,6 @@
     <script>
       //ready to run button event
       function readyToRun(){
-        //if ($('#select_APP option:selected').val() == null){
         if ($('input:checkbox[id=APP_check]').is(':checked') == false){
           alert('please select Application')
         } else if($('input:checkbox[id=APP_check]:checked').length > 1){
@@ -171,7 +167,6 @@
           url: '/client/makeParameterBlank',
           method: 'post',
           data: {
-	          // 'appname' : $('#select_APP option:selected').val()
             'appname' : $('input:checkbox[id=APP_check]:checked').val()
 	        },
           dataType: 'json',
@@ -217,7 +212,6 @@
               $('#select_data').empty();
 
 	            for(var i=0 ; i<result.applist.length ; i++){
-                //$('#select_APP').append('<option value='+result.applist[i].appName+'>'+result.applist[i].appName+'</option>');
                 $('#select_APP').append(
                 '<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td></tr><tr>'
                 );
@@ -234,7 +228,6 @@
       }
 
       function buttonDisable(){
-
         if($('input:checkbox[id=APP_check]:checked').length == 1){
           document.getElementById('ready_button').disabled = false
           if ('<%=user.role%>' == 2)  {
@@ -297,10 +290,8 @@
         //console.log(parameterValue)
 
         //예외처리
-        // if($('#select_data option:selected').val() == null){
         if ($('input:checkbox[id=data_check]').is(':checked') == false){
           alert('please select data file')
-        // } else if ($('#select_APP option:selected').val() == null){
         } else if($('input:checkbox[id=data_check]:checked').length > 1){
           alert('please check only one data')
         } else if($('input:checkbox[id=APP_check]:checked').length > 1){
@@ -310,7 +301,6 @@
         } else{
           var check = confirm("Do you want running selected app?")
           if(check){
-            //console.log($(".btn-group > button.active").val())
             $.ajax({
             url: '/client/sparkSubmit',
             method: 'post',
@@ -318,7 +308,6 @@
 				    	'APP' : $('input:checkbox[id=APP_check]:checked').val(),
 				    	'data' : $('input:checkbox[id=data_check]:checked').val(),
 				    	'parameter' : parameterValue,
-              //'target': $('input[name="sendRadio"]:checked').val(),
               'target': $(".btn-group > button.active").val(),
 					    'user' : $('#user').val()
 				    },
@@ -337,8 +326,6 @@
       $(document).ready(function(){
         listRef();
       })
-
-
 
       $('#select_APP').click(function(){
         buttonDisable()

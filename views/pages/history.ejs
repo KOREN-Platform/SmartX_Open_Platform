@@ -199,7 +199,6 @@
                     table2.$('tr.selected').removeClass('selected')
                     $(this).addClass('selected')
                   }
-                  // alert(table2.row(this).data()[0].split('_')[1])
                   $('#resultTextBox').html('processing...')
                   let app_id = table2.row(this).data()[0].split('_')[1]
                   app_id *= 1
@@ -213,8 +212,6 @@
                     success: function(result) {
                       if(result){
                         $('#resultTextBox').html(result.result)
-                        // document.getElementById("resultTextBox").val() = result.result
-                        // alert(result.result)
                       }
                     }
                   })

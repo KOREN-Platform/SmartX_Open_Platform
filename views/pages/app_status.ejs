@@ -51,12 +51,6 @@
                         <tbody id="runState1">
                         </tbody>
                       </table>
-
-                <div class="alert alert-secondary" role="alert">
-                  <hr class="my-2">
-                  <div class="form-group">
-                    <textarea class="form-control" id="sparkLogTextBox" rows="5" readonly></textarea>
-                  </div>
                 </div>  
               </div>
             </div>
@@ -81,7 +75,6 @@
       })
 
       $(document).ready(function() {
-        updateLog()
         var table1 = $('#dtVerticalScrollExample').DataTable({
           "scrollY": "200px",
           "scrollCollapse": true,
@@ -202,20 +195,6 @@
                 }
             })
         }
-
-        function updateLog(){
-        	$.ajax({
-	          url: '/client/sparkLog',
-	          method: 'post',
-	          success:function(result){
-	            if(result){
-		            $('#sparkLogTextBox').val(result.latelyLog)
-	            }
-	          }
-	        })
-	        setTimeout('updateLog()',1000)
-        }
-
     </script>
 </body>
 </html>

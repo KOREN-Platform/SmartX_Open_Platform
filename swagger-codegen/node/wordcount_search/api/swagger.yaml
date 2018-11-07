@@ -1,0 +1,113 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server.  You can find out more about\
+    \ Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).\
+    \  For this sample, you can use the api key `special-key` to test the authorization\
+    \ filters."
+  version: "1.0.0"
+  title: "Swagger Petstore"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache-2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "zest3:3000"
+basePath: "/client/v2"
+tags:
+- name: "sparkSubmit"
+  description: "Everything about your Pets"
+  externalDocs:
+    description: "Find out more"
+    url: "http://192.168.2.13:3000"
+- name: "pet"
+  description: "Everything about your Pets"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+schemes:
+- "http"
+paths:
+  /sparkSubmit:
+    post:
+      tags:
+      - "sparkSubmit"
+      summary: "Add a new pet to the store"
+      description: ""
+      operationId: "sparkSubmit"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "spark object that needs to be needed to the run"
+        required: true
+        schema:
+          $ref: "#/definitions/Spark"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid status value"
+        404:
+          description: "not found"
+        500:
+          description: "server error"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+      x-swagger-router-controller: "Spark"
+      x-is-post-method: true
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/api/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+definitions:
+  Spark:
+    type: "object"
+    required:
+    - "APP"
+    - "data"
+    - "email"
+    - "target"
+    - "user"
+    properties:
+      email:
+        type: "string"
+        example: "ghwlchlaks"
+      data:
+        type: "string"
+        example: "AtoZ.txt"
+      target:
+        type: "string"
+        example: "email"
+      user:
+        type: "string"
+        example: "ghwlchlaks@naver.com"
+      APP:
+        type: "string"
+        example: "wordcount_search.py"
+    title: "A spark"
+    xml:
+      name: "Spark"
+    description: "running spark"
+    example:
+      email: "ghwlchlaks"
+      data: "AtoZ.txt"
+      parameter: "--word A"
+      target: "email"
+      user: "ghwlchlaks@naver.com"
+      APP: "wordcount_search.py"
+externalDocs:
+  description: "find out more about swagger"
+  url: "http://swagger.io"

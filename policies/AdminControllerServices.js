@@ -2,6 +2,8 @@ const exec = require('child_process').exec;
 const fs = require('fs')
 const multiparty = require('multiparty');
 const conf = require('../config/config.json')
+const zipper = require('zip-local')
+const mime = require('mime')
 //mongodb model
 const App = require('../models/appSchema').App
 const Users = require('../models/users').Users
@@ -51,28 +53,33 @@ module.exports = {
 									fs.readFile('swagger-codegen/swagger2.yaml', 'utf8', function(err, content){
 										if(err) {res.send({status:false, result:err})}
 										else{
-											content += "  example:"+
-													"    email: 'ghwlchlaks'" +
-													"    data: 'AtoZ.txt'"+
-													"    parameter: '--word A'"+
-													"    target: 'email'"+
-													"	 user: 'ghwlchlaks@naver.com'"+
-													"    APP: 'wordcount_search.py'"+
-													"  xml:" +
-													"    name: 'Spark'"+
-													"  externalDocs:"+
-													"    description: 'find out more about swagger'"+
-													"	 url: 'http://swagger.io'"
+											content += "    example:\n"+
+													"      email: 'ghwlchlaks'\n" +
+													"      data: 'AtoZ.txt'\n"+
+													"      parameter: '--word A'\n"+
+													"      target: 'email'\n"+
+													"      user: 'ghwlchlaks@naver.com'\n"+
+													"      APP: 'wordcount_search.py'\n"+
+													"    xml:\n" +
+													"      name: 'Spark'\n"+
+													"externalDocs:\n"+
+													"  description: 'find out more about swagger'\n"+
+													"  url: 'http://swagger.io'\n"
 											let file = "swagger-codegen/"+info.appName.split('.')[0] + ".yaml"
 											fs.writeFile(file, content, 'utf8', function(err){
 												if(err) {res.send({status:false, result:err})}
 												else{
-													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+'swagger-codegen/'+ info.appName.split('.')[0]+'.yaml'+ ' -l nodejs-server -o swagger-codegen/node/'+info.appName
+													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+'swagger-codegen/'+ info.appName.split('.')[0]+'.yaml'+ ' -l nodejs-server -o swagger-codegen/node/'+info.appName.split('.')[0]
 													exec(submit, function(err, stdout, stderr){
 														if(err){
+															console.log("1" + err)
 															res.send({status:false, result:err})
 														} else{
+															
+															zipper.sync.zip("./swagger-codegen/node/"+info.appName.split('.')[0]).compress().save("./swagger-codegen/node/"+info.appName.split('.')[0]+".zip")
+
 															res.send({status:true, result:stdout})
+
 														}
 													})
 												}	
@@ -148,6 +155,18 @@ module.exports = {
 				}
 			})
 		})
+	},
+	downloadFile(req, res){
+		const fileName = req.params.fileName
+		console.log(fileName)
+		const savedPath = "./swagger-codegen/node/"
+		let file = savedPath+fileName
+		// let mimetype = mime.lookup(fileName)
+		// res.setHeader("Content-disposition", 'attachment; filename='+fileName)
+		// res.setHeader("Content-type", mimetype)
+		// let filestream = fs.createReadStream(file)
+		//filestream.pipe(res)
+		res.download(file)
 	},
 	/**
 	 * @name appList

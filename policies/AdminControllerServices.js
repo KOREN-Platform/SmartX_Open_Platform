@@ -63,11 +63,11 @@ module.exports = {
 													"  externalDocs:"+
 													"    description: 'find out more about swagger'"+
 													"	 url: 'http://swagger.io'"
-											let file = info.appName + ".yaml"
+											let file = "swagger-codegen/"+info.appName.split('.')[0] + ".yaml"
 											fs.writeFile(file, content, 'utf8', function(err){
 												if(err) {res.send({status:false, result:err})}
 												else{
-													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+'swagger-codegen/'+ info.appName+'.yaml'+ ' -l nodejs-server -o swagger-codegen/node/'+info.appName
+													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+'swagger-codegen/'+ info.appName.split('.')[0]+'.yaml'+ ' -l nodejs-server -o swagger-codegen/node/'+info.appName
 													exec(submit, function(err, stdout, stderr){
 														if(err){
 															res.send({status:false, result:err})

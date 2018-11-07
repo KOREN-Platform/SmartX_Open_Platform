@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="22" passed="22">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Surefire suite" duration-ms="371" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+    <groups>
+    </groups>
+    <test name="Surefire test" duration-ms="371" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+      <class name="io.swagger.codegen.cmd.utils.OptionUtilsTest">
+        <test-method status="PASS" signature="splitCommaSeparatedList()[pri:0, instance:io.swagger.codegen.cmd.utils.OptionUtilsTest@2f6aa016]" name="splitCommaSeparatedList" duration-ms="6" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- splitCommaSeparatedList -->
+        <test-method status="PASS" signature="testParseCommaSeparatedTuples()[pri:0, instance:io.swagger.codegen.cmd.utils.OptionUtilsTest@2f6aa016]" name="testParseCommaSeparatedTuples" duration-ms="1" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testParseCommaSeparatedTuples -->
+      </class> <!-- io.swagger.codegen.cmd.utils.OptionUtilsTest -->
+      <class name="io.swagger.codegen.cmd.GenerateTest">
+        <test-method status="PASS" signature="testAdditionalProperties()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testAdditionalProperties" duration-ms="163" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testAdditionalProperties -->
+        <test-method status="PASS" signature="testApiPackage()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testApiPackage" duration-ms="6" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testApiPackage -->
+        <test-method status="PASS" signature="testArtifactId()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testArtifactId" duration-ms="6" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testArtifactId -->
+        <test-method status="PASS" signature="testArtifactVersion()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testArtifactVersion" duration-ms="6" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testArtifactVersion -->
+        <test-method status="PASS" signature="testAuth()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testAuth" duration-ms="18" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testAuth -->
+        <test-method status="PASS" signature="testConfig()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testConfig" duration-ms="11" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testConfig -->
+        <test-method status="PASS" signature="testGroupId()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testGroupId" duration-ms="6" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testGroupId -->
+        <test-method status="PASS" signature="testImportMappings()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testImportMappings" duration-ms="13" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testImportMappings -->
+        <test-method status="PASS" signature="testInstantiationTypes()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testInstantiationTypes" duration-ms="12" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testInstantiationTypes -->
+        <test-method status="PASS" signature="testInvokerPackage()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testInvokerPackage" duration-ms="7" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testInvokerPackage -->
+        <test-method status="PASS" signature="testLanguageSpecificPrimitives()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testLanguageSpecificPrimitives" duration-ms="6" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLanguageSpecificPrimitives -->
+        <test-method status="PASS" signature="testLibrary()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testLibrary" duration-ms="5" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLibrary -->
+        <test-method status="PASS" signature="testModelPackage()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testModelPackage" duration-ms="6" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testModelPackage -->
+        <test-method status="PASS" signature="testRequiredArgs_LongArgs()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testRequiredArgs_LongArgs" duration-ms="5" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testRequiredArgs_LongArgs -->
+        <test-method status="PASS" signature="testRequiredArgs_ShortArgs()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testRequiredArgs_ShortArgs" duration-ms="5" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testRequiredArgs_ShortArgs -->
+        <test-method status="PASS" signature="testSkipOverwrite()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testSkipOverwrite" duration-ms="11" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testSkipOverwrite -->
+        <test-method status="PASS" signature="testSystemProperties()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testSystemProperties" duration-ms="31" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testSystemProperties -->
+        <test-method status="PASS" signature="testTemplateDir()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testTemplateDir" duration-ms="9" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTemplateDir -->
+        <test-method status="PASS" signature="testTypeMappings()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testTypeMappings" duration-ms="10" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testTypeMappings -->
+        <test-method status="PASS" signature="testVerbose()[pri:0, instance:io.swagger.codegen.cmd.GenerateTest@4d4b1008]" name="testVerbose" duration-ms="9" started-at="2018-11-06T05:08:44Z" finished-at="2018-11-06T05:08:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testVerbose -->
+      </class> <!-- io.swagger.codegen.cmd.GenerateTest -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
+</testng-results>

@@ -2,7 +2,6 @@ const exec = require('child_process').exec;
 const fs = require('fs')
 const multiparty = require('multiparty');
 const conf = require('../config/config.json')
-
 //mongodb model
 const App = require('../models/appSchema').App
 const Users = require('../models/users').Users
@@ -47,7 +46,39 @@ module.exports = {
 							user.save(function(err, data){
 								if(err) {res.send({status:false, result:err})}
 								if(data){
-									res.send({status:true, result:data})
+									//res.send({status:true, result:data})
+									console.log("test")
+									fs.readFile('swagger-codegen/swagger2.yaml', 'utf8', function(err, content){
+										if(err) {res.send({status:false, result:err})}
+										else{
+											content += "  example:"+
+													"    email: 'ghwlchlaks'" +
+													"    data: 'AtoZ.txt'"+
+													"    parameter: '--word A'"+
+													"    target: 'email'"+
+													"	 user: 'ghwlchlaks@naver.com'"+
+													"    APP: 'wordcount_search.py'"+
+													"  xml:" +
+													"    name: 'Spark'"+
+													"  externalDocs:"+
+													"    description: 'find out more about swagger'"+
+													"	 url: 'http://swagger.io'"
+											let file = info.appName + ".yaml"
+											fs.writeFile(file, content, 'utf8', function(err){
+												if(err) {res.send({status:false, result:err})}
+												else{
+													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+'swagger-codegen/'+ info.appName+'.yaml'+ ' -l nodejs-server -o swagger-codegen/node/'+info.appName
+													exec(submit, function(err, stdout, stderr){
+														if(err){
+															res.send({status:false, result:err})
+														} else{
+															res.send({status:true, result:stdout})
+														}
+													})
+												}	
+											})
+										}
+									})
 								}
 							})
 						}
@@ -78,6 +109,10 @@ module.exports = {
 			let path = files.appFile[0].path
 			let originalName = files.appFile[0].originalFilename
 			let splitName = originalName.split('.')[0]
+			console.log(path)
+			console.log(originalName)
+			console.log(splitName)
+			
 			fs.mkdir(conf.AppFolder+splitName, function(err){
 				if(err) {
 					fs.unlink(path, function(err){

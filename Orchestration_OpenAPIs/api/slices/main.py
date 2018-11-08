@@ -85,5 +85,29 @@ def slice_create():
   return (json.dumps(d1, ensure_ascii=False, indent="\t"))
 
 
+@app.route("/slices", methods=['DELETE'])
+def slice_delete():
+
+  name = request.authorization.username
+  password = request.authorization.password
+
+  slice_id = request.get_json()["slice_id"]
+
+
+
+  # create slices
+  cmd="cd ../ && bash Slice_delete.sh " + name + " " + password + " " + slice_id
+
+
+  result = subprocess.check_output (cmd , shell=True)
+
+  response= result.decode()
+  response= response.replace("\n","")
+
+
+  return response + "\n"
+
+
+
 
 

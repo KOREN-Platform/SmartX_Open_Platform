@@ -8,24 +8,37 @@
 #
 
 
-IP=100.100.100.100
-Port=35357
+
+# Parsing Function
+get_config_value()
+{
+    cat <<EOF | python3
+import configparser
+config = configparser.ConfigParser()
+config.read('$1')
+print (config.get('$2','$3'))
+EOF
+}
+
+IP=$(get_config_value configuration/init.ini controller OpenStack_keystone)
+Port=$(get_config_value configuration/init.ini controller OpenStack_Port)
+
+MYSQL_HOST=$(get_config_value configuration/init.ini database MySQL_HOST)
+MYSQL_PASS=$(get_config_value configuration/init.ini database MySQL_PASS)
 
 
-
-MYSQL_HOST="100.100.100.100"
-MYSQL_PASS="pass"
-
+User_ID=$1
+Password=$2
 
 
 # Indentification
-echo -n "Input your ID: "
-read User_ID
-echo -n "Input your Password: "
-stty -echo
-read Password
-echo ""
-stty echo
+#echo -n "Input your ID: "
+#read User_ID
+#echo -n "Input your Password: "
+#stty -echo
+#read Password
+#echo ""
+#stty echo
 
 export OS_PROJECT_DOMAIN_NAME=default
 export OS_USER_DOMAIN_NAME=default

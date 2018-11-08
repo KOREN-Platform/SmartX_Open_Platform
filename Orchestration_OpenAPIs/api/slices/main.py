@@ -38,7 +38,21 @@ def hello_world():
 
 @app.route("/slices")
 def slice_list():
-  return "Get method"
+
+  name = request.authorization.username
+  password = request.authorization.password
+
+  # create slices
+  cmd="cd ../ && bash Slicing_list.sh " + name + " " + password
+
+
+  result = subprocess.check_output (cmd , shell=True)
+
+  response= result.decode()
+  response= response.replace("\n","")
+
+
+  return response + "\n"
 
 
 

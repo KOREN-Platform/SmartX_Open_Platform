@@ -2,7 +2,7 @@
 
 #
 # ---------------------------------------------|
-#   Infrastructure Slicing v01                 |
+#   Infrastructure Slicing v08                 |
 #   Written by Jungsu Han                      |
 # ---------------------------------------------|
 #
@@ -15,26 +15,38 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-IP=100.100.100.100
-Port=35357
-DB_HOST=100.100.100.100
-DB_PASS="pass"
+# $1= ID
+# $2= Password
+
+ID=$1
+Password=$2
 
 
-echo -n "Input your ID: "
-read ID
-echo -n "Input your Password: "
-stty -echo
-read Password
-echo ""
-stty echo
+# Parsing Function
+get_config_value()
+{
+    cat <<EOF | python3
+import configparser
+config = configparser.ConfigParser()
+config.read('$1')
+print (config.get('$2','$3'))
+EOF
+}
+
+Cloud_keystone_IP=$(get_config_value configuration/init.ini controller OpenStack_keystone)
+Port=$(get_config_value configuration/init.ini controller OpenStack_Port)
+
+DB_HOST=$(get_config_value configuration/init.ini database MySQL_HOST)
+DB_PASS=$(get_config_value configuration/init.ini database MySQL_PASS)
 
 
-
-
-#ID="demo"
-#Password="pass"
-
+#echo -n "Input your ID: "
+#read ID
+#echo -n "Input your Password: "
+#stty -echo
+#read Password
+#echo ""
+#stty echo
 
 
 #source 
@@ -43,7 +55,7 @@ export OS_USER_DOMAIN_NAME=default
 export OS_PROJECT_NAME=$ID
 export OS_USERNAME=$ID
 export OS_PASSWORD=$Password
-export OS_AUTH_URL=http://$IP:$Port/v3
+export OS_AUTH_URL=http://$Cloud_keystone_IP:$Port/v3
 export OS_IDENTITY_API_VERSION=3
 export OS_IMAGE_API_VERSION=2
 
@@ -60,7 +72,7 @@ fi
 
 
 
-##### Assigning Slicing  ID
+##### Assigning Slicing  ID 951~ 958
 SPOTS=30
 vlan=0
 
@@ -101,9 +113,10 @@ quit
 EOF
 
 
-echo "Slicing has been created"
-echo
-echo "Slicing id: $vlan"
-echo
+
+#echo "Slicing has been created"
+#echo
+#echo "Slicing id: $vlan"
+#echo
 
 

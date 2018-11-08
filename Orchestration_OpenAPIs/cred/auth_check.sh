@@ -9,8 +9,19 @@
 #
 
 
-IP=
-Port=
+# Parsing Function
+get_config_value()
+{
+    cat <<EOF | python3
+import configparser
+config = configparser.ConfigParser()
+config.read('$1')
+print (config.get('$2','$3'))
+EOF
+}
+
+IP=$(get_config_value ../configuration/init.ini controller OpenStack_keystone)
+Port=$(get_config_value ../configuration/init.ini controller OpenStack_Port)
 
 
 

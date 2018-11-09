@@ -182,9 +182,6 @@ def cloud_slice_list():
 
 
 
-
-
-
 @app.route("/cloud_slices", methods=['POST'])
 def cloud_slice_create():
 
@@ -202,6 +199,29 @@ def cloud_slice_create():
 
   # create slices
   cmd="cd ../ && bash Cloud_Slicing.sh " + name + " " + password + " " + slice_id + " " + region + " " + flavor + " " + image + " " + instance_name + " " + key_name
+
+
+  result = subprocess.check_output (cmd , shell=True)
+
+  response= result.decode()
+  response= response.replace("\n","")
+
+  return response + "\n"
+
+
+@app.route("/cloud_slices", methods=['DELETE'])
+def cloud_slice_delete():
+
+  name = request.authorization.username
+  password = request.authorization.password
+
+  # parmeters
+  instance_id = request.get_json()["instance_id"]
+  region = request.get_json()["region"]
+
+
+  # create slices
+  cmd="cd ../ && bash Cloud_delete.sh " + name + " " + password + " " + instance_id + " " + region
 
 
   result = subprocess.check_output (cmd , shell=True)

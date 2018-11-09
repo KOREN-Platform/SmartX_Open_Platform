@@ -4,6 +4,7 @@ from flask_restful import reqparse
 from flaskext.mysql import MySQL
 import configparser
 import subprocess
+import requests
 import json
 from collections import defaultdict
 
@@ -177,7 +178,7 @@ def cloud_slice_list():
 
   print(result)
 
-  return json.dumps(result)
+  return json.dumps(result) + "\n"
 
 
 
@@ -230,6 +231,257 @@ def cloud_slice_delete():
   response= response.replace("\n","")
 
   return response + "\n"
+
+
+
+@app.route("/access_slices")
+def access_slice_list():
+  return "method"
+
+
+
+@app.route("/access_slices", methods=['POST'])
+def access_slice_create():
+
+
+
+  # MySQL Ready
+  con = mysql.connect()
+  cur = con.cursor()
+
+
+
+
+  # get User and password
+  name = request.authorization.username
+  password = request.authorization.password
+
+
+  # get parameters 
+  slice_id = request.get_json()["slice_id"]
+  mac = request.get_json()["mac"]
+  location = request.get_json()["location"]
+  ip = request.get_json()["ip"]
+  
+  dpid =""
+
+
+  # get the information from init.conf
+  config = configparser.ConfigParser()
+  config.read('../configuration/init.ini')
+
+
+  if (location == "GJ"):
+    dpid = config.get('sd-access', 'Type_O_GJ') 
+  elif (location == "JJ"):
+    dpid = config.get('sd-access', 'Type_O_JJ')
+  elif (location == "JNU"):
+    dpid = config.get('sd-access', 'Type_O_JNU')
+  elif (location == "KU"):
+    dpid = config.get('sd-access', 'Type_O_KU')
+  else:
+    return ("Error: Location is not valid\n")
+
+
+
+  # check Slicing ID & User
+  cur = mysql.connect().cursor()
+  cur.execute("select * from Slicing where Slicing_ID='" + slice_id + "' and Tenant_ID='" + name + "';")
+
+  
+  flag = 0
+  for row in cur:
+    flag = flag + 1
+
+  if (flag == 0):
+    return "Error: slice id is not valid\n"
+
+
+
+
+
+  # get the ONOS Access IP
+  ONOS_Access = config.get('controller', 'ONOS_SD_Access')
+ 
+  # get the ONOS Port
+  ONOS_Access_Port = config.get('controller', 'ONOS_SD_Access_Port')
+
+
+
+  # get the port information from ONOS API
+  url = "http://" + ONOS_Access + ":8181/onos/v1/devices/" + dpid +"/ports"
+  response = requests.get(url, auth=('karaf', 'karaf'))
+  data = response.text
+  output = json.loads(data)
+
+
+  # Find port number
+  for port in output['ports']:
+    if port['annotations']['portName'] == 'patch-br-tun':
+      Cloud_Interface = port['port']
+    if port['annotations']['portName'] == 'patch-IoT':
+      IoT_Interface = port['port']
+
+
+
+
+
+   # Check cloud_slice is existed
+  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='cloud'"
+  cur.execute(para)
+
+  flag = 0
+  for row in cur:
+    flag = flag + 1
+
+  if (flag == 0):
+    # we need to create cloud_slice
+    data = {
+   "type": "PointToPointIntent",
+   "appId": "org.onosproject.cli",
+   "priority": 40100,
+   "selector":
+    {
+      "criteria":
+      [
+        {"type": "VLAN_VID",
+         "vlanId": slice_id
+        }
+      ]
+    },
+   "treatment":
+     {
+      "instructions":
+      [
+        {"type": "L2MODIFICATION",
+         "subtype": "VLAN_POP"
+        }
+      ]
+     },
+   "ingressPoint":
+     {
+      "device": dpid,
+      "port": Cloud_Interface
+     },
+   "egressPoint":
+     {"device": dpid,
+      "port": IoT_Interface
+     }
+    }
+
+    # get url
+    url = "http://" + ONOS_Access + ":8181/onos/v1/intents"
+
+    # request POST method
+    res = requests.post(url, data =json.dumps(data), auth=('karaf', 'karaf'))
+
+    # get the Intent key
+    intent_key = res.headers['location']
+    url_app = url + "/org.onosproject.cli/"
+    intent_key = intent_key.replace(url_app, "")
+    
+
+    # Save information to MySQL
+    con = mysql.connect()
+    cur = con.cursor()
+
+    cmd = "insert into IoT values('" + mac + "', '" + ip + "', '"  + slice_id + "', '" + intent_key + "', 'cloud');"
+    cur.execute(cmd)
+    con.commit()
+
+
+  
+
+
+  # Call ONOS API data
+  data = { "type": "PointToPointIntent",
+   "appId": "org.onosproject.cli",
+   "priority": 40100,
+   "selector":
+    {
+      "criteria":
+      [
+        {"mac": mac,
+         "type": "ETH_SRC"
+        }
+      ]
+    },
+   "treatment":
+     {
+      "instructions":
+      [
+        {"type": "L2MODIFICATION",
+         "subtype": "VLAN_PUSH"
+        },
+        {"type": "L2MODIFICATION",
+         "subtype": "VLAN_ID",
+         "vlanId": slice_id
+        }
+      ]
+     },
+   "ingressPoint":
+     {
+      "device": dpid,
+      "port": IoT_Interface
+     },
+   "egressPoint":
+     {"device": dpid,
+      "port": Cloud_Interface
+     }}
+
+  # get url
+  url = "http://" + ONOS_Access + ":8181/onos/v1/intents"
+
+  # request POST method
+  res = requests.post(url, data =json.dumps(data), auth=('karaf', 'karaf'))
+
+  # get the Intent key
+  intent_key = res.headers['location']
+  url_app = url + "/org.onosproject.cli/"
+  intent_key = intent_key.replace(url_app, "")
+
+
+  # Save information to MySQL
+
+  con = mysql.connect()
+  cur = con.cursor()
+
+
+  cmd = "insert into IoT values('" + mac + "', '" + ip + "', '" +  slice_id + "', '" + intent_key + "', 'IoT');"
+
+  cur.execute(cmd)
+  con.commit()
+  
+
+  
+
+  print (Cloud_Interface)
+  print (IoT_Interface)
+
+
+
+  # Json format
+
+  cur = mysql.connect().cursor()
+  cur.execute("select * from IoT where MAC='" + mac +"';")
+
+
+  result = []
+
+  columns = tuple( [d[0] for d in cur.description])
+
+  for row in cur:
+    result.append(dict(zip(columns, row)))
+
+  print(result)
+
+  return json.dumps(result) +"\n"
+  
+
+
+
+
+
 
 
 

@@ -236,6 +236,54 @@ def cloud_slice_delete():
 
 @app.route("/access_slices")
 def access_slice_list():
+  
+
+  name = request.authorization.username
+  password = request.authorization.password
+
+
+  # Check Authentication
+
+  cmd="cd ../cred && bash auth_check.sh " + name + " " + password
+
+  result = subprocess.check_output (cmd , shell=True)
+  response= result.decode()
+  response= response.replace("\n","")
+
+  print (response)
+
+  if response != "True":
+    return "Error: Authentication failed\n"
+
+
+  # Json format
+
+  cur = mysql.connect().cursor()
+  cur.execute("select distinct MAC, IP, IoT.Slicing_ID, Intent, direction from Slicing join IoT where Tenant_ID='" + name +"';")
+
+
+  result = []
+
+  columns = tuple( [d[0] for d in cur.description])
+
+  for row in cur:
+    result.append(dict(zip(columns, row)))
+
+  print(result)
+
+  return json.dumps(result) + "\n"
+
+
+
+
+
+
+
+
+
+
+
+
   return "method"
 
 

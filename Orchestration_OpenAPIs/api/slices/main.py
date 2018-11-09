@@ -1,10 +1,41 @@
 from flask import Flask, request, make_response
+from flask_restful import Resource, Api
+from flask_restful import reqparse
+from flaskext.mysql import MySQL
+import configparser
 import subprocess
 import json
 from collections import defaultdict
 
 
 app = Flask(__name__)
+api = Api(app)
+
+
+
+
+# get the MySQL HOST from init.conf
+config = configparser.ConfigParser()
+config.read('../configuration/init.ini')
+Host= config.get('database','MySQL_HOST')
+
+# get the MySQL PASS from init.conf
+Pass= config.get('database','MySQL_PASS')
+
+
+mysql = MySQL()
+
+# MySQL Config
+app.config['MYSQL_DATABASE_USER'] ='Slicing_Management'
+app.config['MYSQL_DATABASE_PASSWORD'] = Pass
+app.config['MYSQL_DATABASE_DB'] = 'Slicing_Management'
+app.config['MYSQL_DATABASE_HOST'] = Host
+
+mysql.init_app(app)
+
+
+
+
 
 
 
@@ -113,20 +144,44 @@ def slice_delete():
 @app.route("/cloud_slices")
 def cloud_slice_list():
 
-  #name = request.authorization.username
-  #password = request.authorization.password
-
-  # create slices
-  #cmd="cd ../ && bash Slicing_list.sh " + name + " " + password
+  name = request.authorization.username
+  password = request.authorization.password
 
 
-  #result = subprocess.check_output (cmd , shell=True)
+  # Check Authentication
 
-  #response= result.decode()
-  #response= response.replace("\n","")
+  cmd="cd ../cred && bash auth_check.sh " + name + " " + password
+
+  result = subprocess.check_output (cmd , shell=True)
+  response= result.decode()
+  response= response.replace("\n","")
+
+  print (response)
+
+  if response != "True":
+    return "Error: Authentication failed\n"
 
 
-  return "Get Method"
+  # Json format 
+ 
+  cur = mysql.connect().cursor()
+  cur.execute("select distinct Instance_ID,IP,Instance.Slicing_ID from Slicing join Instance where Tenant_ID='" + name +"';")
+
+
+  result = []
+
+  columns = tuple( [d[0] for d in cur.description])
+ 
+  for row in cur:
+    result.append(dict(zip(columns, row)))
+
+  print(result)
+
+  return json.dumps(result)
+
+
+
+
 
 
 

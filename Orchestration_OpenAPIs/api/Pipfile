@@ -7,6 +7,9 @@ name = "pypi"
 
 [packages]
 flask = "*"
+flask-restful = "*"
+flask-mysql = "*"
+configparser = "*"
 
 [requires]
 python_version = "3.5"

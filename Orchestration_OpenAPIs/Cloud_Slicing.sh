@@ -16,28 +16,45 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-IP=100.100.100.100
-Port=35357
+# Parsing Function
+get_config_value()
+{
+    cat <<EOF | python3
+import configparser
+config = configparser.ConfigParser()
+config.read('$1')
+print (config.get('$2','$3'))
+EOF
+}
 
-DB_HOST=100.100.100.100
-DB_PASS=""
+IP=$(get_config_value configuration/init.ini controller OpenStack_keystone)
+Port=$(get_config_value configuration/init.ini controller OpenStack_Port)
 
-KEYSTONE_ADMIN_PASS=""
-
-
-Flavor=$3
-Image=$4
+DB_HOST=$(get_config_value configuration/init.ini database MySQL_HOST)
+DB_PASS=$(get_config_value configuration/init.ini database MySQL_PASS)
 
 
+
+KEYSTONE_ADMIN_PASS=$(get_config_value configuration/init.ini controller keystone_admin_pass)
+
+
+User_ID=$1
+Password=$2
+Slicing=$3
+REGION=$4
+Flavor=$5
+Image=$6
+Instance_name=$7
+Key_name=$8
 
 #Authentication
-echo -n "Input your ID: "
-read User_ID
-echo -n "Input your Password: "
-stty -echo
-read Password
-echo ""
-stty echo
+#echo -n "Input your ID: "
+#read User_ID
+#echo -n "Input your Password: "
+#stty -echo
+#read Password
+#echo ""
+#stty echo
 
 export OS_PROJECT_DOMAIN_NAME=default
 export OS_USER_DOMAIN_NAME=default
@@ -61,12 +78,12 @@ fi
 
 
 ##Need to check SLicing ID Part!!!
-echo -n "Input Sllicing ID: "
-read Slicing
+#echo -n "Input Sllicing ID: "
+#read Slicing
 
 read -ra vars <<< $(mysql -DSlicing_Management -uroot -p'$DB_PASS' -se "SELECT Slicing_ID FROM Slicing where Tenant_ID = '$User_ID' ")
 for i in "${vars[i]}"
-do echo ""
+do a=1
 done
 NAME=vars
 tmp="${NAME}[@]"
@@ -92,9 +109,9 @@ done
 #echo $check_val
 if [ "${check_val}" -eq  0 ] ; then
 echo "Error: Invalid VLAN ID"
-exit 1
-else 
-echo "VLAN ID checking complete"
+exit 0
+#else 
+#echo "VLAN ID checking complete"
 fi
 #done
 
@@ -110,18 +127,18 @@ export OS_IMAGE_API_VERSION=2
 
 
 # Flavor & Image
-echo -n "Input your Region: "
-read REGION
+#echo -n "Input your Region: "
+#read REGION
 
-echo -n "Input Flavor: "
-read Flavor
-echo -n "Input Image: "
-read Image
+#echo -n "Input Flavor: "
+#read Flavor
+#echo -n "Input Image: "
+#read Image
 
-echo -n "Input Instance Name: "
-read Instance_name
+#echo -n "Input Instance Name: "
+#read Instance_name
 
-echo "done"
+#echo "done"
 
 ##Checking Network
 
@@ -130,11 +147,11 @@ net_list=`openstack network list --os-region-name $REGION | grep vlan_$Slicing`
 
 if [ "$net_list" == "" ]; then
 
-  echo "Creating Network.."
-  echo
+  #echo "Creating Network.."
+  #echo
 
   # Create Network
-  openstack network create --project $User_ID --provider-network-type vlan --provider-physical-network provider --provider-segment $Slicing vlan_$Slicing --os-region-name $REGION
+  temp=$(openstack network create --project $User_ID --provider-network-type vlan --provider-physical-network provider --provider-segment $Slicing vlan_$Slicing --os-region-name $REGION)
 
 
   # Obtain Network ID
@@ -144,7 +161,7 @@ if [ "$net_list" == "" ]; then
   subnet=`cat network_pool | grep $Slicing | awk '{print $3}'`
   allocation=`cat network_pool | grep $Slicing | awk '{print $4}'`
 
-  openstack subnet create --project demo --subnet-range $subnet --ip-version 4 --network $Net_ID --dns-nameserver 8.8.8.8 --allocation-pool start=$allocation.100,end=$allocation.200 sub_$Slicing --os-region-name $REGION
+  temp=$(openstack subnet create --project demo --subnet-range $subnet --ip-version 4 --network $Net_ID --dns-nameserver 8.8.8.8 --allocation-pool start=$allocation.100,end=$allocation.200 sub_$Slicing --os-region-name $REGION)
 
 
   export OS_PROJECT_DOMAIN_NAME=default
@@ -158,17 +175,17 @@ if [ "$net_list" == "" ]; then
 
 
   # Create Router
-  openstack router create router_$Slicing --os-region-name $REGION
+  temp=$(openstack router create router_$Slicing --os-region-name $REGION)
 
   # Setting External Gateway
-  openstack router set --external-gateway public router_$Slicing --os-region-name $REGION
+  temp=$(openstack router set --external-gateway public router_$Slicing --os-region-name $REGION)
 
   # Add Port
-  openstack router add subnet router_$Slicing sub_$Slicing --os-region-name $REGION
-else
+  temp=$(openstack router add subnet router_$Slicing sub_$Slicing --os-region-name $REGION)
+#else
 
- echo "Network has been created"
- echo ""
+# echo "Network has been created"
+# echo ""
 
 fi
 
@@ -191,12 +208,22 @@ Net_ID=`openstack network list --os-region-name $REGION | grep vlan_$Slicing | a
 
 
 # Create Instance
-openstack server create --os-region-name $REGION --flavor $Flavor --image $Image --nic net-id=$Net_ID $Instance_name
+cmd=$(openstack server create --os-region-name $REGION --flavor $Flavor --image $Image --nic net-id=$Net_ID $Instance_name --key-name $Key_name -f value)
+
+Instance_ID=`echo $cmd | awk '{print $11}'`
+
+
+if [ "$Instance_ID" == "" ]; then
+  echo "Error: Instance creation failed"
+  exit 0
+fi
 
 
 
-Instance_ID=`openstack server list --os-region-name $REGION | grep $Instance_name | awk '{print $2}'`
-Instance_IP=`openstack server list --os-region-name $REGION | grep $Instance_name | awk '{print $8}' | cut -d "=" -f2`
+#Instance_ID=`openstack server list --os-region-name $REGION | grep $Instance_name | awk '{print $2}'`
+Instance_IP=`openstack server list --os-region-name $REGION | grep $Instance_ID | awk '{print $8}' | cut -d "=" -f2`
+
+
 
 
 check=0
@@ -204,7 +231,7 @@ while [ $check == 0 ]
 do
 
   if [ "$Instance_IP" == "" ] || [ "$Instance_IP" == "|" ]; then
-    Instance_IP=`openstack server list --os-region-name $REGION | grep $Instance_name | awk '{print $8}' | cut -d "=" -f2`
+    Instance_IP=`openstack server list --os-region-name $REGION | grep $Instance_ID | awk '{print $8}' | cut -d "=" -f2`
   else
     check=1
   fi
@@ -222,6 +249,14 @@ EOF
 
 
 
+
+# Output
+json=""
+
+json=`echo $json '{"Instance_ID": "'$Instance_ID'", "IP": "'$Instance_IP'", "Slicing_ID": "'$Slicing'"}'`
+
+
+echo $json
 
 
 

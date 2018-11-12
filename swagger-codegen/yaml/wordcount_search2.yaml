@@ -99,6 +99,7 @@ definitions:
         example: "wordcount_search.py"
     title: "A spark"
     description: "running spark"
+    
 #     example:
 #       email: "ghwlchlaks"
 #       data: "AtoZ.txt"
@@ -111,3 +112,15 @@ definitions:
 # externalDocs:
 #   description: "Find out more about Swagger"
 #   url: "http://swagger.io"
+    example:
+      email: 'ghwlchlaks'
+      data: 'AtoZ.txt'
+      parameter: '--word A'
+      target: 'email'
+      user: 'ghwlchlaks@naver.com'
+      APP: 'wordcount_search2.py'
+    xml:
+      name: 'Spark'
+externalDocs:
+  description: 'find out more about swagger'
+  url: 'http://swagger.io'

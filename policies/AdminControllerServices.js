@@ -50,7 +50,7 @@ module.exports = {
 								if(data){
 									//res.send({status:true, result:data})
 									console.log("test")
-									fs.readFile('swagger-codegen/swagger2.yaml', 'utf8', function(err, content){
+									fs.readFile(conf.YamlFolder+'swagger2.yaml', 'utf8', function(err, content){
 										if(err) {res.send({status:false, result:err})}
 										else{
 											content += "    example:\n"+
@@ -58,25 +58,25 @@ module.exports = {
 													"      data: 'AtoZ.txt'\n"+
 													"      parameter: '--word A'\n"+
 													"      target: 'email'\n"+
-													"      user: 'ghwlchlaks@naver.com'\n"+
-													"      APP: 'wordcount_search.py'\n"+
+													"      user: 'Your@email.com'\n"+
+													"      APP: '"+info.appName+"'\n"+
 													"    xml:\n" +
 													"      name: 'Spark'\n"+
 													"externalDocs:\n"+
 													"  description: 'find out more about swagger'\n"+
 													"  url: 'http://swagger.io'\n"
-											let file = "swagger-codegen/"+info.appName.split('.')[0] + ".yaml"
+											let file = conf.YamlFolder+info.appName.split('.')[0] + ".yaml"
 											fs.writeFile(file, content, 'utf8', function(err){
 												if(err) {res.send({status:false, result:err})}
 												else{
-													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+'swagger-codegen/'+ info.appName.split('.')[0]+'.yaml'+ ' -l nodejs-server -o swagger-codegen/node/'+info.appName.split('.')[0]
+													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+conf.YamlFolder+ info.appName.split('.')[0]+'.yaml'+ ' -l nodejs-server -o '+conf.SwaggerFolder+info.appName.split('.')[0]
 													exec(submit, function(err, stdout, stderr){
 														if(err){
 															console.log("1" + err)
 															res.send({status:false, result:err})
 														} else{
 															
-															zipper.sync.zip("./swagger-codegen/node/"+info.appName.split('.')[0]).compress().save("./swagger-codegen/node/"+info.appName.split('.')[0]+".zip")
+															zipper.sync.zip(conf.SwaggerFolder+info.appName.split('.')[0]).compress().save(conf.SwaggerFolder+info.appName.split('.')[0]+".zip")
 
 															res.send({status:true, result:stdout})
 
@@ -241,7 +241,19 @@ module.exports = {
 															function(err, result){
 																if(err) throw err
 																if (result){
-																	res.send({status: true, result: result})
+																	exec('rm -r '+conf.SwaggerFolder+id, function(err, stdout, stderr){
+																		if(err){
+																			res.send({status: false, result: 'rmdir err'})
+																		} else {
+																			fs.unlink(conf.SwaggerFolder+id+'.zip',function(err){
+																				if(err){
+																					res.send({status: false, result: 'unlink err'})
+																				}else{
+																					res.send({status: true, result: result})
+																				}
+																			})
+																		}
+																	})
 																}
 															}
 														)

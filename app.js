@@ -9,6 +9,10 @@ const mongoose = require('mongoose');
 const session = require('express-session')
 const passport = require('passport');
 const passportPolicy = require('./policies/AuthencationServices')
+// const jsyaml = require('js-yaml');
+// const fs = require('fs')
+
+
 
 //mongoDB 설정 파일
 const dbconfig = require('./config/database');
@@ -62,9 +66,10 @@ passportPolicy.service()
 
 //swagger-ui routing
 app.use('/swagger-ui', express.static(path.join(__dirname, './node_modules/swagger-ui/dist')));
-// app.use('/v1/swagger.yaml', function(req, res) {
-//   res.json(require('./swagger-codegen/swagger.yaml'));
-// });
+
+app.use('/v1/swagger.json', function(req, res) {
+  res.json(require('./swagger.json'));
+});
 
 // default
 // /index hosting

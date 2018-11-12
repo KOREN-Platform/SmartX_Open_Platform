@@ -49,42 +49,185 @@ module.exports = {
 								if(err) {res.send({status:false, result:err})}
 								if(data){
 									//res.send({status:true, result:data})
-									console.log("test")
-									fs.readFile(conf.YamlFolder+'swagger2.yaml', 'utf8', function(err, content){
+									console.log("write swagger json")
+									let	content =
+											'{'+
+												' "swagger": "2.0", '+
+												' "info": { '+
+													' "description": "'+info.description+'", '+
+													' "version": "'+info.version+'", '+
+													' "title": "'+info.appName+'", '+
+													' "termsOfService": "http://swagger.io/terms/", '+
+													' "contact": { '+
+													' "email": "apiteam@swagger.io" '+
+													' }, '+
+													' "license": { '+
+													' "name": "Apache-2.0", '+
+													' "url": "http://www.apache.org/licenses/LICENSE-2.0.html" '+
+													' } '+
+												' }, '+
+												' "host": "zest3:3000", '+
+												' "basePath": "/client/v2", '+
+												' "tags": [ '+
+													' { '+
+													' "name": "'+info.appName+'", '+
+													' "description": "'+info.description+'", '+
+													' "externalDocs": { '+
+														' "description": "Find out more", '+
+														' "url": "http://192.168.2.13:3000" '+
+													' } '+
+													' }, '+
+													' { '+
+													' "name": "pet", '+
+													' "description": "Everything about your Pets", '+
+													' "externalDocs": { '+
+														' "description": "Find out more", '+
+														' "url": "http://swagger.io" '+
+													' } '+
+													' } '+
+												' ], '+
+												' "schemes": [ '+
+													' "http" '+
+												' ], '+
+												' "paths": { '+
+													' "/sparkSubmit": { '+
+													' "post": { '+
+														' "tags": [ '+
+														' "sparkSubmit" '+
+														' ], '+
+														' "summary": "You can running spark application by this API", '+
+														' "description": "", '+
+														' "operationId": "sparkSubmit", '+
+														' "consumes": [ '+
+														' "application/json", '+
+														' "application/xml" '+
+														' ], '+
+														' "produces": [ '+
+														' "application/xml", '+
+														' "application/json" '+
+														' ], '+
+														' "parameters": [ '+
+														' { '+
+															' "in": "body", '+
+															' "name": "body", '+
+															' "description": "meta data", '+
+															' "required": true, '+
+															' "schema": { '+
+															' "$ref": "#/definitions/Spark" '+
+															' } '+
+														' } '+
+														' ], '+
+														' "responses": { '+
+														' "200": { '+
+															' "description": "successful operation" '+
+														' }, '+
+														' "400": { '+
+															' "description": "Invalid status value" '+
+														' }, '+
+														' "404": { '+
+															' "description": "not found" '+
+														' }, '+
+														' "500": { '+
+															' "description": "server error" '+
+														' } '+
+														' }, '+
+														' "security": [ '+
+														' { '+
+															' "petstore_auth": [ '+
+															' "write:pets", '+
+															' "read:pets" '+
+															' ] '+
+														' } '+
+														' ], '+
+														' "x-swagger-router-controller": "Spark" '+
+													' } '+
+													' } '+
+												' }, '+
+												' "securityDefinitions": { '+
+													' "petstore_auth": { '+
+													' "type": "oauth2", '+
+													' "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog", '+
+													' "flow": "implicit", '+
+													' "scopes": { '+
+														' "write:pets": "modify pets in your account", '+
+														' "read:pets": "read your pets" '+
+														' } '+
+													' } '+
+													' }, '+
+												' "definitions": { '+
+												' "Spark": { '+
+													' "Spark": { '+ 
+													' "Spark": { '+ 
+													' "type": "object", '+
+													' "required": [ '+
+														' "appName", '+
+														' "author", '+
+														' "parameters", '+
+														' "version", '+
+														' "type", '+
+														' "user" '+
+													' ], '+
+													' "properties": { '+
+														' "appName": { '+
+														' "type": "string", '+
+														' "example": "'+info.appName+'" '+
+														' }, '+
+														' "author": { '+
+														' "type": "string", '+
+														' "example": "'+info.author+'" '+
+														' }, '+
+														' "parameters": { '+
+														' "type": "json", '+
+														' "example": "'+info.parameters+'" '+
+														' }, '+
+														' "version": { '+
+														' "type": "string", '+
+														' "example": "'+info.version+'" '+
+														' }, '+
+														' "user": { '+
+														' "type": "string", '+
+														' "example": "'+user._id+'" '+
+														' } '+
+													' }, '+
+													' "title": "A spark", '+
+													' "description": "running spark", '+
+													' "example": { '+
+														' "email": "ghwlchlaks", '+
+														' "data": "AtoZ.txt", '+
+														' "parameter": "--word A", '+
+														' "target": "email", '+
+														' "user": "ghwlchlaks@naver.com", '+
+														' "APP": "wordcount_search.py" '+
+													' }, '+
+													' "xml": { '+
+														' "name": "Spark" '+
+													' } '+
+													' } '+
+												' }, '+
+												' "externalDocs": { '+
+													' "description": "Find out more about Swagger", '+
+													' "url": "http://swagger.io" '+
+												' } '+
+												' } '
+
+									let file = conf.JsonFolder+info.appName.split('.')[0] + ".json"
+									fs.writeFile(file, content, 'utf8', function(err){
 										if(err) {res.send({status:false, result:err})}
 										else{
-											content += "    example:\n"+
-													"      email: 'ghwlchlaks'\n" +
-													"      data: 'AtoZ.txt'\n"+
-													"      parameter: '--word A'\n"+
-													"      target: 'email'\n"+
-													"      user: 'Your@email.com'\n"+
-													"      APP: '"+info.appName+"'\n"+
-													"    xml:\n" +
-													"      name: 'Spark'\n"+
-													"externalDocs:\n"+
-													"  description: 'find out more about swagger'\n"+
-													"  url: 'http://swagger.io'\n"
-											let file = conf.YamlFolder+info.appName.split('.')[0] + ".yaml"
-											fs.writeFile(file, content, 'utf8', function(err){
-												if(err) {res.send({status:false, result:err})}
-												else{
-													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+conf.YamlFolder+ info.appName.split('.')[0]+'.yaml'+ ' -l nodejs-server -o '+conf.SwaggerFolder+info.appName.split('.')[0]
-													exec(submit, function(err, stdout, stderr){
-														if(err){
-															console.log("1" + err)
-															res.send({status:false, result:err})
-														} else{
-															
-															zipper.sync.zip(conf.SwaggerFolder+info.appName.split('.')[0]).compress().save(conf.SwaggerFolder+info.appName.split('.')[0]+".zip")
+											const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+conf.JsonFolder+ info.appName.split('.')[0]+'.json'+ ' -l nodejs-server -o '+conf.SwaggerFolder+info.appName.split('.')[0]
+											exec(submit, function(err, stdout, stderr){
+												if(err){
+													console.log("1" + err)
+													res.send({status:false, result:err})
+												} else{
+													
+													zipper.sync.zip(conf.SwaggerFolder+info.appName.split('.')[0]).compress().save(conf.SwaggerFolder+info.appName.split('.')[0]+".zip")
 
-															res.send({status:true, result:stdout})
+													res.send({status:true, result:stdout})
 
-														}
-													})
-												}	
+												}
 											})
-										}
+										}	
 									})
 								}
 							})

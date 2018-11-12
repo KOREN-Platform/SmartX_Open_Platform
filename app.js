@@ -60,6 +60,12 @@ app.use(passport.initialize())
 app.use(passport.session())
 passportPolicy.service()
 
+//swagger-ui routing
+app.use('/swagger-ui', express.static(path.join(__dirname, './node_modules/swagger-ui/dist')));
+// app.use('/v1/swagger.yaml', function(req, res) {
+//   res.json(require('./swagger-codegen/swagger.yaml'));
+// });
+
 // default
 // /index hosting
 app.use('/', indexRouter);

@@ -10,6 +10,8 @@ const session = require('express-session')
 const passport = require('passport');
 const passportPolicy = require('./policies/AuthencationServices')
 
+
+
 //mongoDB 설정 파일
 const dbconfig = require('./config/database');
 
@@ -59,6 +61,13 @@ app.use(session({secret: "abc", resave:true, saveUninitialized: false}));
 app.use(passport.initialize())
 app.use(passport.session())
 passportPolicy.service()
+
+//swagger-ui routing
+app.use('/swagger-ui', express.static(path.join(__dirname, './node_modules/swagger-ui/dist')));
+
+app.use('/v1/swagger.json', function(req, res) {
+  res.json(require('./swagger.json'));
+});
 
 // default
 // /index hosting
@@ -119,7 +128,7 @@ app.use('/profile', indexRouter)
 app.use('/logout',indexRouter)
 
 app.get('/download/:fileName',adminRouter)
-
+app.get('/apiDoc/',adminRouter)
 
 //css&js&data
 app.use('/css', express.static(__dirname +'/node_modules/bootstrap/dist/css'));

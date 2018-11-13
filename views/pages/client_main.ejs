@@ -70,6 +70,9 @@
                       <hr class="my-2">
                       <form id='parameter_blank'></form>
                     </div>
+                    
+                    <div class="apiDoc">
+                    </div>
 
                     <div class="btn-group btn_mine" id="selector" role="group" aria-label="Basic example">
                       <button type="button" value="email" id="emailBtn" class="btn btn-secondary"><ion-icon name="mail"></ion-icon> E-mail</button>
@@ -146,6 +149,21 @@
     <script>
       //ready to run button event
       function readyToRun(){
+        $.ajax({
+				url: '/apiDoc',
+        type: 'GET',
+        data: {"appName": $('input:checkbox[id=APP_check]:checked').val()},
+				success:function(result) {
+          $('.apiDoc').empty()
+          if(result.status){
+            $('.apiDoc').append(result.result)
+          }
+				},	
+				error:function(error) {
+					console.log("error : " + error)	
+				}
+        })
+        
         if ($('input:checkbox[id=APP_check]').is(':checked') == false){
           alert('please select Application')
         } else if($('input:checkbox[id=APP_check]:checked').length > 1){
@@ -220,7 +238,7 @@
 
 	            for(var i=0 ; i<result.applist.length ; i++){
                 $('#select_APP').append(
-                '<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td><td><a href="download/'+result.applist[i].appName.split('.')[0]+".zip"+'">download</a></td></tr><tr>'
+                '<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" name="APP_check" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td><td><a href="download/'+result.applist[i].appName.split('.')[0]+".zip"+'">download</a></td></tr><tr>'
                 );
               }
               

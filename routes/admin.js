@@ -25,4 +25,5 @@ router.get('/appData',AdminControllerServices.appData)
 router.get('/delApp', AdminControllerServices.delApp)
 
 router.get('/download/:fileName', AdminControllerServices.downloadFile)
+router.get('/apiDoc/', AdminControllerServices.getDoc)
 module.exports = router;

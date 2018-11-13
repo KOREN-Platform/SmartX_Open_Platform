@@ -3,7 +3,7 @@ const fs = require('fs')
 const multiparty = require('multiparty');
 const conf = require('../config/config.json')
 const zipper = require('zip-local')
-const mime = require('mime')
+const markdown = require('markdown-js')
 //mongodb model
 const App = require('../models/appSchema').App
 const Users = require('../models/users').Users
@@ -49,7 +49,6 @@ module.exports = {
 								if(err) {res.send({status:false, result:err})}
 								if(data){
 									//res.send({status:true, result:data})
-									console.log("test")
 									fs.readFile(conf.YamlFolder+'swagger2.yaml', 'utf8', function(err, content){
 										if(err) {res.send({status:false, result:err})}
 										else{
@@ -69,17 +68,38 @@ module.exports = {
 											fs.writeFile(file, content, 'utf8', function(err){
 												if(err) {res.send({status:false, result:err})}
 												else{
-													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+conf.YamlFolder+ info.appName.split('.')[0]+'.yaml'+ ' -l nodejs-server -o '+conf.SwaggerFolder+info.appName.split('.')[0]
+													const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+conf.YamlFolder+ info.appName.split('.')[0]+'.yaml'+ ' -l python -o '+conf.SwaggerFolder+info.appName.split('.')[0]
 													exec(submit, function(err, stdout, stderr){
 														if(err){
-															console.log("1" + err)
 															res.send({status:false, result:err})
 														} else{
-															
 															zipper.sync.zip(conf.SwaggerFolder+info.appName.split('.')[0]).compress().save(conf.SwaggerFolder+info.appName.split('.')[0]+".zip")
-
 															res.send({status:true, result:stdout})
 
+															// config = {};
+															// config.format = "singleFile";
+															// config.markdown = true;
+															// config.fixedNav = true;
+															// config.autoTags = true;
+															// config.theme = {
+															// 	"default": "blue",
+															// 	"GET": "blue",
+															// 	"POST": "indigo",
+															// 	"DELETE": "red",
+															// 	"PUT": "amber"
+															// };
+															// let input = conf.YamlFolder+ info.appName.split('.')[0]+'.yaml'
+															// let output = conf.htmlFolder + info.appName.split('.')[0]+'.html'
+
+															// prettySwag.run(input, output, config, function(err){
+															// 	if (err){
+															// 		console.log("test1")
+															// 		res.send({status:false, result: err})}
+															// 	else {
+															// 		console.log("test2")
+															// 		res.send({status:true, result:stdout})
+															// 	}
+															// })
 														}
 													})
 												}	
@@ -156,16 +176,16 @@ module.exports = {
 			})
 		})
 	},
+	getDoc(req, res){
+		let appName = req.query.appName
+		let str = fs.readFileSync(conf.SwaggerFolder+appName.split('.')[0] + "/docs/Spark.md", "utf8")
+		let result = markdown.makeHtml(str)
+		res.send({status:true, result:result})
+	},
 	downloadFile(req, res){
 		const fileName = req.params.fileName
-		console.log(fileName)
 		const savedPath = "./swagger-codegen/node/"
 		let file = savedPath+fileName
-		// let mimetype = mime.lookup(fileName)
-		// res.setHeader("Content-disposition", 'attachment; filename='+fileName)
-		// res.setHeader("Content-type", mimetype)
-		// let filestream = fs.createReadStream(file)
-		//filestream.pipe(res)
 		res.download(file)
 	},
 	/**

@@ -86,8 +86,7 @@
             ]
           }
         ],
-        "x-swagger-router-controller": "Spark",
-        "x-is-post-method": true
+        "x-swagger-router-controller": "Spark"
       }
     }
   },
@@ -106,11 +105,12 @@
     "Spark": {
       "type": "object",
       "required": [
-        "APP",
-        "data",
         "email",
+        "data",
+        "paramter",
         "target",
-        "user"
+        "user",
+        "APP"
       ],
       "properties": {
         "email": {
@@ -135,9 +135,6 @@
         }
       },
       "title": "A spark",
-      "xml": {
-        "name": "Spark"
-      },
       "description": "running spark",
       "example": {
         "email": "ghwlchlaks",
@@ -145,12 +142,15 @@
         "parameter": "--word A",
         "target": "email",
         "user": "ghwlchlaks@naver.com",
-        "APP": "wordcount_search2.py"
+        "APP": "wordcount_search.py"
+      },
+      "xml": {
+        "name": "Spark"
       }
     }
   },
   "externalDocs": {
-    "description": "find out more about swagger",
+    "description": "Find out more about Swagger",
     "url": "http://swagger.io"
   }
 }

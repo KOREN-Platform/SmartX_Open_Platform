@@ -3,9 +3,9 @@
 var utils = require('../utils/writer.js');
 var SparkSubmit = require('../service/SparkSubmitService');
 
-module.exports.sparkSubmit = function sparkSubmit (req, res, next) {
+module.exports.wordcount_search2.py = function wordcount_search2.py (req, res, next) {
   var body = req.swagger.params['body'].value;
-  SparkSubmit.sparkSubmit(body)
+  SparkSubmit.wordcount_search2.py(body)
     .then(function (response) {
       utils.writeJson(res, response);
     })

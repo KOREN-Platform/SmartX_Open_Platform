@@ -2,13 +2,13 @@
 
 
 /**
- * Add a new pet to the store
+ * apps description
  * 
  *
- * body Pet Pet object that needs to be added to the store
+ * body Spark apps description
  * no response value expected for this operation
  **/
-exports.addPet = function(body) {
+exports.wordcount_search2.py = function(body) {
   return new Promise(function(resolve, reject) {
     resolve();
   });

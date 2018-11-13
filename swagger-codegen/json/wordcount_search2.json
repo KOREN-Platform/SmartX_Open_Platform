@@ -1,1 +1,156 @@
-{ "swagger": "2.0",  "info": {  "description": "Apps that count the number of specific characters",  "version": "0.0.1",  "title": "wordcount_search2.py",  "termsOfService": "http://swagger.io/terms/",  "contact": {  "email": "apiteam@swagger.io"  },  "license": {  "name": "Apache-2.0",  "url": "http://www.apache.org/licenses/LICENSE-2.0.html"  }  },  "host": "zest3:3000",  "basePath": "/client/v2",  "tags": [  {  "name": "wordcount_search2.py",  "description": "Apps that count the number of specific characters",  "externalDocs": {  "description": "Find out more",  "url": "http://192.168.2.13:3000"  }  },  {  "name": "pet",  "description": "Everything about your Pets",  "externalDocs": {  "description": "Find out more",  "url": "http://swagger.io"  }  }  ],  "schemes": [  "http"  ],  "paths": {  "/sparkSubmit": {  "post": {  "tags": [  "sparkSubmit"  ],  "summary": "You can running spark application by this API",  "description": "",  "operationId": "sparkSubmit",  "consumes": [  "application/json",  "application/xml"  ],  "produces": [  "application/xml",  "application/json"  ],  "parameters": [  {  "in": "body",  "name": "body",  "description": "meta data",  "required": true,  "schema": {  "$ref": "#/definitions/Spark"  }  }  ],  "responses": {  "200": {  "description": "successful operation"  },  "400": {  "description": "Invalid status value"  },  "404": {  "description": "not found"  },  "500": {  "description": "server error"  }  },  "security": [  {  "petstore_auth": [  "write:pets",  "read:pets"  ]  }  ],  "x-swagger-router-controller": "Spark"  }  }  },  "securityDefinitions": {  "petstore_auth": {  "type": "oauth2",  "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",  "flow": "implicit",  "scopes": {  "write:pets": "modify pets in your account",  "read:pets": "read your pets"  }  }  },  "definitions": {  "Spark": {  "Spark": {  "Spark": {  "type": "object",  "required": [  "appName",  "author",  "parameters",  "version",  "type",  "user"  ],  "properties": {  "appName": {  "type": "string",  "example": "wordcount_search2.py"  },  "author": {  "type": "string",  "example": "[object Object]"  },  "parameters": {  "type": "json",  "example": "[object Object],[object Object]"  },  "version": {  "type": "string",  "example": "0.0.1"  },  "user": {  "type": "string",  "example": "5be2995a0cb7a90d721cdd0f"  }  },  "title": "A spark",  "description": "running spark",  "example": {  "email": "ghwlchlaks",  "data": "AtoZ.txt",  "parameter": "--word A",  "target": "email",  "user": "ghwlchlaks@naver.com",  "APP": "wordcount_search.py"  },  "xml": {  "name": "Spark"  }  }  },  "externalDocs": {  "description": "Find out more about Swagger",  "url": "http://swagger.io"  }  } 
+{
+"swagger": "2.0",
+"info": {
+"description": "This is a sample server Spark server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+"version": "0.0.1",
+"title": "wordcount_search2.py",
+"termsOfService": "http://swagger.io/terms/",
+"contact": {
+"email": "ghwlchlaks@naver.com"
+},
+"license": {
+"name": "Apache-2.0",
+"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+}
+},
+"host": "zest3:3000",
+"basePath": "/client/v2",
+"tags": [
+{
+"name": "wordcount_search2.py",
+"description": "Apps that count the number of specific characters",
+"externalDocs": {
+"description": "Find out more",
+"url": "http://192.168.2.13:3000"
+}
+},
+{
+"name": "pet",
+"description": "Everything about your Pets",
+"externalDocs": {
+"description": "Find out more",
+"url": "http://swagger.io"
+}
+}
+],
+"schemes": [
+"http"
+],
+"paths": {
+"/sparkSubmit": {
+"post": {
+"tags": [
+"sparkSubmit"
+],
+"summary": "apps description",
+"description": "",
+"operationId": "wordcount_search2.py",
+"consumes": [
+"application/json",
+"application/xml"
+],
+"produces": [
+"application/xml",
+"application/json"
+],
+"parameters": [
+{
+"in": "body",
+"name": "body",
+"description": "apps description",
+"required": true,
+"schema": {
+"$ref": "#/definitions/Spark"
+}
+}
+],
+"responses": {
+"200": {
+"description": "successful operation"
+},
+"400": {
+"description": "Invalid status value"
+},
+"404": {
+"description": "not found"
+},
+"500": {
+"description": "server error"
+}
+},
+"security": [
+{
+"petstore_auth": [
+"write:pets",
+"read:pets"
+]
+}
+],
+"x-swagger-router-controller": "Spark"
+}
+}
+},
+"securityDefinitions": {
+"petstore_auth": {
+"type": "oauth2",
+"authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+"flow": "implicit",
+"scopes": {
+"write:pets": "modify pets in your account",
+"read:pets": "read your pets"
+}
+}
+},
+"definitions": {
+"Spark": {
+"type": "object",
+"required": [
+"email",
+"data",
+"paramter",
+"target",
+"user",
+"APP"
+],
+"properties": {
+"email": {
+"type": "string",
+"example": "ghwlchlaks"
+},
+"data": {
+"type": "string",
+"example": "AtoZ.txt"
+},
+"target": {
+"type": "string",
+"example": "email"
+},
+"user": {
+"type": "string",
+"example": "ghwlchlaks@naver.com"
+},
+"APP": {
+"type": "string",
+"example": "wordcount_search.py"
+}
+},
+"title": "A spark",
+"description": "running spark",
+"example": {
+"email": "ghwlchlaks",
+"data": "AtoZ.txt",
+"parameter": "--word A",
+"target": "email",
+"user": "ghwlchlaks@naver.com",
+"APP": "wordcount_search.py"
+},
+"xml": {
+"name": "Spark"
+}
+}
+},
+"externalDocs": {
+"description": "Find out more about Swagger",
+"url": "http://swagger.io"
+}
+}

@@ -50,165 +50,162 @@ module.exports = {
 								if(data){
 									//res.send({status:true, result:data})
 									console.log("write swagger json")
-									let	content =
-											'{'+
-												' "swagger": "2.0", '+
-												' "info": { '+
-													' "description": "'+info.description+'", '+
-													' "version": "'+info.version+'", '+
-													' "title": "'+info.appName+'", '+
-													' "termsOfService": "http://swagger.io/terms/", '+
-													' "contact": { '+
-													' "email": "apiteam@swagger.io" '+
-													' }, '+
-													' "license": { '+
-													' "name": "Apache-2.0", '+
-													' "url": "http://www.apache.org/licenses/LICENSE-2.0.html" '+
-													' } '+
-												' }, '+
-												' "host": "zest3:3000", '+
-												' "basePath": "/client/v2", '+
-												' "tags": [ '+
-													' { '+
-													' "name": "'+info.appName+'", '+
-													' "description": "'+info.description+'", '+
-													' "externalDocs": { '+
-														' "description": "Find out more", '+
-														' "url": "http://192.168.2.13:3000" '+
-													' } '+
-													' }, '+
-													' { '+
-													' "name": "pet", '+
-													' "description": "Everything about your Pets", '+
-													' "externalDocs": { '+
-														' "description": "Find out more", '+
-														' "url": "http://swagger.io" '+
-													' } '+
-													' } '+
-												' ], '+
-												' "schemes": [ '+
-													' "http" '+
-												' ], '+
-												' "paths": { '+
-													' "/sparkSubmit": { '+
-													' "post": { '+
-														' "tags": [ '+
-														' "sparkSubmit" '+
-														' ], '+
-														' "summary": "You can running spark application by this API", '+
-														' "description": "", '+
-														' "operationId": "sparkSubmit", '+
-														' "consumes": [ '+
-														' "application/json", '+
-														' "application/xml" '+
-														' ], '+
-														' "produces": [ '+
-														' "application/xml", '+
-														' "application/json" '+
-														' ], '+
-														' "parameters": [ '+
-														' { '+
-															' "in": "body", '+
-															' "name": "body", '+
-															' "description": "meta data", '+
-															' "required": true, '+
-															' "schema": { '+
-															' "$ref": "#/definitions/Spark" '+
-															' } '+
-														' } '+
-														' ], '+
-														' "responses": { '+
-														' "200": { '+
-															' "description": "successful operation" '+
-														' }, '+
-														' "400": { '+
-															' "description": "Invalid status value" '+
-														' }, '+
-														' "404": { '+
-															' "description": "not found" '+
-														' }, '+
-														' "500": { '+
-															' "description": "server error" '+
-														' } '+
-														' }, '+
-														' "security": [ '+
-														' { '+
-															' "petstore_auth": [ '+
-															' "write:pets", '+
-															' "read:pets" '+
-															' ] '+
-														' } '+
-														' ], '+
-														' "x-swagger-router-controller": "Spark" '+
-													' } '+
-													' } '+
-												' }, '+
-												' "securityDefinitions": { '+
-													' "petstore_auth": { '+
-													' "type": "oauth2", '+
-													' "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog", '+
-													' "flow": "implicit", '+
-													' "scopes": { '+
-														' "write:pets": "modify pets in your account", '+
-														' "read:pets": "read your pets" '+
-														' } '+
-													' } '+
-													' }, '+
-												' "definitions": { '+
-												' "Spark": { '+
-													' "Spark": { '+ 
-													' "Spark": { '+ 
-													' "type": "object", '+
-													' "required": [ '+
-														' "appName", '+
-														' "author", '+
-														' "parameters", '+
-														' "version", '+
-														' "type", '+
-														' "user" '+
-													' ], '+
-													' "properties": { '+
-														' "appName": { '+
-														' "type": "string", '+
-														' "example": "'+info.appName+'" '+
-														' }, '+
-														' "author": { '+
-														' "type": "string", '+
-														' "example": "'+info.author+'" '+
-														' }, '+
-														' "parameters": { '+
-														' "type": "json", '+
-														' "example": "'+info.parameters+'" '+
-														' }, '+
-														' "version": { '+
-														' "type": "string", '+
-														' "example": "'+info.version+'" '+
-														' }, '+
-														' "user": { '+
-														' "type": "string", '+
-														' "example": "'+user._id+'" '+
-														' } '+
-													' }, '+
-													' "title": "A spark", '+
-													' "description": "running spark", '+
-													' "example": { '+
-														' "email": "ghwlchlaks", '+
-														' "data": "AtoZ.txt", '+
-														' "parameter": "--word A", '+
-														' "target": "email", '+
-														' "user": "ghwlchlaks@naver.com", '+
-														' "APP": "wordcount_search.py" '+
-													' }, '+
-													' "xml": { '+
-														' "name": "Spark" '+
-													' } '+
-													' } '+
-												' }, '+
-												' "externalDocs": { '+
-													' "description": "Find out more about Swagger", '+
-													' "url": "http://swagger.io" '+
-												' } '+
-												' } '
+									let	content = '{\n'+
+										'"swagger": "2.0",\n'+
+										'"info": {\n'+
+										  '"description": "This is a sample server Spark server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",\n'+
+										  '"version": "'+info.version+'",\n'+
+										  '"title": "'+info.appName+'",\n'+
+										  '"termsOfService": "http://swagger.io/terms/",\n'+
+										  '"contact": {\n'+
+											'"email": "ghwlchlaks@naver.com"\n'+
+										  '},\n'+
+										  '"license": {\n'+
+											'"name": "Apache-2.0",\n'+
+											'"url": "http://www.apache.org/licenses/LICENSE-2.0.html"\n'+
+										  '}\n'+
+										'},\n'+
+										'"host": "zest3:3000",\n'+
+										'"basePath": "/client/v2",\n'+
+										'"tags": [\n'+
+										  '{\n'+
+											'"name": "'+info.appName+'",\n'+
+											'"description": "'+info.description+'",\n'+
+											'"externalDocs": {\n'+
+											  '"description": "Find out more",\n'+
+											  '"url": "http://192.168.2.13:3000"\n'+
+											'}\n'+
+										  '},\n'+
+										  '{\n'+
+											'"name": "pet",\n'+
+											'"description": "Everything about your Pets",\n'+
+											'"externalDocs": {\n'+
+											  '"description": "Find out more",\n'+
+											  '"url": "http://swagger.io"\n'+
+											'}\n'+
+										  '}\n'+
+										'],\n'+
+										'"schemes": [\n'+
+										  '"http"\n'+
+										'],\n'+
+										'"paths": {\n'+
+										  '"/sparkSubmit": {\n'+
+											'"post": {\n'+
+											  '"tags": [\n'+
+												'"sparkSubmit"\n'+
+											  '],\n'+
+											  '"summary": "apps description",\n'+
+											  '"description": "",\n'+
+											  '"operationId": "'+info.appName+'",\n'+
+											  '"consumes": [\n'+
+												'"application/json",\n'+
+												'"application/xml"\n'+
+											  '],\n'+
+											  '"produces": [\n'+
+												'"application/xml",\n'+
+												'"application/json"\n'+
+											  '],\n'+
+											  '"parameters": [\n'+
+												'{\n'+
+												  '"in": "body",\n'+
+												  '"name": "body",\n'+
+												  '"description": "apps description",\n'+
+												  '"required": true,\n'+
+												  '"schema": {\n'+
+													'"$ref": "#/definitions/Spark"\n'+
+												  '}\n'+
+												'}\n'+
+											  '],\n'+
+											  '"responses": {\n'+
+												'"200": {\n'+
+												  '"description": "successful operation"\n'+
+												'},\n'+
+												'"400": {\n'+
+												  '"description": "Invalid status value"\n'+
+												'},\n'+
+												'"404": {\n'+
+												  '"description": "not found"\n'+
+												'},\n'+
+												'"500": {\n'+
+												  '"description": "server error"\n'+
+												'}\n'+
+											  '},\n'+
+											  '"security": [\n'+
+												'{\n'+
+												  '"petstore_auth": [\n'+
+													'"write:pets",\n'+
+													'"read:pets"\n'+
+												  ']\n'+
+												'}\n'+
+											  '],\n'+
+											  '"x-swagger-router-controller": "Spark"\n'+
+											'}\n'+
+										  '}\n'+
+										'},\n'+
+										'"securityDefinitions": {\n'+
+										  '"petstore_auth": {\n'+
+											'"type": "oauth2",\n'+
+											'"authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",\n'+
+											'"flow": "implicit",\n'+
+											'"scopes": {\n'+
+											  '"write:pets": "modify pets in your account",\n'+
+											  '"read:pets": "read your pets"\n'+
+											'}\n'+
+										  '}\n'+
+										'},\n'+
+										'"definitions": {\n'+
+										  '"Spark": {\n'+
+											'"type": "object",\n'+
+											'"required": [\n'+
+											  '"email",\n'+
+											  '"data",\n'+
+											  '"paramter",\n'+
+											  '"target",\n'+
+											  '"user",\n'+
+											  '"APP"\n'+
+											'],\n'+
+											'"properties": {\n'+
+											  '"email": {\n'+
+												'"type": "string",\n'+
+												'"example": "'+info.author.email+'"\n'+
+											  '},\n'+
+											  '"data": {\n'+
+												'"type": "string",\n'+
+												'"example": "AtoZ.txt"\n'+
+											  '},\n'+
+											  '"target": {\n'+
+												'"type": "string",\n'+
+												'"example": "email"\n'+
+											  '},\n'+
+											  '"user": {\n'+
+												'"type": "string",\n'+
+												'"example": "ghwlchlaks@naver.com"\n'+
+											  '},\n'+
+											  '"APP": {\n'+
+												'"type": "string",\n'+
+												'"example": "wordcount_search.py"\n'+
+											  '}\n'+
+											'},\n'+
+											'"title": "A spark",\n'+
+											'"description": "running spark",\n'+
+											'"example": {\n'+
+											  '"email": "'+info.author.email+'",\n'+
+											  '"data": "AtoZ.txt",\n'+
+											  '"parameter": "--word A",\n'+
+											  '"target": "email",\n'+
+											  '"user": "ghwlchlaks@naver.com",\n'+
+											  '"APP": "wordcount_search.py"\n'+
+											'},\n'+
+											'"xml": {\n'+
+											  '"name": "Spark"\n'+
+											'}\n'+
+										  '}\n'+
+										'},\n'+
+										'"externalDocs": {\n'+
+										  '"description": "Find out more about Swagger",\n'+
+										  '"url": "http://swagger.io"\n'+
+										'}\n'+
+									  '}'
 
 									let file = conf.JsonFolder+info.appName.split('.')[0] + ".json"
 									fs.writeFile(file, content, 'utf8', function(err){

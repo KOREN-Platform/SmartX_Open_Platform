@@ -65,7 +65,7 @@ module.exports = {
 										  '"title": "'+info.appName.split('.')[0]+'",\n'+
 										  '"termsOfService": "http://swagger.io/terms/",\n'+
 										  '"contact": {\n'+
-											'"email": "ghwlchlaks@naver.com"\n'+
+											'"email": "'+info.author.email+'"\n'+
 										  '},\n'+
 										  '"license": {\n'+
 											'"name": "Apache-2.0",\n'+
@@ -73,7 +73,7 @@ module.exports = {
 										  '}\n'+
 										'},\n'+
 										'"host": "'+conf.HostName+':3000",\n'+
-										'"basePath": "/client/api/v2/sparkSubmit",\n'+
+										'"basePath": "/client/api/v2",\n'+
 										'"tags": [\n'+
 										  '{\n'+
 											'"name": "'+info.appName.split('.')[0]+'",\n'+
@@ -81,14 +81,6 @@ module.exports = {
 											'"externalDocs": {\n'+
 											  '"description": "Find out more",\n'+
 											  '"url": "http://'+conf.ManagerIp+':3000"\n'+
-											'}\n'+
-										  '},\n'+
-										  '{\n'+
-											'"name": "pet",\n'+
-											'"description": "Everything about your Pets",\n'+
-											'"externalDocs": {\n'+
-											  '"description": "Find out more",\n'+
-											  '"url": "http://swagger.io"\n'+
 											'}\n'+
 										  '}\n'+
 										'],\n'+
@@ -101,8 +93,8 @@ module.exports = {
 											  '"tags": [\n'+
 												'"sparkApps"\n'+
 											  '],\n'+
-											  '"summary": "app meta datas",\n'+
-											  '"description": "",\n'+
+											  '"summary": "'+info.description+'",\n'+
+											  '"description": "'+info.description+'",\n'+
 											  '"operationId": "'+info.appName.split('.')[0]+'",\n'+
 											  '"consumes": [\n'+
 												'"application/json",\n'+
@@ -116,13 +108,20 @@ module.exports = {
 												'{\n'+
 												  '"in": "body",\n'+
 												  '"name": "body",\n'+
-												  '"description": "apps desemailcription",\n'+
-												  '"required": true,\n'+
+												  '"description": "Data for running the app",\n'+
+													'"required": true,\n'+
 												  '"schema": {\n'+
-													'"$ref": "#/definitions/Spark"\n'+
+													'"$ref": "#/definitions/JSON"\n'+
 												  '}\n'+
 												'}\n'+
-											  '],\n'+
+												// '{\n'+
+												//   '"in": "query",\n'+
+												//   '"name": "--word",\n'+
+												//   '"description": "word dec",\n'+
+												//   '"required": true,\n'+
+												//   '"type": "string"\n'+
+												// '}\n'+
+												'],\n'+
 											  '"responses": {\n'+
 												'"200": {\n'+
 												  '"description": "successful operation"\n'+
@@ -155,7 +154,7 @@ module.exports = {
 											'"properties": {\n'+
 											  '"email": {\n'+
 												'"type": "string",\n'+
-												'"example": "'+info.author.email+'"\n'+
+												'"example": "'+req.user.email+'"\n'+
 											  '},\n'+
 											  '"data": {\n'+
 												'"type": "string",\n'+
@@ -167,11 +166,11 @@ module.exports = {
 											  '},\n'+
 											  '"user": {\n'+
 												'"type": "string",\n'+
-												'"example": "ghwlchlaks@naver.com"\n'+
+												'"example": "Your@email.com"\n'+
 											  '},\n'+
 											  '"APP": {\n'+
 												'"type": "string",\n'+
-												'"example": "wordcount_search.py"\n'+
+												'"example": "'+info.appName+'"\n'+
 											  '}\n'+
 											'},\n'+
 											'"title": "A spark",\n'+

@@ -219,7 +219,7 @@ module.exports = {
 									fs.writeFile(file, content, 'utf8', function(err){
 										if(err) {res.send({status:false, result:err})}
 										else{
-											const submit = 'java -jar swagger-codegen-cli.jar generate -i '+conf.JsonFolder+ info.appName.split('.')[0]+'.json'+ ' -l java -o '+conf.SwaggerFolder+info.appName.split('.')[0]
+											const submit = 'java -jar swagger-codegen-cli.jar generate -i '+conf.JsonFolder+ info.appName.split('.')[0]+'.json'+ ' -l nodejs-server -o '+conf.SwaggerFolder+info.appName.split('.')[0]
 											exec(submit, function(err, stdout, stderr){
 												if(err){
 													console.log("1" + err)

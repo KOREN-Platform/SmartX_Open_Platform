@@ -397,7 +397,13 @@ module.exports = {
 																				if(err){
 																					res.send({status: false, result: 'unlink err'})
 																				}else{
-																					res.send({status: true, result: result})
+																					fs.unlink(conf.SwaggerFolder+id+'.json',function(err){
+																						if(err){
+																							res.send({status: false, result: 'unlink err'})
+																						}else{
+																							res.send({status: true, result: result})
+																						}
+																					})
 																				}
 																			})
 																		}

@@ -244,9 +244,9 @@ module.exports = {
 			let path = files.appFile[0].path
 			let originalName = files.appFile[0].originalFilename
 			let splitName = originalName.split('.')[0]
-			console.log(path)
-			console.log(originalName)
-			console.log(splitName)
+			// console.log(path)
+			// console.log(originalName)
+			// console.log(splitName)
 			
 			fs.mkdir(conf.AppFolder+splitName, function(err){
 				if(err) {
@@ -286,14 +286,13 @@ module.exports = {
 	},
 	getDoc(req, res){
 		let appName = req.query.appName
-		let str = fs.readFileSync(conf.SwaggerFolder+appName.split('.')[0] + "/docs/Spark.md", "utf8")
+		let str = fs.readFileSync(conf.SwaggerFolder+appName.split('.')[0] + "/docs/SparkAppsApi.md", "utf8")
 		let result = markdown.makeHtml(str)
 		res.send({status:true, result:result})
 	},
 	downloadFile(req, res){
 		const fileName = req.params.fileName
-		const savedPath = "./swagger-codegen/node/"
-		let file = savedPath+fileName
+		let file = conf.SwaggerFolder+fileName
 		res.download(file)
 	},
 	/**

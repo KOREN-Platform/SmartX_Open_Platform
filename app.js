@@ -33,6 +33,7 @@ const hdfsRouter = require('./routes/hdfs');
 const yarnRouter = require('./routes/yarn');
 const zooRouter = require('./routes/zoo');
 const historyRouter = require('./routes/history')
+const aboutRouter = require('./routes/about')
 
 //member 라우트 파일
 const loginRouter = require('./routes/login');
@@ -90,7 +91,7 @@ app.use('/hdfs', hdfsRouter);
 app.use('/yarn', yarnRouter);
 app.use('/zoo', zooRouter);
 app.use('/history', historyRouter);
-
+app.use('/about', aboutRouter)
 //member ages hosting
 app.use('/login',loginRouter);
 app.use('/register',registerRouter);

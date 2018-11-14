@@ -327,7 +327,7 @@
           var check = confirm("Do you want running selected app?")
           if(check){
             $.ajax({
-            url: 'client/api/v2/sparkSubmit/'+$('input:checkbox[id=APP_check]:checked').val().split('.')[0],
+            url: 'client/api/v2/'+$('input:checkbox[id=APP_check]:checked').val().split('.')[0],
             method: 'post',
             data: {
 				    	'APP' : $('input:checkbox[id=APP_check]:checked').val(),

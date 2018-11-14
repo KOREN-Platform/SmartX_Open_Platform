@@ -69,138 +69,139 @@ module.exports = {
 										}
 									}
 									let	content = '{\n'+
-										'"swagger": "2.0",\n'+
-										'"info": {\n'+
-										  '"description": "'+info.description+'",\n'+
-										  '"version": "'+info.version+'",\n'+
-										  '"title": "'+info.appName.split('.')[0]+'",\n'+
-										  '"termsOfService": "http://swagger.io/terms/",\n'+
-										  '"contact": {\n'+
-											'"email": "'+info.author.email+'"\n'+
-										  '},\n'+
-										  '"license": {\n'+
-											'"name": "Apache-2.0",\n'+
-											'"url": "http://www.apache.org/licenses/LICENSE-2.0.html"\n'+
-										  '}\n'+
+									'"swagger": "2.0",\n'+
+									'"info": {\n'+
+										'"description": "'+info.description+'",\n'+
+										'"version": "'+info.version+'",\n'+
+										'"title": "'+info.appName.split('.')[0]+'",\n'+
+										'"termsOfService": "http://swagger.io/terms/",\n'+
+										'"contact": {\n'+
+										'"email": "'+info.author.email+'"\n'+
 										'},\n'+
-										'"host": "'+conf.HostName+':3000",\n'+
-										'"basePath": "/api/v2",\n'+
-										'"tags": [\n'+
-										  '{\n'+
-											'"name": "'+info.appName.split('.')[0]+'",\n'+
-											'"description": "'+info.description+'",\n'+
-											'"externalDocs": {\n'+
-											  '"description": "Find out more",\n'+
-											  '"url": "http://'+conf.ManagerIp+':3000"\n'+
-											'}\n'+
-										  '}\n'+
-										'],\n'+
-										'"schemes": [\n'+
-										  '"http"\n'+
-										'],\n'+
-										'"paths": {\n'+
-										  '"/'+info.appName.split('.')[0]+'": {\n'+
-											'"post": {\n'+
-											  '"tags": [\n'+
-												'"sparkApps"\n'+
-											  '],\n'+
-											  '"summary": "'+info.description+'",\n'+
-											  '"description": "'+info.description+'",\n'+
-											  '"operationId": "'+info.appName.split('.')[0]+'",\n'+
-											  '"consumes": [\n'+
-												'"application/json",\n'+
-												'"application/xml"\n'+
-											  '],\n'+
-											  '"produces": [\n'+
-												'"application/xml",\n'+
-												'"application/json"\n'+
-											  '],\n'+
-											  '"parameters": [\n'+
-												'{\n'+
-												  '"in": "body",\n'+
-												  '"name": "body",\n'+
-												  '"description": "Data for running the app",\n'+
-													'"required": true,\n'+
-												  '"schema": {\n'+
-													'"$ref": "#/definitions/JSON"\n'+
-													'}\n'+
-												'}\n'+
-												'],\n'+
-											  '"responses": {\n'+
-												'"200": {\n'+
-												  '"description": "successful operation"\n'+
-												'},\n'+
-												'"400": {\n'+
-												  '"description": "Invalid status value"\n'+
-												'},\n'+
-												'"404": {\n'+
-												  '"description": "not found"\n'+
-												'},\n'+
-												'"500": {\n'+
-												  '"description": "server error"\n'+
-												'}\n'+
-											  '},\n'+
-											  '"x-swagger-router-controller": "Spark"\n'+
-											'}\n'+
-										  '}\n'+
-										'},\n'+
-										'"definitions": {\n'+
-										  '"JSON": {\n'+
-											'"type": "object",\n'+
-											'"required": [\n'+
-											  '"email",\n'+
-											  '"data",\n'+
-											  '"parameter",\n'+
-											  '"APP"\n'+
-											'],\n'+
-											'"properties": {\n'+
-											  '"email": {\n'+
-												'"type": "string",\n'+
-												'"example": "'+req.user.email+'",\n'+
-												'"description": "your email"\n'+
-											  '},\n'+
-											  '"data": {\n'+
-												'"type": "string",\n'+
-												'"example": "AtoZ.txt",\n'+
-												'"description": "target data name"\n'+
-											  '},\n'+
-											  '"target": {\n'+
-												'"type": "string",\n'+
-												'"example": "email",\n'+
-												'"description": "callback target (email or slack)"\n'+
-											  '},\n'+
-											  '"user": {\n'+
-												'"type": "string",\n'+
-												'"example": "Your@email.com",\n'+
-												'"description": "callback address"\n'+
-											  '},\n'+
-											  '"APP": {\n'+
-												'"type": "string",\n'+
-												'"example": "'+info.appName+'",\n'+
-												'"description": "target app name"\n'+
-												'},\n'+
-												propertiesParams +
-											'},\n'+
-											'"title": "A spark",\n'+
-											'"description": "running spark",\n'+
-											'"example": {\n'+
-											  '"email": "'+req.user.email+'",\n'+
-											  '"data": "AtoZ.txt",\n'+
-											  '"parameter": "'+apiParameters+'",\n'+
-											  '"target": "email",\n'+
-											  '"user": "Your@email.com",\n'+
-											  '"APP": "'+info.appName+'"\n'+
-											'},\n'+
-											'"xml": {\n'+
-											  '"name": "Spark"\n'+
-											'}\n'+
-										  '}\n'+
-										'},\n'+
-										'"externalDocs": {\n'+
-										  '"description": "Find out more about Swagger",\n'+
-										  '"url": "http://swagger.io"\n'+
+										'"license": {\n'+
+										'"name": "Apache-2.0",\n'+
+										'"url": "http://www.apache.org/licenses/LICENSE-2.0.html"\n'+
 										'}\n'+
-									  '}'
+									'},\n'+
+									'"host": "'+conf.HostName+':3000",\n'+
+									'"basePath": "/api/v2",\n'+
+									'"tags": [\n'+
+										'{\n'+
+										'"name": "'+info.appName.split('.')[0]+'",\n'+
+										'"description": "'+info.description+'",\n'+
+										'"externalDocs": {\n'+
+											'"description": "Find out more",\n'+
+											'"url": "http://'+conf.ManagerIp+':3000"\n'+
+										'}\n'+
+										'}\n'+
+									'],\n'+
+									'"schemes": [\n'+
+										'"http"\n'+
+									'],\n'+
+									'"paths": {\n'+
+										'"/'+info.appName.split('.')[0]+'": {\n'+
+										'"post": {\n'+
+											'"tags": [\n'+
+											'"sparkApps"\n'+
+											'],\n'+
+											'"summary": "'+info.description+'",\n'+
+											'"description": "'+info.description+'",\n'+
+											'"operationId": "'+info.appName.split('.')[0]+'",\n'+
+											'"consumes": [\n'+
+											'"application/json",\n'+
+											'"application/xml"\n'+
+											'],\n'+
+											'"produces": [\n'+
+											'"application/xml",\n'+
+											'"application/json"\n'+
+											'],\n'+
+											'"parameters": [\n'+
+											'{\n'+
+												'"in": "body",\n'+
+												'"name": "body",\n'+
+												'"description": "Data for running the app",\n'+
+												'"required": true,\n'+
+												'"schema": {\n'+
+												'"$ref": "#/definitions/JSON"\n'+
+												'}\n'+
+											'}\n'+
+											'],\n'+
+											'"responses": {\n'+
+											'"200": {\n'+
+												'"description": "successful operation"\n'+
+											'},\n'+
+											'"400": {\n'+
+												'"description": "Invalid status value"\n'+
+											'},\n'+
+											'"404": {\n'+
+												'"description": "not found"\n'+
+											'},\n'+
+											'"500": {\n'+
+												'"description": "server error"\n'+
+											'}\n'+
+											'},\n'+
+											'"x-swagger-router-controller": "Spark"\n'+
+										'}\n'+
+										'}\n'+
+									'},\n'+
+									'"definitions": {\n'+
+										'"JSON": {\n'+
+										'"type": "object",\n'+
+										'"required": [\n'+
+											'"email",\n'+
+											'"data",\n'+
+											'"parameter",\n'+
+											'"APP"\n'+
+										'],\n'+
+										'"properties": {\n'+
+											'"email": {\n'+
+											'"type": "string",\n'+
+											'"example": "'+req.user.email+'",\n'+
+											'"description": "your email"\n'+
+											'},\n'+
+											'"data": {\n'+
+											'"type": "string",\n'+
+											'"example": "AtoZ.txt",\n'+
+											'"description": "target data name"\n'+
+											'},\n'+
+											'"target": {\n'+
+											'"type": "string",\n'+
+											'"example": "email",\n'+
+											'"description": "callback target (email or slack)"\n'+
+											'},\n'+
+											'"user": {\n'+
+											'"type": "string",\n'+
+											'"example": "Your@email.com",\n'+
+											'"description": "callback address"\n'+
+											'},\n'+
+											'"APP": {\n'+
+											'"type": "string",\n'+
+											'"example": "'+info.appName+'",\n'+
+											'"description": "target app name"\n'+
+											'},\n'+
+											propertiesParams +
+										'},\n'+
+										'"title": "A spark",\n'+
+										'"description": "running spark",\n'+
+										'"example": {\n'+
+											'"email": "'+req.user.email+'",\n'+
+											'"data": "AtoZ.txt",\n'+
+											'"parameter": "'+apiParameters+'",\n'+
+											'"target": "email",\n'+
+											'"user": "Your@email.com",\n'+
+											'"APP": "'+info.appName+'"\n'+
+										'},\n'+
+										'"xml": {\n'+
+											'"name": "Spark"\n'+
+										'}\n'+
+										'}\n'+
+									'},\n'+
+									'"externalDocs": {\n'+
+										'"description": "Find out more about Swagger",\n'+
+										'"url": "http://swagger.io"\n'+
+									'}\n'+
+									'}'
+
 
 									let file = conf.JsonFolder+info.appName.split('.')[0] + ".json"
 									fs.writeFile(file, content, 'utf8', function(err){

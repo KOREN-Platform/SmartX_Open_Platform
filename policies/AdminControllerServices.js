@@ -161,8 +161,8 @@ module.exports = {
 											  '"email",\n'+
 											  '"data",\n'+
 											  '"parameter",\n'+
-											  '"target",\n'+
-											  '"user",\n'+
+											  // '"target",\n'+
+											  // '"user",\n'+
 											  '"APP"\n'+
 											'],\n'+
 											'"properties": {\n'+

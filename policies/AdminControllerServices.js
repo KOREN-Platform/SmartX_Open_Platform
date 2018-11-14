@@ -2,7 +2,8 @@ const exec = require('child_process').exec;
 const fs = require('fs')
 const multiparty = require('multiparty');
 const conf = require('../config/config.json')
-
+const zipper = require('zip-local')
+const markdown = require('markdown-js')
 //mongodb model
 const App = require('../models/appSchema').App
 const Users = require('../models/users').Users
@@ -47,7 +48,172 @@ module.exports = {
 							user.save(function(err, data){
 								if(err) {res.send({status:false, result:err})}
 								if(data){
-									res.send({status:true, result:data})
+									//res.send({status:true, result:data})
+									console.log("write swagger json")
+
+									let apiParameters = ''
+
+									for( let i = 0 ; info.parameters.length > i ; i++ ){
+										apiParameters+= info.parameters[i].name + ' ' + info.parameters[i].default + ' '
+									}
+
+									let	content = '{\n'+
+										'"swagger": "2.0",\n'+
+										'"info": {\n'+
+										  '"description": "'+info.description+'",\n'+
+										  '"version": "'+info.version+'",\n'+
+										  '"title": "'+info.appName.split('.')[0]+'",\n'+
+										  '"termsOfService": "http://swagger.io/terms/",\n'+
+										  '"contact": {\n'+
+											'"email": "ghwlchlaks@naver.com"\n'+
+										  '},\n'+
+										  '"license": {\n'+
+											'"name": "Apache-2.0",\n'+
+											'"url": "http://www.apache.org/licenses/LICENSE-2.0.html"\n'+
+										  '}\n'+
+										'},\n'+
+										'"host": "'+conf.HostName+':3000",\n'+
+										'"basePath": "/client/api/v2/sparkSubmit",\n'+
+										'"tags": [\n'+
+										  '{\n'+
+											'"name": "'+info.appName.split('.')[0]+'",\n'+
+											'"description": "'+info.description+'",\n'+
+											'"externalDocs": {\n'+
+											  '"description": "Find out more",\n'+
+											  '"url": "http://'+conf.ManagerIp+':3000"\n'+
+											'}\n'+
+										  '},\n'+
+										  '{\n'+
+											'"name": "pet",\n'+
+											'"description": "Everything about your Pets",\n'+
+											'"externalDocs": {\n'+
+											  '"description": "Find out more",\n'+
+											  '"url": "http://swagger.io"\n'+
+											'}\n'+
+										  '}\n'+
+										'],\n'+
+										'"schemes": [\n'+
+										  '"http"\n'+
+										'],\n'+
+										'"paths": {\n'+
+										  '"/'+info.appName.split('.')[0]+'": {\n'+
+											'"post": {\n'+
+											  '"tags": [\n'+
+												'"sparkApps"\n'+
+											  '],\n'+
+											  '"summary": "app meta datas",\n'+
+											  '"description": "",\n'+
+											  '"operationId": "'+info.appName.split('.')[0]+'",\n'+
+											  '"consumes": [\n'+
+												'"application/json",\n'+
+												'"application/xml"\n'+
+											  '],\n'+
+											  '"produces": [\n'+
+												'"application/xml",\n'+
+												'"application/json"\n'+
+											  '],\n'+
+											  '"parameters": [\n'+
+												'{\n'+
+												  '"in": "body",\n'+
+												  '"name": "body",\n'+
+												  '"description": "apps desemailcription",\n'+
+												  '"required": true,\n'+
+												  '"schema": {\n'+
+													'"$ref": "#/definitions/Spark"\n'+
+												  '}\n'+
+												'}\n'+
+											  '],\n'+
+											  '"responses": {\n'+
+												'"200": {\n'+
+												  '"description": "successful operation"\n'+
+												'},\n'+
+												'"400": {\n'+
+												  '"description": "Invalid status value"\n'+
+												'},\n'+
+												'"404": {\n'+
+												  '"description": "not found"\n'+
+												'},\n'+
+												'"500": {\n'+
+												  '"description": "server error"\n'+
+												'}\n'+
+											  '},\n'+
+											  '"x-swagger-router-controller": "Spark"\n'+
+											'}\n'+
+										  '}\n'+
+										'},\n'+
+										'"definitions": {\n'+
+										  '"Spark": {\n'+
+											'"type": "object",\n'+
+											'"required": [\n'+
+											  '"email",\n'+
+											  '"data",\n'+
+											  '"parameter",\n'+
+											  '"target",\n'+
+											  '"user",\n'+
+											  '"APP"\n'+
+											'],\n'+
+											'"properties": {\n'+
+											  '"email": {\n'+
+												'"type": "string",\n'+
+												'"example": "'+info.author.email+'"\n'+
+											  '},\n'+
+											  '"data": {\n'+
+												'"type": "string",\n'+
+												'"example": "AtoZ.txt"\n'+
+											  '},\n'+
+											  '"target": {\n'+
+												'"type": "string",\n'+
+												'"example": "email"\n'+
+											  '},\n'+
+											  '"user": {\n'+
+												'"type": "string",\n'+
+												'"example": "ghwlchlaks@naver.com"\n'+
+											  '},\n'+
+											  '"APP": {\n'+
+												'"type": "string",\n'+
+												'"example": "wordcount_search.py"\n'+
+											  '}\n'+
+											'},\n'+
+											'"title": "A spark",\n'+
+											'"description": "running spark",\n'+
+											'"example": {\n'+
+											  '"email": "'+req.user.email+'",\n'+
+											  '"data": "AtoZ.txt",\n'+
+											  '"parameter": "'+apiParameters+'",\n'+
+											  '"target": "email",\n'+
+											  '"user": "Your@email.com",\n'+
+											  '"APP": "'+info.appName+'"\n'+
+											'},\n'+
+											'"xml": {\n'+
+											  '"name": "Spark"\n'+
+											'}\n'+
+										  '}\n'+
+										'},\n'+
+										'"externalDocs": {\n'+
+										  '"description": "Find out more about Swagger",\n'+
+										  '"url": "http://swagger.io"\n'+
+										'}\n'+
+									  '}'
+
+									let file = conf.JsonFolder+info.appName.split('.')[0] + ".json"
+									fs.writeFile(file, content, 'utf8', function(err){
+										if(err) {res.send({status:false, result:err})}
+										else{
+											const submit = 'java -jar swagger-codegen-cli.jar generate -i '+conf.JsonFolder+ info.appName.split('.')[0]+'.json'+ ' -l python -o '+conf.SwaggerFolder+info.appName.split('.')[0]
+											exec(submit, function(err, stdout, stderr){
+												if(err){
+													console.log("1" + err)
+													res.send({status:false, result:err})
+												} else{
+													
+													zipper.sync.zip(conf.SwaggerFolder+info.appName.split('.')[0]).compress().save(conf.SwaggerFolder+info.appName.split('.')[0]+".zip")
+
+													res.send({status:true, result:stdout})
+
+												}
+											})
+										}	
+									})
 								}
 							})
 						}
@@ -78,6 +244,10 @@ module.exports = {
 			let path = files.appFile[0].path
 			let originalName = files.appFile[0].originalFilename
 			let splitName = originalName.split('.')[0]
+			// console.log(path)
+			// console.log(originalName)
+			// console.log(splitName)
+			
 			fs.mkdir(conf.AppFolder+splitName, function(err){
 				if(err) {
 					fs.unlink(path, function(err){
@@ -113,6 +283,17 @@ module.exports = {
 				}
 			})
 		})
+	},
+	getDoc(req, res){
+		let appName = req.query.appName
+		let str = fs.readFileSync(conf.SwaggerFolder+appName.split('.')[0] + "/docs/SparkAppsApi.md", "utf8")
+		let result = markdown.makeHtml(str)
+		res.send({status:true, result:result})
+	},
+	downloadFile(req, res){
+		const fileName = req.params.fileName
+		let file = conf.SwaggerFolder+fileName
+		res.download(file)
 	},
 	/**
 	 * @name appList
@@ -187,7 +368,19 @@ module.exports = {
 															function(err, result){
 																if(err) throw err
 																if (result){
-																	res.send({status: true, result: result})
+																	exec('rm -r '+conf.SwaggerFolder+id, function(err, stdout, stderr){
+																		if(err){
+																			res.send({status: false, result: 'rmdir err'})
+																		} else {
+																			fs.unlink(conf.SwaggerFolder+id+'.zip',function(err){
+																				if(err){
+																					res.send({status: false, result: 'unlink err'})
+																				}else{
+																					res.send({status: true, result: result})
+																				}
+																			})
+																		}
+																	})
 																}
 															}
 														)

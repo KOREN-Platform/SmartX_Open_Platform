@@ -15,7 +15,13 @@ module.exports = {
 	 * @param {String} req.body.parameter - 입력한 파라미터
 	 */
 	sparkSubmit(req, res, next) {
-		const email = req.user.email
+		let email =  req.body.email
+		if (req.body.email) {
+			email = req.body.email
+		}else {
+			email = req.user.email
+		}
+
 		const submit = 'spark-submit '+'--name '+email+' '+conf.AppFolder+req.body.APP.split('.')[0]+'/'+req.body.APP+' --file='+req.body.data + ' ' +  req.body.parameter
 		count+=1
 

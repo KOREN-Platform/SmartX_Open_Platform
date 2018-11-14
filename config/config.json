@@ -3,5 +3,8 @@
     "AppFolder" : "./sparkApps/",
     "DataFolder" : "/data",
     "ResultFolder" : "/result",
-    "ManagerIp" : "192.168.2.12"
+    "ManagerIp" : "192.168.2.13",
+    "HostName" : "zest3",
+    "SwaggerFolder" : "./stubs/",
+    "JsonFolder" : "./stubs/"
 }

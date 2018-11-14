@@ -24,4 +24,6 @@ router.get('/appData',AdminControllerServices.appData)
 // AdminControllerServices.delApp : spark 앱 삭제 및 데이터 삭제
 router.get('/delApp', AdminControllerServices.delApp)
 
+router.get('/download/:fileName', AdminControllerServices.downloadFile)
+router.get('/apiDoc/', AdminControllerServices.getDoc)
 module.exports = router;

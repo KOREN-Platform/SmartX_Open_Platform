@@ -1,0 +1,97 @@
+---
+swagger: "2.0"
+info:
+  description: "Apps that count the number of specific characters"
+  version: "0.0.1"
+  title: "wordcount_search"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "ghwlchlaks@naver.com"
+  license:
+    name: "Apache-2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "zest2:3000"
+basePath: "/client/api/v2/sparkSubmit"
+tags:
+- name: "wordcount_search"
+  description: "Apps that count the number of specific characters"
+  externalDocs:
+    description: "Find out more"
+    url: "http://192.168.2.12:3000"
+- name: "pet"
+  description: "Everything about your Pets"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+schemes:
+- "http"
+paths:
+  /wordcount_search:
+    post:
+      tags:
+      - "sparkApps"
+      summary: "app meta datas"
+      description: ""
+      operationId: "wordcount_search"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "apps desemailcription"
+        required: true
+        schema:
+          $ref: "#/definitions/Spark"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid status value"
+        404:
+          description: "not found"
+        500:
+          description: "server error"
+      x-swagger-router-controller: "Spark"
+definitions:
+  Spark:
+    type: "object"
+    required:
+    - "APP"
+    - "data"
+    - "email"
+    - "target"
+    - "user"
+    properties:
+      email:
+        type: "string"
+        example: "ghwlchlaks"
+      data:
+        type: "string"
+        example: "AtoZ.txt"
+      target:
+        type: "string"
+        example: "email"
+      user:
+        type: "string"
+        example: "ghwlchlaks@naver.com"
+      APP:
+        type: "string"
+        example: "wordcount_search.py"
+    title: "A spark"
+    description: "running spark"
+    example:
+      email: "developer"
+      data: "AtoZ.txt"
+      parameter: "--word A "
+      target: "email"
+      user: "Your@email.com"
+      APP: "wordcount_search.py"
+    xml:
+      name: "Spark"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

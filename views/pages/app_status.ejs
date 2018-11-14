@@ -23,7 +23,7 @@
                 </div></div></div><div class="row"><div class="col-sm-12">
 
                   <!-- running yarn status -->
-                  <h3><ion-icon name="boat"></ion-icon> Running Apps</h3>
+                  <h3><ion-icon name="boat"></ion-icon> Running Apps </h3>
                   <br/>
                     <table id="dtVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                         <thead>
@@ -50,14 +50,7 @@
                         </thead>
                         <tbody id="runState1">
                         </tbody>
-                      </table>
-
-                <div class="alert alert-secondary" role="alert">
-                  <hr class="my-2">
-                  <div class="form-group">
-                    <textarea class="form-control" id="sparkLogTextBox" rows="5" readonly></textarea>
-                  </div>
-                </div>  
+                      </table>  
               </div>
             </div>
           </div>
@@ -81,7 +74,6 @@
       })
 
       $(document).ready(function() {
-        updateLog()
         var table1 = $('#dtVerticalScrollExample').DataTable({
           "scrollY": "200px",
           "scrollCollapse": true,
@@ -172,7 +164,7 @@
                   let elapsedTime = runningData[i].elapsedTime
                   let startedTime = runningData[i].startedTime
                   let finishedTime = runningData[i].finishedTime
-                  $('#dtVerticalScrollExample').find('tbody').append('<tr> <td>'+id.split("application")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+state+'</td>'+'<td>'+elapsedTime+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td> </tr>')
+                  $('#dtVerticalScrollExample').find('tbody').append('<tr> <td>'+id.split("application_")[1]+'</td>'+'<td>'+name+'</td>'+'<td>'+elapsedTime+'</td>'+'<td>'+startedTime+'</td>'+'<td>'+finishedTime+'</td>'+'<td>'+state+' <img src="images/ajax-loader.gif" width="20px" height="20px"> </td> </tr> ')
                 }
                 $('#dtVerticalScrollExample').DataTable({
                   "scrollY": "200px",
@@ -202,20 +194,6 @@
                 }
             })
         }
-
-        function updateLog(){
-        	$.ajax({
-	          url: '/client/sparkLog',
-	          method: 'post',
-	          success:function(result){
-	            if(result){
-		            $('#sparkLogTextBox').val(result.latelyLog)
-	            }
-	          }
-	        })
-	        setTimeout('updateLog()',1000)
-        }
-
     </script>
 </body>
 </html>

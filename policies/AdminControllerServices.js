@@ -50,12 +50,19 @@ module.exports = {
 								if(data){
 									//res.send({status:true, result:data})
 									console.log("write swagger json")
+
+									let apiParameters = ''
+
+									for( let i = 0 ; info.parameters.length > i ; i++ ){
+										apiParameters+= info.parameters[i].name + ' ' + info.parameters[i].default + ' '
+									}
+
 									let	content = '{\n'+
 										'"swagger": "2.0",\n'+
 										'"info": {\n'+
-										  '"description": "This is a sample server Spark server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",\n'+
+										  '"description": "'+info.description+'",\n'+
 										  '"version": "'+info.version+'",\n'+
-										  '"title": "'+info.appName+'",\n'+
+										  '"title": "'+info.appName.split('.')[0]+'",\n'+
 										  '"termsOfService": "http://swagger.io/terms/",\n'+
 										  '"contact": {\n'+
 											'"email": "ghwlchlaks@naver.com"\n'+
@@ -65,15 +72,15 @@ module.exports = {
 											'"url": "http://www.apache.org/licenses/LICENSE-2.0.html"\n'+
 										  '}\n'+
 										'},\n'+
-										'"host": "zest3:3000",\n'+
-										'"basePath": "/client/v2",\n'+
+										'"host": "'+conf.HostName+':3000",\n'+
+										'"basePath": "/client/api/v2/sparkSubmit",\n'+
 										'"tags": [\n'+
 										  '{\n'+
-											'"name": "'+info.appName+'",\n'+
+											'"name": "'+info.appName.split('.')[0]+'",\n'+
 											'"description": "'+info.description+'",\n'+
 											'"externalDocs": {\n'+
 											  '"description": "Find out more",\n'+
-											  '"url": "http://192.168.2.13:3000"\n'+
+											  '"url": "http://'+conf.ManagerIp+':3000"\n'+
 											'}\n'+
 										  '},\n'+
 										  '{\n'+
@@ -89,14 +96,14 @@ module.exports = {
 										  '"http"\n'+
 										'],\n'+
 										'"paths": {\n'+
-										  '"/sparkSubmit": {\n'+
+										  '"/'+info.appName.split('.')[0]+'": {\n'+
 											'"post": {\n'+
 											  '"tags": [\n'+
-												'"sparkSubmit"\n'+
+												'"sparkApps"\n'+
 											  '],\n'+
-											  '"summary": "apps description",\n'+
+											  '"summary": "app meta datas",\n'+
 											  '"description": "",\n'+
-											  '"operationId": "'+info.appName+'",\n'+
+											  '"operationId": "'+info.appName.split('.')[0]+'",\n'+
 											  '"consumes": [\n'+
 												'"application/json",\n'+
 												'"application/xml"\n'+
@@ -109,7 +116,7 @@ module.exports = {
 												'{\n'+
 												  '"in": "body",\n'+
 												  '"name": "body",\n'+
-												  '"description": "apps description",\n'+
+												  '"description": "apps desemailcription",\n'+
 												  '"required": true,\n'+
 												  '"schema": {\n'+
 													'"$ref": "#/definitions/Spark"\n'+
@@ -130,26 +137,7 @@ module.exports = {
 												  '"description": "server error"\n'+
 												'}\n'+
 											  '},\n'+
-											  '"security": [\n'+
-												'{\n'+
-												  '"petstore_auth": [\n'+
-													'"write:pets",\n'+
-													'"read:pets"\n'+
-												  ']\n'+
-												'}\n'+
-											  '],\n'+
 											  '"x-swagger-router-controller": "Spark"\n'+
-											'}\n'+
-										  '}\n'+
-										'},\n'+
-										'"securityDefinitions": {\n'+
-										  '"petstore_auth": {\n'+
-											'"type": "oauth2",\n'+
-											'"authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",\n'+
-											'"flow": "implicit",\n'+
-											'"scopes": {\n'+
-											  '"write:pets": "modify pets in your account",\n'+
-											  '"read:pets": "read your pets"\n'+
 											'}\n'+
 										  '}\n'+
 										'},\n'+
@@ -159,7 +147,7 @@ module.exports = {
 											'"required": [\n'+
 											  '"email",\n'+
 											  '"data",\n'+
-											  '"paramter",\n'+
+											  '"parameter",\n'+
 											  '"target",\n'+
 											  '"user",\n'+
 											  '"APP"\n'+
@@ -189,12 +177,12 @@ module.exports = {
 											'"title": "A spark",\n'+
 											'"description": "running spark",\n'+
 											'"example": {\n'+
-											  '"email": "'+info.author.email+'",\n'+
+											  '"email": "'+req.user.email+'",\n'+
 											  '"data": "AtoZ.txt",\n'+
-											  '"parameter": "--word A",\n'+
+											  '"parameter": "'+apiParameters+'",\n'+
 											  '"target": "email",\n'+
-											  '"user": "ghwlchlaks@naver.com",\n'+
-											  '"APP": "wordcount_search.py"\n'+
+											  '"user": "Your@email.com",\n'+
+											  '"APP": "'+info.appName+'"\n'+
 											'},\n'+
 											'"xml": {\n'+
 											  '"name": "Spark"\n'+
@@ -211,7 +199,7 @@ module.exports = {
 									fs.writeFile(file, content, 'utf8', function(err){
 										if(err) {res.send({status:false, result:err})}
 										else{
-											const submit = 'java -jar swagger-codegen/modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i '+conf.JsonFolder+ info.appName.split('.')[0]+'.json'+ ' -l nodejs-server -o '+conf.SwaggerFolder+info.appName.split('.')[0]
+											const submit = 'java -jar swagger-codegen-cli.jar generate -i '+conf.JsonFolder+ info.appName.split('.')[0]+'.json'+ ' -l nodejs-server -o '+conf.SwaggerFolder+info.appName.split('.')[0]
 											exec(submit, function(err, stdout, stderr){
 												if(err){
 													console.log("1" + err)

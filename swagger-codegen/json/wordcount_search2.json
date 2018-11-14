@@ -1,9 +1,9 @@
 {
 "swagger": "2.0",
 "info": {
-"description": "This is a sample server Spark server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+"description": "Apps that count the number of specific characters",
 "version": "0.0.1",
-"title": "wordcount_search2.py",
+"title": "wordcount_search2",
 "termsOfService": "http://swagger.io/terms/",
 "contact": {
 "email": "ghwlchlaks@naver.com"
@@ -13,15 +13,15 @@
 "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
 }
 },
-"host": "zest3:3000",
-"basePath": "/client/v2",
+"host": "zest2:3000",
+"basePath": "/api/v2/sparkSubmit",
 "tags": [
 {
-"name": "wordcount_search2.py",
+"name": "wordcount_search2",
 "description": "Apps that count the number of specific characters",
 "externalDocs": {
 "description": "Find out more",
-"url": "http://192.168.2.13:3000"
+"url": "http://192.168.2.12:3000"
 }
 },
 {
@@ -37,14 +37,14 @@
 "http"
 ],
 "paths": {
-"/sparkSubmit": {
+"/wordcount_search2": {
 "post": {
 "tags": [
-"sparkSubmit"
+"sparkApps"
 ],
-"summary": "apps description",
+"summary": "app meta datas",
 "description": "",
-"operationId": "wordcount_search2.py",
+"operationId": "wordcount_search2",
 "consumes": [
 "application/json",
 "application/xml"
@@ -78,26 +78,7 @@
 "description": "server error"
 }
 },
-"security": [
-{
-"petstore_auth": [
-"write:pets",
-"read:pets"
-]
-}
-],
 "x-swagger-router-controller": "Spark"
-}
-}
-},
-"securityDefinitions": {
-"petstore_auth": {
-"type": "oauth2",
-"authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
-"flow": "implicit",
-"scopes": {
-"write:pets": "modify pets in your account",
-"read:pets": "read your pets"
 }
 }
 },
@@ -107,7 +88,7 @@
 "required": [
 "email",
 "data",
-"paramter",
+"parameter",
 "target",
 "user",
 "APP"
@@ -139,10 +120,10 @@
 "example": {
 "email": "ghwlchlaks",
 "data": "AtoZ.txt",
-"parameter": "--word A",
+"parameter": "--word A--checkbox A",
 "target": "email",
-"user": "ghwlchlaks@naver.com",
-"APP": "wordcount_search.py"
+"user": "Your@email.com",
+"APP": "wordcount_search2.py"
 },
 "xml": {
 "name": "Spark"

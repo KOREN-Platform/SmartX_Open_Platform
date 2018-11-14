@@ -4,6 +4,7 @@
     "DataFolder" : "/data",
     "ResultFolder" : "/result",
     "ManagerIp" : "192.168.2.12",
+    "HostName" : "zest2",
     "SwaggerFolder" : "./swagger-codegen/node/",
     "YamlFolder" : "./swagger-codegen/yaml/",
     "JsonFolder" : "./swagger-codegen/json/"

@@ -285,8 +285,9 @@ module.exports = {
 	},
 	getDoc(req, res){
 		let appName = req.query.appName
-		let str = fs.readFileSync(conf.SwaggerFolder+appName.split('.')[0] + "/docs/SparkAppsApi.md", "utf8")
-		let result = markdown.makeHtml(str)
+		let str1 = fs.readFileSync(conf.SwaggerFolder+appName.split('.')[0] + "/docs/SparkAppsApi.md", "utf8")
+		let str2 = fs.readFileSync(conf.SwaggerFolder+appName.split('.')[0] + "/docs/Spark.md", "utf8")
+		let result = markdown.makeHtml(str1 +str2)
 		res.send({status:true, result:result})
 	},
 	downloadFile(req, res){

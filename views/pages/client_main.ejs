@@ -160,15 +160,15 @@
           if(result.status){
             $('.apiDoc').append(result.result)
             //$('.apiDoc').children('p').last().remove()  //a tag remove
-            $('.apiDoc').children('pre').remove() //example code remove
-            $('.apiDoc').children('h3').remove() // h3 tag remove
-            $('.apiDoc').children('ul').remove() //ul tag remove
-            $('.apiDoc').children('p').not($('.apiDoc').children('p').first()).remove()
-            $('.apiDoc').children('blockquote').remove()
-            $('.apiDoc').children('h1').remove()  //all h1 tag remove
-            $('.apiDoc').children('table').children('tbody').children('tr').children('td').children('a').contents().unwrap()
-            $('.apiDoc').children('table').addClass('table')
-            $('.apiDoc > p').css('font-weight','bold') //p tag style change
+            // $('.apiDoc').children('pre').remove() //example code remove
+            // $('.apiDoc').children('h3').remove() // h3 tag remove
+            // $('.apiDoc').children('ul').remove() //ul tag remove
+            // $('.apiDoc').children('p').not($('.apiDoc').children('p').first()).remove()
+            // $('.apiDoc').children('blockquote').remove()
+            // $('.apiDoc').children('h1').remove()  //all h1 tag remove
+            // $('.apiDoc').children('table').children('tbody').children('tr').children('td').children('a').contents().unwrap()
+            // $('.apiDoc').children('table').addClass('table')
+            // $('.apiDoc > p').css('font-weight','bold') //p tag style change
           }
 				},	
 				error:function(error) {

@@ -68,9 +68,6 @@ module.exports = {
 											propertiesParams += '},\n'
 										}
 									}
-
-									console.log(propertiesParams)
-
 									let	content = '{\n'+
 										'"swagger": "2.0",\n'+
 										'"info": {\n'+
@@ -87,7 +84,7 @@ module.exports = {
 										  '}\n'+
 										'},\n'+
 										'"host": "'+conf.HostName+':3000",\n'+
-										'"basePath": "/client/api/v2",\n'+
+										'"basePath": "/api/v2",\n'+
 										'"tags": [\n'+
 										  '{\n'+
 											'"name": "'+info.appName.split('.')[0]+'",\n'+
@@ -128,13 +125,6 @@ module.exports = {
 													'"$ref": "#/definitions/JSON"\n'+
 													'}\n'+
 												'}\n'+
-												// '{\n'+
-												//   '"in": "query",\n'+
-												//   '"name": "--word",\n'+
-												//   '"description": "word dec",\n'+
-												//   '"required": true,\n'+
-												//   '"type": "string"\n'+
-												// '}\n'+
 												'],\n'+
 											  '"responses": {\n'+
 												'"200": {\n'+
@@ -155,22 +145,19 @@ module.exports = {
 										  '}\n'+
 										'},\n'+
 										'"definitions": {\n'+
-										  '"Spark": {\n'+
+										  '"JSON": {\n'+
 											'"type": "object",\n'+
 											'"required": [\n'+
 											  '"email",\n'+
 											  '"data",\n'+
 											  '"parameter",\n'+
-											  // '"target",\n'+
-											  // '"user",\n'+
 											  '"APP"\n'+
 											'],\n'+
 											'"properties": {\n'+
 											  '"email": {\n'+
 												'"type": "string",\n'+
 												'"example": "'+req.user.email+'",\n'+
-												'"description": "your email",\n'+
-												'"notes": "your email"\n'+
+												'"description": "your email"\n'+
 											  '},\n'+
 											  '"data": {\n'+
 												'"type": "string",\n'+
@@ -219,7 +206,7 @@ module.exports = {
 									fs.writeFile(file, content, 'utf8', function(err){
 										if(err) {res.send({status:false, result:err})}
 										else{
-											const submit = 'java -jar swagger-codegen-cli.jar generate -i '+conf.JsonFolder+ info.appName.split('.')[0]+'.json'+ ' -l java -o '+conf.SwaggerFolder+info.appName.split('.')[0]
+											const submit = 'java -jar swagger-codegen-cli.jar generate -i '+conf.JsonFolder+ info.appName.split('.')[0]+'.json'+ ' -l nodejs-server -o '+conf.SwaggerFolder+info.appName.split('.')[0]
 											exec(submit, function(err, stdout, stderr){
 												if(err){
 													console.log("1" + err)

@@ -68,9 +68,6 @@ module.exports = {
 											propertiesParams += '},\n'
 										}
 									}
-
-									console.log(propertiesParams)
-
 									let	content = '{\n'+
 										'"swagger": "2.0",\n'+
 										'"info": {\n'+
@@ -87,7 +84,7 @@ module.exports = {
 										  '}\n'+
 										'},\n'+
 										'"host": "'+conf.HostName+':3000",\n'+
-										'"basePath": "/client/api/v2",\n'+
+										'"basePath": "/api/v2",\n'+
 										'"tags": [\n'+
 										  '{\n'+
 											'"name": "'+info.appName.split('.')[0]+'",\n'+
@@ -128,13 +125,6 @@ module.exports = {
 													'"$ref": "#/definitions/JSON"\n'+
 													'}\n'+
 												'}\n'+
-												// '{\n'+
-												//   '"in": "query",\n'+
-												//   '"name": "--word",\n'+
-												//   '"description": "word dec",\n'+
-												//   '"required": true,\n'+
-												//   '"type": "string"\n'+
-												// '}\n'+
 												'],\n'+
 											  '"responses": {\n'+
 												'"200": {\n'+
@@ -155,22 +145,19 @@ module.exports = {
 										  '}\n'+
 										'},\n'+
 										'"definitions": {\n'+
-										  '"Spark": {\n'+
+										  '"JSON": {\n'+
 											'"type": "object",\n'+
 											'"required": [\n'+
 											  '"email",\n'+
 											  '"data",\n'+
 											  '"parameter",\n'+
-											  '"target",\n'+
-											  '"user",\n'+
 											  '"APP"\n'+
 											'],\n'+
 											'"properties": {\n'+
 											  '"email": {\n'+
 												'"type": "string",\n'+
 												'"example": "'+req.user.email+'",\n'+
-												'"description": "your email",\n'+
-												'"notes": "your email"\n'+
+												'"description": "your email"\n'+
 											  '},\n'+
 											  '"data": {\n'+
 												'"type": "string",\n'+
@@ -397,7 +384,13 @@ module.exports = {
 																				if(err){
 																					res.send({status: false, result: 'unlink err'})
 																				}else{
-																					res.send({status: true, result: result})
+																					fs.unlink(conf.SwaggerFolder+id+'.json',function(err){
+																						if(err){
+																							res.send({status: false, result: 'unlink err'})
+																						}else{
+																							res.send({status: true, result: result})
+																						}
+																					})
 																				}
 																			})
 																		}

@@ -1,10 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-//spark 앱 실행 기능 파일
-const SparkPolicy = require('../policies/SparkPolicy')
-//slack 또는 email 콜백 기능 파일
-const ResultSendToServices = require('../policies/ResultSendToServices')
+
 // yarn 상태 데이터를 가져오는 기능 파일
 const YarnStateServices = require('../policies/YarnStateServices')
 const ClientControllerServices = require('../policies/ClientControllerServices')
@@ -22,12 +19,7 @@ let isAuthenticated = function(req, res, next) {
 	}
 	res.redirect('/')
 }
-/*
-isAuthenticated : 로그인유무
-SparkPolicy.sparkSubmit  : spark parameter 호출
-ResultSendToServices.sendToService : slack 또는 email로 콜백
-*/
-router.post('/api/v2/*', SparkPolicy.sparkSubmit , ResultSendToServices.sendToService)
+
 // YarnStateServices.appState : yarn의 앱 상태 데이터를 가져옴
 router.get('/appState', YarnStateServices.appState)
 // YarnStateServices.AllYarnStates : yarn의 전체 상태값을 가져옴

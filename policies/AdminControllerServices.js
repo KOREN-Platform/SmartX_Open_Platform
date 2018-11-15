@@ -128,13 +128,6 @@ module.exports = {
 													'"$ref": "#/definitions/JSON"\n'+
 													'}\n'+
 												'}\n'+
-												// '{\n'+
-												//   '"in": "query",\n'+
-												//   '"name": "--word",\n'+
-												//   '"description": "word dec",\n'+
-												//   '"required": true,\n'+
-												//   '"type": "string"\n'+
-												// '}\n'+
 												'],\n'+
 											  '"responses": {\n'+
 												'"200": {\n'+
@@ -161,8 +154,6 @@ module.exports = {
 											  '"email",\n'+
 											  '"data",\n'+
 											  '"parameter",\n'+
-											  '"target",\n'+
-											  '"user",\n'+
 											  '"APP"\n'+
 											'],\n'+
 											'"properties": {\n'+

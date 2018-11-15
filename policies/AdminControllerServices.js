@@ -148,16 +148,16 @@ module.exports = {
 										  '"Spark": {\n'+
 											'"type": "object",\n'+
 											'"required": [\n'+
-											  '"email",\n'+
-											  '"data",\n'+
+											  '"account",\n'+
+											  '"file",\n'+
 											  '"parameter",\n'+
-											  '"APP"\n'+
+											  '"app_name"\n'+
 											'],\n'+
 											'"properties": {\n'+
 											  '"account": {\n'+
 												'"type": "string",\n'+
 												'"example": "'+req.user.email+'",\n'+
-												'"description": "issuer\'s account(email)",\n'+
+												'"description": "issuer\'s account(email)"\n'+
 												'},\n'+
 												'"app_name": {\n'+
 												'"type": "string",\n'+

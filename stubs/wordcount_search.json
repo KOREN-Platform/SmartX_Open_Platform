@@ -14,7 +14,7 @@
 }
 },
 "host": "zest2:3000",
-"basePath": "/client/api/v2",
+"basePath": "/api/v2",
 "tags": [
 {
 "name": "wordcount_search",
@@ -49,7 +49,7 @@
 {
 "in": "body",
 "name": "body",
-"description": "Data for running the app",
+"description": "Arguments for running the app",
 "required": true,
 "schema": {
 "$ref": "#/definitions/JSON"
@@ -78,37 +78,36 @@
 "Spark": {
 "type": "object",
 "required": [
-"email",
-"data",
+"account",
+"file",
 "parameter",
-"APP"
+"app_name"
 ],
 "properties": {
-"email": {
+"account": {
 "type": "string",
 "example": "ghwlchlaks@naver.com",
-"description": "your email",
-"notes": "your email"
+"description": "issuer's account(email)"
 },
-"data": {
+"app_name": {
+"type": "string",
+"example": "wordcount_search.py",
+"description": "app name"
+},
+"file": {
 "type": "string",
 "example": "AtoZ.txt",
-"description": "target data name"
+"description": "target file name"
 },
-"target": {
+"callback_method": {
 "type": "string",
 "example": "email",
 "description": "callback target (email or slack)"
 },
-"user": {
+"callback_addr": {
 "type": "string",
 "example": "Your@email.com",
 "description": "callback address"
-},
-"APP": {
-"type": "string",
-"example": "wordcount_search.py",
-"description": "target app name"
 },
 "--word": {
 "type": "string",
@@ -119,12 +118,12 @@
 "title": "A spark",
 "description": "running spark",
 "example": {
-"email": "ghwlchlaks@naver.com",
-"data": "AtoZ.txt",
+"account": "ghwlchlaks@naver.com",
+"app_name": "wordcount_search.py",
+"file": "AtoZ.txt",
 "parameter": "--word A ",
-"target": "email",
-"user": "Your@email.com",
-"APP": "wordcount_search.py"
+"callback_method": "email",
+"callback_addr": "Your@email.com"
 },
 "xml": {
 "name": "Spark"

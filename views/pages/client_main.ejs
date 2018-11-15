@@ -340,11 +340,11 @@
             url: 'api/v2/'+$('input:checkbox[id=APP_check]:checked').val().split('.')[0],
             method: 'post',
             data: {
-				    	'APP' : $('input:checkbox[id=APP_check]:checked').val(),
-				    	'data' : $('input:checkbox[id=data_check]:checked').val(),
+				    	'app_name' : $('input:checkbox[id=APP_check]:checked').val(),
+				    	'file' : $('input:checkbox[id=data_check]:checked').val(),
 				    	'parameter' : parameterValue,
-              'target': $(".btn-group > button.active").val(),
-					    'user' : $('#user').val()
+              'callback_method': $(".btn-group > button.active").val(),
+					    'callback_addr' : $('#user').val()
 				    },
             dataType: 'json',
             success: function(result) {

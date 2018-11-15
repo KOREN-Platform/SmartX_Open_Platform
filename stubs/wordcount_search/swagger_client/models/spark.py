@@ -31,164 +31,164 @@ class Spark(object):
                             and the value is json key in definition.
     """
     swagger_types = {
-        'email': 'str',
-        'data': 'str',
-        'target': 'str',
-        'user': 'str',
-        'app': 'str',
+        'account': 'str',
+        'app_name': 'str',
+        'file': 'str',
+        'callback_method': 'str',
+        'callback_addr': 'str',
         'word': 'str'
     }
 
     attribute_map = {
-        'email': 'email',
-        'data': 'data',
-        'target': 'target',
-        'user': 'user',
-        'app': 'APP',
+        'account': 'account',
+        'app_name': 'app_name',
+        'file': 'file',
+        'callback_method': 'callback_method',
+        'callback_addr': 'callback_addr',
         'word': '--word'
     }
 
-    def __init__(self, email=None, data=None, target=None, user=None, app=None, word=None):  # noqa: E501
+    def __init__(self, account=None, app_name=None, file=None, callback_method=None, callback_addr=None, word=None):  # noqa: E501
         """Spark - a model defined in Swagger"""  # noqa: E501
 
-        self._email = None
-        self._data = None
-        self._target = None
-        self._user = None
-        self._app = None
+        self._account = None
+        self._app_name = None
+        self._file = None
+        self._callback_method = None
+        self._callback_addr = None
         self._word = None
         self.discriminator = None
 
-        self.email = email
-        self.data = data
-        if target is not None:
-            self.target = target
-        if user is not None:
-            self.user = user
-        self.app = app
+        self.account = account
+        self.app_name = app_name
+        self.file = file
+        if callback_method is not None:
+            self.callback_method = callback_method
+        if callback_addr is not None:
+            self.callback_addr = callback_addr
         if word is not None:
             self.word = word
 
     @property
-    def email(self):
-        """Gets the email of this Spark.  # noqa: E501
+    def account(self):
+        """Gets the account of this Spark.  # noqa: E501
 
-        your email  # noqa: E501
+        issuer's account(email)  # noqa: E501
 
-        :return: The email of this Spark.  # noqa: E501
+        :return: The account of this Spark.  # noqa: E501
         :rtype: str
         """
-        return self._email
+        return self._account
 
-    @email.setter
-    def email(self, email):
-        """Sets the email of this Spark.
+    @account.setter
+    def account(self, account):
+        """Sets the account of this Spark.
 
-        your email  # noqa: E501
+        issuer's account(email)  # noqa: E501
 
-        :param email: The email of this Spark.  # noqa: E501
+        :param account: The account of this Spark.  # noqa: E501
         :type: str
         """
-        if email is None:
-            raise ValueError("Invalid value for `email`, must not be `None`")  # noqa: E501
+        if account is None:
+            raise ValueError("Invalid value for `account`, must not be `None`")  # noqa: E501
 
-        self._email = email
+        self._account = account
 
     @property
-    def data(self):
-        """Gets the data of this Spark.  # noqa: E501
+    def app_name(self):
+        """Gets the app_name of this Spark.  # noqa: E501
 
-        target data name  # noqa: E501
+        app name  # noqa: E501
 
-        :return: The data of this Spark.  # noqa: E501
+        :return: The app_name of this Spark.  # noqa: E501
         :rtype: str
         """
-        return self._data
+        return self._app_name
 
-    @data.setter
-    def data(self, data):
-        """Sets the data of this Spark.
+    @app_name.setter
+    def app_name(self, app_name):
+        """Sets the app_name of this Spark.
 
-        target data name  # noqa: E501
+        app name  # noqa: E501
 
-        :param data: The data of this Spark.  # noqa: E501
+        :param app_name: The app_name of this Spark.  # noqa: E501
         :type: str
         """
-        if data is None:
-            raise ValueError("Invalid value for `data`, must not be `None`")  # noqa: E501
+        if app_name is None:
+            raise ValueError("Invalid value for `app_name`, must not be `None`")  # noqa: E501
 
-        self._data = data
+        self._app_name = app_name
 
     @property
-    def target(self):
-        """Gets the target of this Spark.  # noqa: E501
+    def file(self):
+        """Gets the file of this Spark.  # noqa: E501
+
+        target file name  # noqa: E501
+
+        :return: The file of this Spark.  # noqa: E501
+        :rtype: str
+        """
+        return self._file
+
+    @file.setter
+    def file(self, file):
+        """Sets the file of this Spark.
+
+        target file name  # noqa: E501
+
+        :param file: The file of this Spark.  # noqa: E501
+        :type: str
+        """
+        if file is None:
+            raise ValueError("Invalid value for `file`, must not be `None`")  # noqa: E501
+
+        self._file = file
+
+    @property
+    def callback_method(self):
+        """Gets the callback_method of this Spark.  # noqa: E501
 
         callback target (email or slack)  # noqa: E501
 
-        :return: The target of this Spark.  # noqa: E501
+        :return: The callback_method of this Spark.  # noqa: E501
         :rtype: str
         """
-        return self._target
+        return self._callback_method
 
-    @target.setter
-    def target(self, target):
-        """Sets the target of this Spark.
+    @callback_method.setter
+    def callback_method(self, callback_method):
+        """Sets the callback_method of this Spark.
 
         callback target (email or slack)  # noqa: E501
 
-        :param target: The target of this Spark.  # noqa: E501
+        :param callback_method: The callback_method of this Spark.  # noqa: E501
         :type: str
         """
 
-        self._target = target
+        self._callback_method = callback_method
 
     @property
-    def user(self):
-        """Gets the user of this Spark.  # noqa: E501
+    def callback_addr(self):
+        """Gets the callback_addr of this Spark.  # noqa: E501
 
         callback address  # noqa: E501
 
-        :return: The user of this Spark.  # noqa: E501
+        :return: The callback_addr of this Spark.  # noqa: E501
         :rtype: str
         """
-        return self._user
+        return self._callback_addr
 
-    @user.setter
-    def user(self, user):
-        """Sets the user of this Spark.
+    @callback_addr.setter
+    def callback_addr(self, callback_addr):
+        """Sets the callback_addr of this Spark.
 
         callback address  # noqa: E501
 
-        :param user: The user of this Spark.  # noqa: E501
+        :param callback_addr: The callback_addr of this Spark.  # noqa: E501
         :type: str
         """
 
-        self._user = user
-
-    @property
-    def app(self):
-        """Gets the app of this Spark.  # noqa: E501
-
-        target app name  # noqa: E501
-
-        :return: The app of this Spark.  # noqa: E501
-        :rtype: str
-        """
-        return self._app
-
-    @app.setter
-    def app(self, app):
-        """Sets the app of this Spark.
-
-        target app name  # noqa: E501
-
-        :param app: The app of this Spark.  # noqa: E501
-        :type: str
-        """
-        if app is None:
-            raise ValueError("Invalid value for `app`, must not be `None`")  # noqa: E501
-
-        self._app = app
+        self._callback_addr = callback_addr
 
     @property
     def word(self):

@@ -43,7 +43,7 @@ class SparkAppsApi(object):
         >>> result = thread.get()
 
         :param async bool
-        :param JSON body: Data for running the app (required)
+        :param JSON body: Arguments for running the app (required)
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
@@ -65,7 +65,7 @@ class SparkAppsApi(object):
         >>> result = thread.get()
 
         :param async bool
-        :param JSON body: Data for running the app (required)
+        :param JSON body: Arguments for running the app (required)
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.

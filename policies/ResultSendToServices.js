@@ -27,14 +27,14 @@ module.exports = {
    * @name sendToService
    * @description callback 서비스 slack email 구분
    * @method
-   * @param {String} req.body.target -slack, email target id
+   * @param {String} req.body.callback_method -slack, email target id
    * @param {String} req.body.stdout - spark 앱 결과값
    * @param {String} req.body.user - email, slack id 정보
    */
   sendToService(req, res) {
-    const target = req.body.target
+    const target = req.body.callback_method
     const stdout = req.body.stdout
-    const user = req.body.user
+    const user = req.body.callback_addr
     if (target == "slack") {
       checkUser(user, function(result) {
         if (!result) {

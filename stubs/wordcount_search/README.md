@@ -52,7 +52,7 @@ from swagger_client.rest import ApiException
 from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.SparkAppsApi()
-body = swagger_client.JSON() # JSON | Data for running the app
+body = swagger_client.JSON() # JSON | Arguments for running the app
 
 try:
     # Apps that count the number of specific characters
@@ -64,7 +64,7 @@ except ApiException as e:
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://zest2:3000/client/api/v2*
+All URIs are relative to *http://zest2:3000/api/v2*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------

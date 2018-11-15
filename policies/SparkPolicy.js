@@ -9,20 +9,20 @@ module.exports = {
 	 * @name sparkSubmit
 	 * @description spark 앱을 실행
 	 * @method 
-	 * @param {String} req.user.email - 유저 이메일
-	 * @param {String} req.body.App - 선택한 앱
-	 * @param {String} req.body.data - 선택한 데이터 파일
+	 * @param {String} req.user.account - 유저 이메일
+	 * @param {String} req.body.app_name - 선택한 앱
+	 * @param {String} req.body.file - 선택한 데이터 파일
 	 * @param {String} req.body.parameter - 입력한 파라미터
 	 */
 	sparkSubmit(req, res, next) {
-		let email =  req.body.email
+		let account =  req.body.email
 		if (req.body.email) {
-			email = req.body.email
+			account = req.body.email
 		}else {
-			email = req.user.email
+			account = req.user.email
 		}
 
-		const submit = 'spark-submit '+'--name '+email+' '+conf.AppFolder+req.body.APP.split('.')[0]+'/'+req.body.APP+' --file='+req.body.data + ' ' +  req.body.parameter
+		const submit = 'spark-submit '+'--name '+account+' '+conf.AppFolder+req.body.app_name.split('.')[0]+'/'+req.body.app_name+' --file='+req.body.file + ' ' +  req.body.parameter
 		count+=1
 
 		exec(submit, function (err, stdout, stderr) {
@@ -34,7 +34,7 @@ module.exports = {
 			else {
 				console.log("count "+ count)
 				req.body.stdout = stdout
-				let file = email+count+".txt"
+				let file = account+count+".txt"
 				fs.writeFile(file, stdout, 'utf8', function(err){
 					if (err) {throw err}
 					else{

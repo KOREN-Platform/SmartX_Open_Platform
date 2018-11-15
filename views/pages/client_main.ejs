@@ -72,10 +72,6 @@
                       <hr class="my-2">
                       <form id='parameter_blank'></form>
                     </div>
-                    
-                    <div class="apiDoc">
-                    </div>
-                    <br>
 
                     <div class="btn-group btn_mine" id="selector" role="group" aria-label="Basic example">
                       <button type="button" value="email" id="emailBtn" class="btn btn-secondary active" checked="checked"><ion-icon name="mail"></ion-icon> E-mail</button>
@@ -90,6 +86,18 @@
                         <button type="button" class="sparkRun btn btn-danger"><ion-icon name="play"></ion-icon><b>SPARK RUN</b></button>
                       <% } %>
 
+                      <% if (user.role == 1) { %> <!-- user mode -->
+                        <button type="button" class="API_description btn btn-success"><ion-icon name="document"></ion-icon><b>API DESCRIPTION</b></button>
+                        <% } else if (user.role == 2) {%> <!-- developer mode -->
+                        <button type="button" class="API_description btn btn-info"><ion-icon name="document"></ion-icon><b>API DESCRIPTION</b></button>
+                        <% } else {%> <!-- manager mode -->
+                          <button type="button" class="API_description btn btn-danger"><ion-icon name="document"></ion-icon><b>API DESCRIPTION</b></button>
+                        <% } %>
+
+                      <div class="collapse" id="api_collapse">
+                          <div class="card card-body apiDoc">
+                          </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -176,10 +184,10 @@
             let appTable = $("<table class='table'>") // create app's parameters table
             appTable.append("<thead><tr><th>Name</th><th>Type</th><th>Description</th><th>Notes</th></tr></thead><tbody></tbody>")
             $('.apiDoc').append(appTable)
-            for(let i= 5; i< $('.apiDoc').children('table').eq(2).children('tbody').children('tr').length; i++ ){
-              let appParam = $('.apiDoc').children('table').eq(2).children('tbody').children('tr').eq(i).html()
-              $('.apiDoc').children('table').eq(2).children('tbody').children('tr').eq(i).remove()
-              $('.apiDoc').children('table').last().children('tbody').append(appParam)
+            while($('.apiDoc').children('table').eq(2).children('tbody').children('tr').length > 5 ){
+              let appParam = $('.apiDoc').children('table').eq(2).children('tbody').children('tr').last().html()
+              $('.apiDoc').children('table').eq(2).children('tbody').children('tr').last().remove()
+              $('.apiDoc').children('table').last().children('tbody').append("<tr>"+appParam+"</tr>")
             }
           }
 				},	
@@ -196,7 +204,7 @@
           document.all.readyToSpark.style.display=""
           makeParaBlank()
         }
-      }      
+      }    
       $('#logoutBtn').click(function(){
         $.ajax({
 				url: '/logout',
@@ -210,7 +218,13 @@
 				}
 			  })
       })
-
+      $('.API_description').click(function(){
+        if($('.collapse').hasClass('show')){
+          $('.collapse').removeClass('show')
+        }else{
+          $('.collapse').addClass('show')
+        }
+      })
       function makeParaBlank(){
         $.ajax({
           url: '/client/makeParameterBlank',

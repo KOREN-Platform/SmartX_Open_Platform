@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const session = require('express-session')
 const passport = require('passport');
 const passportPolicy = require('./policies/AuthencationServices')
+const favicon = require('express-favicon')
 // const jsyaml = require('js-yaml');
 // const fs = require('fs')
 
@@ -55,12 +56,14 @@ const app = express();
 app.set('views', path.join(__dirname, 'views/pages/'));
 app.set('view engine', 'ejs');
 
+app.use(favicon(path.join(__dirname,'public','images','favicon.ico')))
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')))
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({secret: "abc", resave:true, saveUninitialized: false}));
 app.use(passport.initialize())

@@ -14,6 +14,7 @@
             <li class="breadcrumb-item active">List</li>
           </ol>
           <!-- Icon Cards-->
+
           <div class="card mb-3">
             <div class="card-body">
                   <h2><ion-icon name="list-box"></ion-icon> App List</h2>
@@ -77,7 +78,7 @@
                     <br>
 
                     <div class="btn-group btn_mine" id="selector" role="group" aria-label="Basic example">
-                      <button type="button" value="email" id="emailBtn" class="btn btn-secondary"><ion-icon name="mail"></ion-icon> E-mail</button>
+                      <button type="button" value="email" id="emailBtn" class="btn btn-secondary active" checked="checked"><ion-icon name="mail"></ion-icon> E-mail</button>
                       <button type="button" value="slack" id="slackBtn" class="btn btn-secondary"><ion-icon name="logo-slack"></ion-icon> Slack</button>
                       <input type="text" name="sendName" class="form-control-smail" id="user" aria-describedby="emailHelp" placeholder="Input your Email">
                     </div>
@@ -249,7 +250,7 @@
 
 	            for(var i=0 ; i<result.applist.length ; i++){
                 $('#select_APP').append(
-                '<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" name="APP_check" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td><td><a href="download/'+result.applist[i].appName.split('.')[0]+".zip"+'">download</a></td></tr><tr>'
+                '<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" name="APP_check" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td><td><button type="button" class="btn btn-dark" href="download/'+result.applist[i].appName.split('.')[0]+".zip"+'">download</button></td></tr><tr>'
                 );
               }
               

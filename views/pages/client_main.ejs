@@ -175,10 +175,10 @@
             let appTable = $("<table class='table'>") // create app's parameters table
             appTable.append("<thead><tr><th>Name</th><th>Type</th><th>Description</th><th>Notes</th></tr></thead><tbody></tbody>")
             $('.apiDoc').append(appTable)
-            for(let i= 5; i< $('.apiDoc').children('table').eq(2).children('tbody').children('tr').length; i++ ){
-              let appParam = $('.apiDoc').children('table').eq(2).children('tbody').children('tr').eq(i).html()
-              $('.apiDoc').children('table').eq(2).children('tbody').children('tr').eq(i).remove()
-              $('.apiDoc').children('table').last().children('tbody').append(appParam)
+            while($('.apiDoc').children('table').eq(2).children('tbody').children('tr').length > 5 ){
+              let appParam = $('.apiDoc').children('table').eq(2).children('tbody').children('tr').last().html()
+              $('.apiDoc').children('table').eq(2).children('tbody').children('tr').last().remove()
+              $('.apiDoc').children('table').last().children('tbody').append("<tr>"+appParam+"</tr>")
             }
           }
 				},	

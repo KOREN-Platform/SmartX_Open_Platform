@@ -167,7 +167,19 @@
             $('.apiDoc').children('h1').remove()  //all h1 tag remove
             $('.apiDoc').children('table').children('tbody').children('tr').children('td').children('a').contents().unwrap()
             $('.apiDoc').children('table').addClass('table')
+            $('.apiDoc').children('h2').html("Base Parameters")
             $('.apiDoc > p').css('font-weight','bold') //p tag style change
+            $('.apiDoc').children('table').eq(1).children('thead').children('tr').children('th').eq(0).html("Top element")
+            let appTitle = $("<h2>App's Parameters</h2>") // app's parameter title
+            $('.apiDoc').append(appTitle)
+            let appTable = $("<table class='table'>") // create app's parameters table
+            appTable.append("<thead><tr><th>Name</th><th>Type</th><th>Description</th><th>Notes</th></tr></thead><tbody></tbody>")
+            $('.apiDoc').append(appTable)
+            for(let i= 5; i< $('.apiDoc').children('table').eq(2).children('tbody').children('tr').length; i++ ){
+              let appParam = $('.apiDoc').children('table').eq(2).children('tbody').children('tr').eq(i).html()
+              $('.apiDoc').children('table').eq(2).children('tbody').children('tr').eq(i).remove()
+              $('.apiDoc').children('table').last().children('tbody').append(appParam)
+            }
           }
 				},	
 				error:function(error) {

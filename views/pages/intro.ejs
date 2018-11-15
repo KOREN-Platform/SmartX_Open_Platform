@@ -17,7 +17,7 @@
 				<h4 class="mb-4 lead main_text">Big Data App Container Service<br>Intelligence <strong>OpenAPI</strong></h4>
 				<button href="" class="btn btn-info mb-4 btn_main" data-toggle="modal" data-target="#modalLoginForm">Sign in</button> &nbsp;&nbsp;&nbsp;&nbsp;
 				<button href="" class="btn btn-outline-light mb-4 btn_main" data-toggle="modal" data-target="#modalRegisterForm">register</button>
-				<br><button href="#otter" class="btn btn-dark mb-4 btn_main">what is otter?</button>
+				<br><a href="#team" class="btn btn-dark mb-4 btn_main">what is otter?</a>
 				
 			</div>
 		</div>
@@ -199,5 +199,20 @@
 				</div>
 			</div>
 			<!-- ./container -->
-		
+		<script>
+			$(function() {
+			$('a[href*="#"]:not([href="#"])').click(function() {
+				if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+				var target = $(this.hash);
+				target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+				if (target.length) {
+					$('html, body').animate({
+					scrollTop: target.offset().top
+					}, 1000);
+					return false;
+				}
+				}
+			});
+			});
+		</script>
 </body></html>

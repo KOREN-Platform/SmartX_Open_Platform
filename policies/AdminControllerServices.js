@@ -68,9 +68,6 @@ module.exports = {
 											propertiesParams += '},\n'
 										}
 									}
-
-									console.log(propertiesParams)
-
 									let	content = '{\n'+
 										'"swagger": "2.0",\n'+
 										'"info": {\n'+
@@ -87,7 +84,7 @@ module.exports = {
 										  '}\n'+
 										'},\n'+
 										'"host": "'+conf.HostName+':3000",\n'+
-										'"basePath": "/client/api/v2",\n'+
+										'"basePath": "/api/v2",\n'+
 										'"tags": [\n'+
 										  '{\n'+
 											'"name": "'+info.appName.split('.')[0]+'",\n'+
@@ -122,7 +119,7 @@ module.exports = {
 												'{\n'+
 												  '"in": "body",\n'+
 												  '"name": "body",\n'+
-												  '"description": "Data for running the app",\n'+
+												  '"description": "Arguments for running the app",\n'+
 													'"required": true,\n'+
 												  '"schema": {\n'+
 													'"$ref": "#/definitions/JSON"\n'+
@@ -157,43 +154,42 @@ module.exports = {
 											  '"APP"\n'+
 											'],\n'+
 											'"properties": {\n'+
-											  '"email": {\n'+
+											  '"account": {\n'+
 												'"type": "string",\n'+
 												'"example": "'+req.user.email+'",\n'+
-												'"description": "your email",\n'+
-												'"notes": "your email"\n'+
-											  '},\n'+
-											  '"data": {\n'+
+												'"description": "issuer\'s account(email)",\n'+
+												'},\n'+
+												'"app_name": {\n'+
+												'"type": "string",\n'+
+												'"example": "'+info.appName+'",\n'+
+												'"description": "app name"\n'+
+												'},\n'+
+											  '"file": {\n'+
 												'"type": "string",\n'+
 												'"example": "AtoZ.txt",\n'+
-												'"description": "target data name"\n'+
+												'"description": "target file name"\n'+
 											  '},\n'+
-											  '"target": {\n'+
+											  '"callback_method": {\n'+
 												'"type": "string",\n'+
 												'"example": "email",\n'+
 												'"description": "callback target (email or slack)"\n'+
 											  '},\n'+
-											  '"user": {\n'+
+											  '"callback_addr": {\n'+
 												'"type": "string",\n'+
 												'"example": "Your@email.com",\n'+
 												'"description": "callback address"\n'+
 											  '},\n'+
-											  '"APP": {\n'+
-												'"type": "string",\n'+
-												'"example": "'+info.appName+'",\n'+
-												'"description": "target app name"\n'+
-												'},\n'+
 												propertiesParams +
 											'},\n'+
 											'"title": "A spark",\n'+
 											'"description": "running spark",\n'+
 											'"example": {\n'+
-											  '"email": "'+req.user.email+'",\n'+
-											  '"data": "AtoZ.txt",\n'+
+												'"account": "'+req.user.email+'",\n'+
+												'"app_name": "'+info.appName+'",\n'+
+											  '"file": "AtoZ.txt",\n'+
 											  '"parameter": "'+apiParameters+'",\n'+
-											  '"target": "email",\n'+
-											  '"user": "Your@email.com",\n'+
-											  '"APP": "'+info.appName+'"\n'+
+											  '"callback_method": "email",\n'+
+											  '"callback_addr": "Your@email.com"\n'+
 											'},\n'+
 											'"xml": {\n'+
 											  '"name": "Spark"\n'+

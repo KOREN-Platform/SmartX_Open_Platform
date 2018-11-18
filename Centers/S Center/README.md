@@ -5,7 +5,7 @@ Define
 
 ![Picture](./images/scenter.png)
 
-## 
+## 기능
    1.
    2.
    3.

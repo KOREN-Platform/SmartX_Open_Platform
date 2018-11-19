@@ -18,7 +18,7 @@ KOREN 기반의 정보 기술 및 서비스 개발/운영을 위한 KOREN 사용
   * Service
      - [Smart Air IoT-Cloud Service](https://github.com/KOREN-Platform/IoT-Cloud_Services/tree/master/Smart_Air_IoT_Cloud_Service)
      - [Smart Campus Safety Service](https://github.com/KOREN-Platform/Smart-Campus-Safety-Service)
-     - [Smart Disaster Safety Service]
+     - Smart Disaster Safety Service
   
   * Control Tower
      - [O+P Center](https://github.com/KOREN-Platform/SmartX_Open_Platform/tree/master/Centers/P%2BO%20Center)

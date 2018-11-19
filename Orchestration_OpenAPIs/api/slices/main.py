@@ -674,7 +674,7 @@ def access_slice_delete():
     res = requests.delete(url, auth=('karaf', 'karaf'))
 
     # delete mysql
-    cmd = "delete from IoT where MAC ='" + mac +"' and direction='cloud';"
+    cmd = "delete from IoT where Slicing_ID ='" + slice_id +"' and direction='cloud';"
     cur.execute(cmd)
     con.commit()
 

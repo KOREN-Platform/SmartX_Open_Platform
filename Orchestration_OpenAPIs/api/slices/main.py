@@ -382,6 +382,9 @@ def access_slice_create():
   for row in cur:
     flag = flag + 1
 
+  print ("Flag: ")
+  print (flag)
+
   if (flag == 0):
     # we need to create cloud_slice
     data = {
@@ -656,7 +659,7 @@ def access_slice_delete():
 
   if (flag == 0):
     # we need to delete cloud_slice
-    para = "select * from IoT where MAC='" + mac + "' and direction='cloud';"
+    para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='cloud';"
     cur.execute(para)
 
     for row in cur:

@@ -161,7 +161,7 @@ if [ "$net_list" == "" ]; then
   subnet=`cat network_pool | grep $Slicing | awk '{print $3}'`
   allocation=`cat network_pool | grep $Slicing | awk '{print $4}'`
 
-  temp=$(openstack subnet create --project demo --subnet-range $subnet --ip-version 4 --network $Net_ID --dns-nameserver 8.8.8.8 --allocation-pool start=$allocation.100,end=$allocation.200 sub_$Slicing --os-region-name $REGION)
+  temp=$(openstack subnet create --project $User_ID --subnet-range $subnet --ip-version 4 --network $Net_ID --dns-nameserver 8.8.8.8 --allocation-pool start=$allocation.100,end=$allocation.200 sub_$Slicing --os-region-name $REGION)
 
 
   export OS_PROJECT_DOMAIN_NAME=default

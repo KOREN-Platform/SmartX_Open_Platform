@@ -166,7 +166,7 @@ def cloud_slice_list():
   # Json format 
  
   cur = mysql.connect().cursor()
-  cur.execute("select distinct Instance_ID,IP,Instance.Slicing_ID from Slicing join Instance where Tenant_ID='" + name +"';")
+  cur.execute("select distinct Instance_ID,IP,Instance.Slicing_ID from Slicing join Instance where Tenant_ID='" + name +"' and Slicing.Slicing_ID=Instance.Slicing_ID;")
 
 
   result = []
@@ -259,7 +259,7 @@ def access_slice_list():
   # Json format
 
   cur = mysql.connect().cursor()
-  cur.execute("select distinct MAC, IP, IoT.Slicing_ID, Intent, direction from Slicing join IoT where Tenant_ID='" + name +"';")
+  cur.execute("select distinct MAC, IP, IoT.Slicing_ID, Intent, direction from Slicing join IoT where Tenant_ID='" + name +"' and Slicing.Slicing_ID=IoT.Slicing_ID;")
 
 
   result = []

@@ -81,38 +81,46 @@ fi
 #echo -n "Input Sllicing ID: "
 #read Slicing
 
-read -ra vars <<< $(mysql -DSlicing_Management -uroot -p'$DB_PASS' -se "SELECT Slicing_ID FROM Slicing where Tenant_ID = '$User_ID' ")
-for i in "${vars[i]}"
-do a=1
-done
-NAME=vars
-tmp="${NAME}[@]"
-size_var=("${!tmp}")
-size="${#size_var[@]}"
-((size_1=${size}-1))
-#size_l=$(( size - 1 ))
-check_val=0
-for j in $(seq 0 $size_1 )  
-do
-# echo ${vars[j]}
-if [ "${vars[j]}" == "$Slicing" ]; then
-# echo "Correct"
-((check_val=${check_val}+1))
-else
-# echo "Different"
-((check_val=${check_val}+0))
+sql=$(mysql -u root -h $DB_HOST --password=$DB_PASS -e "use Slicing_Management; select * from Slicing where Slicing_ID='$Slicing' and Tenant_ID='$User_ID';")
+
+if [ "$sql" == "" ]; then
+  echo "Error: Invalid VLAN ID"
+  exit 0
 fi
-done
+
+
+#read -ra vars <<< $(mysql -DSlicing_Management -uroot -p'$DB_PASS' -se "SELECT Slicing_ID FROM Slicing where Tenant_ID = '$User_ID' ")
+#for i in "${vars[i]}"
+#do a=1
+#done
+#NAME=vars
+#tmp="${NAME}[@]"
+#size_var=("${!tmp}")
+#size="${#size_var[@]}"
+#((size_1=${size}-1))
+#size_l=$(( size - 1 ))
+#check_val=0
+#for j in $(seq 0 $size_1 )  
+#do
+# echo ${vars[j]}
+#if [ "${vars[j]}" == "$Slicing" ]; then
+# echo "Correct"
+#((check_val=${check_val}+1))
+#else
+# echo "Different"
+#((check_val=${check_val}+0))
+#fi
+#done
 
 #for j in $(seq 0 $size_1)
 #do
 #echo $check_val
-if [ "${check_val}" -eq  0 ] ; then
-echo "Error: Invalid VLAN ID"
-exit 0
+#if [ "${check_val}" -eq  0 ] ; then
+#echo "Error: Invalid VLAN ID"
+#exit 0
 #else 
 #echo "VLAN ID checking complete"
-fi
+#fi
 #done
 
 

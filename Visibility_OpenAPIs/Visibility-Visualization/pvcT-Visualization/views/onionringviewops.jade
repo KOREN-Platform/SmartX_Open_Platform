@@ -1,0 +1,116 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    title Onion-ring-style Visualization (Operator)
+    style(type='text/css').
+      .sdncontrollerdiv{
+      position: absolute;
+      top: 40px;
+      right: 30px;
+      width: 240px;
+      height: 135px;
+      font-size: 18px;
+      opacity: 0.7;
+      border: 1px solid #bfbfbf;
+      background: #f5f5ef;
+      }
+      .sdncontrollerheaddiv{
+      position: relative;
+      top: 5px;
+      left: 1px;
+      width: 230px;
+      height: 30px;
+      border: 1px solid #999999;
+      background: #ff1a66;
+      padding: 5px 0;
+      text-align: center;
+      }
+      .sdncontrollerbodydiv{
+      position: relative;
+      top: 5px;
+      left: 1px;
+      width: 230px;
+      height: 80px;
+      border: 1px solid #999999;
+      background: #ffffff;
+      overflow-y:scroll;
+      }
+      .controllertable {
+      width: 100%;
+      background-color: #f1f1c1;
+      }
+      .controllertable tr:nth-child(even) {
+      background-color: #eee;
+      }
+      .controllertable tr:nth-child(odd) {
+      background-color: #fff;
+      }
+      .controllertable th {
+      color: white;
+      background-color: black;
+      }
+    script(type='text/javascript', src='javascripts/d3.v3.min.js')
+    script(type='text/javascript', src='//cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.js')
+    script(type='text/javascript', src='javascripts/psd3.js')
+    link(type='text/css', rel='stylesheet', href='opentip/css/opentip.css')
+    link(rel='stylesheet', type='text/css', href='stylesheets/psd3.css')
+  body(style='margin: 15px;')
+    .container
+      #chartContainer.well
+    .sdncontrollerdiv
+      .sdncontrollerheaddiv(style='color:white;font-family:verdana;text-align:center;') Plaground Controllers
+      .sdncontrollerbodydiv
+        table#controllertable(style='width:100%;color:black;text-align:center;')
+          tbody
+    script(type='text/javascript').
+      //var session_username = sessionStorage.getItem('ss_user_name');
+      //if(session_username === null){
+      //	window.location.replace("http://103.22.221.56:3011/login");
+      //};
+      var data =  !{data};
+      var controllerList   = !{controllerList};
+      //* Important Data is the data of psd3
+      var config = {
+      containerId: "chartContainer",
+      width: 850,
+      height: 850,
+      data: data,
+      label: function(d) {
+      return d.data.label;
+      },
+      textBoder : function(d){
+      return d.data.colorBoder;
+      },
+      value: "resource",
+      inner: "drilldown",
+      tooltip: function(d) {
+      return "<div style='background-color: #4a4; color: white; padding: 15px; text-align: middle; border: dotted 1px black;'><strong>" + d.info;
+      },
+      textColor: function(d){
+      return d.data.color;
+      },
+      transition: "linear",
+      transitionDuration: 20,
+      donutRadius: 50,
+      gradient: true,
+      colors: d3.scale.category20(),
+      labelColor: "black",
+      stroke: "#eee",
+      strokeWidth: 2,
+      drilldownTransition: "linear",
+      drilldownTransitionDuration: 0,
+      highlightColor: "#c00",
+      rotateLabel: false
+      };
+      //Generate HTML for Controllers
+      var rows='';
+      for( var controller in controllerList )
+      {
+      //console.log(controllerList[controller].controllerName);
+      var color = controllerList[controller].controllerStatus;
+      console.log(rows);
+      rows += '<tr><td style=color:'+color+';>'+controllerList[controller].controllerName+'</td></tr>';
+      }
+      document.getElementById( 'controllertable' ).innerHTML = rows;
+      var samplePie = new psd3.Pie(config);

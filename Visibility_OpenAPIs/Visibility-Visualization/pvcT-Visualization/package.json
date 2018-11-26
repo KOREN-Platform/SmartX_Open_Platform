@@ -1,0 +1,27 @@
+{
+  "author": "usman <usman@smartx.kr>",
+  "name": "visibility",
+  "version": "0.0.2",
+  "repository": {
+    "url": ""
+  },
+  "main": "server.js",
+  "dependencies": {
+    "express": "3.4.4",
+    "stylus": ">= 0.0.1",
+    "jade": ">= 0.0.1",
+    "mongodb": "*",
+    "async": "*",
+	"nodemon": "~1.11.0",
+    "dateformat": "*",
+    "vis": "*",
+	"socket.io": "^1.4.1",
+    "googleanalytics": "*"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
+

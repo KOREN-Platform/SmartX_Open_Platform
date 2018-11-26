@@ -1,0 +1,75 @@
+doctype html
+html
+  head
+    style.
+      table {
+      width:100%;
+      }
+      table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      }
+      th, td {
+      padding: 5px;
+      text-align: left;
+      }
+      table#t01 tr:nth-child(even) {
+      background-color: #eee;
+      }
+      table#t01 tr:nth-child(odd) {
+      background-color:#fff;
+      }
+      table#t01 th {
+      background-color: #003366;
+      color: white;
+      }
+    script(type='text/javascript').
+      var configList = configList;
+      var statList = statList;
+      console.log(configList);
+      console.log(statList);
+  body
+    h2 Installed Flow Rules
+    table#t01
+      thead
+        tr
+          th Controller
+          th Node
+          th Name
+          th InstallInHw
+          th IngressPort
+          th Actions
+      tbody
+       each rule in configList
+        tr
+          td= rule.controllerIP
+          td= rule.node
+          td= rule.name
+          td= rule.InstallInHw
+          td= rule.IngressPort
+          td= rule.Actions
+    br
+    br
+    h2 Switch Statistics
+    table#t01
+      thead
+        tr
+          th timestamp
+          th Controller
+          th Node
+          th Packet Count
+          th Byte Count
+          th Duration Seconds
+          th Match Field
+          th Actions
+      tbody
+       each stat in statList
+        tr
+          td= stat.timestamp
+          td= stat.controllerIP
+          td= stat.node
+          td= stat.packetCount
+          td= stat.byteCount
+          td= stat.durationSeconds
+          td= stat.matchField
+          td= stat.actions

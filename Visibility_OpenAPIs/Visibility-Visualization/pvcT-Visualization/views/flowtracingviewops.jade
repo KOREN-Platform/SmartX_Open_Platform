@@ -1,0 +1,228 @@
+doctype html
+html
+  head
+    title MultiView : Flow Path Tracing View
+    style(type='text/css').
+      body {
+      color: #d3d3d3;
+      font: 12pt arial;
+      background-color: #222222;
+      }
+      #mynetwork {
+      position: absolute;
+      margin: auto;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid lightgray;
+      background: #ffffff;
+      }
+    script(src='../bower_components/jquery/dist/jquery.min.js')
+    script(type='text/javascript', src='../javascripts/vis.js')
+    link(href='../stylesheets/vis.css', rel='stylesheet', type='text/css')
+    script(type='text/javascript').
+      //Check Session
+      var serverIP="103.22.221.56";
+      var serverPort="3011";
+      var session_username = sessionStorage.getItem('ss_user_name');
+      if (session_username === null)
+      {
+      window.location.replace("http://"+serverIP+":"+serverPort+"/login");
+      }
+      // Receive Parameters From Server.js
+      var boxList         = !{boxList};
+      var switchList      = !{switchList};
+      var instanceList    = !{instanceList};
+      var workloadList    = !{workloadList};
+      //var ovsBridgeStatus = !{ovsBridgeStatus};
+      var bridgevlanmapList = !{bridgevlanmapList};
+      //Define Local Varialbes
+      var index=0, boxlevel=1, switchlevel=0, vmlevel=0, workloadlevel=0;
+      var nodes = null, edges = null, network = null;
+      var DIR = '../images/';
+      var EDGE_LENGTH_MAIN = 350, EDGE_LENGTH_SUB = 150;
+      var BridgeNodeColor = '#3399ff', BridgeLinkColor = '#3399ff', TraceColor='#ffbb33';
+      var LENGTH_SERVER = 150, LENGTH_SUB = 50, WIDTH_SCALE = 2, GREEN = 'green', RED = '#C5000B', ORANGE = 'orange', GRAY = 'gray', BLACK = '#2B1B17';
+      var boxMatch=false, bridgeMatch=false, vmMatch=false, workloadMatch=false;
+      // Called when the Visualization API is loaded.
+      function draw() {
+      // Create a data table with nodes.
+      nodes = [];
+      // Create a data table with links.
+      edges = [];
+      //Add network Node
+      nodes.push({id: 1, label: '                                   REN Network                                   ', font: {size: 50, color: '#ffffff'},shape: 'box', color: TraceColor, level:0, fixed: false, physics:true});
+      //JSON.stringify(bridgevlanmapList);
+      //Draw the Physical Boxes
+      for (var i in boxList)
+      {
+      index=index+1;
+      BoxNodeID = index * 1000;
+      for (var vlanboxbridge in bridgevlanmapList)
+      {
+      if (bridgevlanmapList[vlanboxbridge].box == boxList[i].box)
+      {
+      boxMatch=true;
+      break;
+      }
+      }
+      if (boxMatch)
+      {
+      console.log('If');
+      nodes.push({id: BoxNodeID, label: boxList[i].boxID, image: DIR + 'pboxyellow.jpg', shape: 'image', level:boxlevel, fixed: false, physics:false});
+      edges.push({from: 1, to: BoxNodeID, length: EDGE_LENGTH_MAIN, width: WIDTH_SCALE * 4, color: TraceColor, label: ''});
+      }
+      else
+      {
+      console.log('Else');
+      console.log(boxList[i].box);
+      nodes.push({id: BoxNodeID, label: boxList[i].boxID, image: DIR + 'pboxgreen.jpg', shape: 'image', level:boxlevel, fixed: false, physics:false});
+      edges.push({from: 1, to: BoxNodeID, length: EDGE_LENGTH_MAIN, width: WIDTH_SCALE * 4, color: '#3399ff', label: ''});
+      }
+      //Draw the OVS Bridges
+      switchNodeID = BoxNodeID;
+      for (var j in switchList)
+      {
+      if (switchList[j].bridge !== 'br-ex')
+      {
+      switchNodeID = switchNodeID + 1;
+      for (var vlanboxbridge2 in bridgevlanmapList)
+      {
+      if (bridgevlanmapList[vlanboxbridge2].bridge == switchList[j].bridge && boxMatch==true)
+      {
+      bridgeMatch=true;
+      break;
+      }
+      }
+      if (bridgeMatch)
+      {
+      if (switchNodeID != BoxNodeID + 1)
+      {
+      switchlevel=switchlevel + 1;
+      nodes.push({id: switchNodeID, label: switchList[j].bridge, box: boxList[i].boxID, level:switchlevel, group: 'desktop', value: 3, fixed: false, physics:false, color: TraceColor});
+      edges.push({from: switchNodeID-1, to: switchNodeID, length: EDGE_LENGTH_SUB, color: TraceColor});
+      }
+      else
+      {
+      switchlevel = boxlevel + 1;
+      nodes.push({id: switchNodeID, label: switchList[j].bridge, box: boxList[i].boxID, level:switchlevel, group: 'desktop', value: 3, fixed: false, physics:false, color: TraceColor});
+      edges.push({from: BoxNodeID, to: switchNodeID, length: EDGE_LENGTH_SUB, color: TraceColor});
+      }
+      }
+      else
+      {
+      if (switchNodeID != BoxNodeID + 1)
+      {
+      switchlevel=switchlevel + 1;
+      nodes.push({id: switchNodeID, label: switchList[j].bridge, box: boxList[i].boxID, level:switchlevel, group: 'desktop', value: 3, fixed: false, physics:false, color: '#3399ff'});
+      edges.push({from: switchNodeID-1, to: switchNodeID, length: EDGE_LENGTH_SUB, color: '#3399ff'});
+      }
+      else
+      {
+      switchlevel = boxlevel + 1;
+      nodes.push({id: switchNodeID, label: switchList[j].bridge, box: boxList[i].boxID, level:switchlevel, group: 'desktop', value: 3, fixed: false, physics:false, color: '#3399ff'});
+      edges.push({from: BoxNodeID, to: switchNodeID, length: EDGE_LENGTH_SUB, color: '#3399ff'});
+      }
+      }
+      }
+      bridgeMatch=false;
+      }
+      //Draw the OpenStack Instances
+      vmNodeID = BoxNodeID+100;
+      vmlevel  = switchlevel+1;
+      for (var k in instanceList)
+      {
+      if (boxList[i].box == instanceList[k].box)
+      {
+      vmNodeID = vmNodeID + 1;
+      //if (instanceList[k].state == 'Running')
+      //{
+      nodes.push({id: vmNodeID, label: instanceList[k].name, box: instanceList[k].box, level:vmlevel, image: DIR + 'vmiconyellow.png', shape: 'image', group: 'instance', title: 'Instance Details', fixed: false, physics:true});
+      edges.push({from: switchNodeID, to: vmNodeID, length: EDGE_LENGTH_SUB, color: TraceColor});
+      //}
+      //else
+      //{
+      //	console.log('TEST');
+      //	nodes.push({id: vmNodeID, label: instanceList[k].name, level:vmlevel, image: DIR + 'vmiconred.png', shape: 'image', group: 'instance', title: 'Instance Details', fixed: false, physics:true});
+      //	edges.push({from: switchNodeID, to: vmNodeID, length: EDGE_LENGTH_SUB, color: GREEN});
+      //}
+      //Draw the Application Running in the OpenStack Instance using Workload and Tenant Concept
+      workloadNodeID = BoxNodeID+600;
+      //workloadNodeID = workloadNodeID+1;
+      //nodes.push({id: workloadNodeID, label: 'Streaming', level:switchlevel+2, group: 'desktop', value: 3, fixed: false, physics:false});
+      //edges.push({from: vmNodeID, to: workloadNodeID, length: EDGE_LENGTH_SUB, color: GREEN});
+      }
+      }
+      boxMatch=false;
+      }
+      // legend
+      var mynetwork = document.getElementById('mynetwork');
+      var x = - mynetwork.clientWidth / 2 + 50;
+      var y = - mynetwork.clientHeight / 2 + 50;
+      var step = 70;
+      // create a visualization network
+      var container = document.getElementById('mynetwork');
+      var data = {
+      nodes: nodes,
+      edges: edges
+      };
+      var options = {
+      nodes: {
+      //shape: 'dot',
+      size: 20,
+      borderWidth: 2,
+      font: {
+      size: 16,
+      color: '#000000'
+      },
+      scaling: {
+      min: 16,
+      max: 32,
+      }
+      },
+      edges: {
+      color: GRAY,
+      smooth: false,
+      width: 2
+      },
+      layout: {
+      hierarchical: {
+      enabled:true,
+      levelSeparation: 150,
+      nodeSpacing: 240,
+      direction: "DU",
+      }
+      },
+      physics:{
+      barnesHut:{gravitationalConstant:-30000},
+      stabilization: {iterations:2500}
+      },
+      interaction: {
+      navigationButtons: true,
+      hover: true,
+      keyboard: true
+      },
+      groups: {
+      'switch': {
+      shape: 'triangle',
+      color: '#FF9900' // orange
+      },
+      instance: {
+      shape: 'square',
+      color: "#C5000B" // blue
+      },
+      workload: {
+      shape: 'dot',
+      color: "#C5000B" // red
+      }
+      }
+      };
+      network = new vis.Network(container, data, options);
+      }
+  body(onload='draw()')
+    p
+    p
+    #mynetwork(align='center')

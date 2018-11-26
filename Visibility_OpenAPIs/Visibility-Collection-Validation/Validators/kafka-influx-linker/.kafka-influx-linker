@@ -1,0 +1,35 @@
+{
+	"snap" : {
+		"collectors" : [
+			"snap-plugin-collector-psutil",
+			"snap-plugin-collector-cpu",
+			"snap-plugin-collector-meminfo",
+			"snap-plugin-collector-df",
+			"snap-plugin-collector-iostat"
+		]
+	},
+	"kafka" : {
+		"topic" : "snap-pbox-visibility",
+		"zookeeper" : "103.22.221.55:2181",
+		"bootstrap.servers" : [
+			"103.22.221.55:9092"
+		],
+		"group.id" : "test",
+		"enable.auto.commit" : "true",
+		"auto.commit.interval.ms" : 1000,
+		"session.timeout.ms" : 30000,
+		"key.deserializer" : "org.apache.kafka.common.serialization.StringDeserializer",
+		"value.deserializer" : "org.apache.kafka.common.serialization.StringDeserializer"
+	},
+	"influxdb" : {
+		"address" : "http://103.22.221.55:8086",
+		"id" : "root",
+		"password" : "root",
+		"db_name" : "snap_pbox_visibility",
+		"retention_policy" : "default",
+		"consistency_level" : "all"
+	},
+	"self" : {
+		"log_level" : 3
+	}
+}

@@ -1,0 +1,422 @@
+doctype html
+html
+  head
+    title MultiView : Flow Measures View
+    style(type='text/css').
+      body {
+      color: #d3d3d3;
+      font: 12pt arial;
+      background-color: #222222;
+      }
+      #mynetwork {
+      position: relative;
+      margin: auto;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 1550px;
+      height: 550px;
+      border: 1px solid lightgray;
+      background: #ffffff;
+      }
+      .sdncontrollerdiv{
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      width: 240px;
+      height: 135px;
+      font-size: 18px;
+      opacity: 0.7;
+      border: 1px solid #bfbfbf;
+      background: #f5f5ef;
+      }
+      .sdncontrollerheaddiv{
+      position: relative;
+      top: 5px;
+      left: 5px;
+      width: 230px;
+      height: 30px;
+      border: 1px solid #999999;
+      background: #ff1a66;
+      padding: 5px 0;
+      text-align: center;
+      }
+      .sdncontrollerbodydiv{
+      position: relative;
+      top: 5px;
+      left: 5px;
+      width: 230px;
+      height: 80px;
+      border: 1px solid #999999;
+      background: #ffffff;
+      overflow-y:scroll;
+      }
+      .controllertable {
+      width: 100%;
+      background-color: #f1f1c1;
+      }
+      .controllertable tr:nth-child(even) {
+      background-color: #eee;
+      }
+      .controllertable tr:nth-child(odd) {
+      background-color: #fff;
+      }
+      .controllertable th {
+      color: white;
+      background-color: black;
+      }
+    script(src='../bower_components/jquery/dist/jquery.min.js')
+    script(type='text/javascript', src='javascripts/vis.js')
+    link(href='stylesheets/vis.css', rel='stylesheet', type='text/css')
+    link(type='text/css', rel='stylesheet', href='stylesheets/opentip.css')
+    script(type='text/javascript', src='javascripts/opentip-jquery.js')
+    script(type='text/javascript').
+      var serverIP="103.22.221.56";
+      var serverPort="3012";
+      var session_username = sessionStorage.getItem('ss_user_name');
+      if (session_username === null){
+      window.location.replace("http://"+serverIP+":"+serverPort+"/login");
+      }
+      // Receive Active Boxes List
+      var sboxList         = !{sboxList};
+      var cboxList         = !{cboxList};
+      var oboxList         = !{oboxList};
+      var sswitchList      = !{sswitchList};
+      var cswitchList      = !{cswitchList};
+      var oswitchList      = !{oswitchList};
+      var instanceList     = !{instanceList};
+      var iotHostList      =  !{iotHostList};
+      var sovsBridgeStatus = !{sovsBridgeStatus};
+      var covsBridgeStatus = !{covsBridgeStatus};
+      var oovsBridgeStatus = !{oovsBridgeStatus};
+      var controllerList   = !{controllerList};
+      var sBoxNodeID=0, cBoxNodeID=0, oBoxNodeID=0, sswitchNodeID=0, cswitchNodeID =0, oswitchNodeID=0, instanceNodeID=0, hostNodeID=0;
+      var index=0, sBoxLevel=1, oBoxLevel=0, cBoxLevel=0, sSwitchLevel=0, oSwitchLevel=0, cSwitchLevel=0, instanceLevel=0, hostLevel=0, workloadlevel=0;
+      var nodes = null, edges = null, network = null;
+      var DIR = 'images/';
+      var EDGE_LENGTH_MAIN = 350, EDGE_LENGTH_SUB   = 150;
+      var BridgeLinkColor = 'GREEN', BridgeNodeColor = '#3399ff';
+      var LENGTH_SERVER  = 150, LENGTH_SUB = 50, WIDTH_SCALE = 2, GREEN = 'green', RED = '#C5000B', ORANGE = 'orange', GRAY = 'gray', BLACK = '#2B1B17';
+      // Called when the Visualization API is loaded.
+      function draw() {
+      // Create a data table with nodes.
+      nodes = [];
+      // Create a data table with links.
+      edges = [];
+      //Add network Node
+      nodes.push({id: 1, label: '                                   Korea Research Network                                   ', font: {size: 50, color: '#ffffff'},shape: 'box', color: BridgeNodeColor, level:0, fixed: false, physics:true});
+      //Draw the Physical Boxes
+      for (var i in sboxList)
+      {
+      index=index+1;
+      sBoxNodeID = index * 1000;
+      console.log('S-Box: '+sboxList[i].boxID+ ' NodeID: '+sBoxNodeID);
+      if (sboxList[i].management_ip_status == 'GREEN')
+      {
+      nodes.push({id: sBoxNodeID, label: sboxList[i].boxName, image: DIR + 'boxgreen.png', shape: 'image', level:sBoxLevel, fixed: false, physics:false});
+      edges.push({from: 1, to: sBoxNodeID, length: EDGE_LENGTH_MAIN, width: WIDTH_SCALE * 4, color: sboxList[i].data1_ip_status, label: '0.71 mbps'});
+      //console.log(sboxList[i].management_ip_status);
+      //Draw the OVS Bridges
+      sswitchNodeID = sBoxNodeID;
+      for (var j in sswitchList)
+      {
+      if (sswitchList[j].bridge !== 'br-ex')
+      {
+      for (var a in sovsBridgeStatus)
+      {
+      if (sovsBridgeStatus[a].bridge == sswitchList[j].bridge && sovsBridgeStatus[a].boxID == sboxList[i].boxID)
+      {
+      BridgeLinkColor = sovsBridgeStatus[a].status;
+      BridgeNodeColor = sovsBridgeStatus[a].status;
+      console.log('  S-Box: '+sboxList[i].boxID+ ' Bridge: '+sovsBridgeStatus[a].bridge + ' Status: '+BridgeLinkColor);
+      break;
+      }
+      }
+      sswitchNodeID = sswitchNodeID + 1;
+      if (sswitchNodeID != sBoxNodeID + 1)
+      {
+      sSwitchLevel=sSwitchLevel + 1;
+      nodes.push({id: sswitchNodeID, label: sswitchList[j].bridge, box: sboxList[i].boxID, level:sSwitchLevel, image: ((BridgeNodeColor == 'GREEN') ? DIR + 'switchgreen.png' : DIR + 'switchred.png'), shape: 'image', group: 'desktop', fixed: false, physics:true});
+      edges.push({from: sswitchNodeID-1, to: sswitchNodeID, length: EDGE_LENGTH_SUB, color: BridgeLinkColor});
+      }
+      else
+      {
+      sSwitchLevel = sBoxLevel + 1;
+      nodes.push({id: sswitchNodeID, label: sswitchList[j].bridge, box: sboxList[i].boxID, level:sSwitchLevel, image: ((BridgeNodeColor == 'GREEN') ? DIR + 'switchgreen.png' : DIR + 'switchred.png'), shape: 'image', group: 'desktop', fixed: false, physics:true});
+      edges.push({from: sBoxNodeID, to: sswitchNodeID, length: EDGE_LENGTH_SUB, color: BridgeLinkColor});
+      }
+      }
+      //Draw Type O Boxes
+      for (var oindex in oboxList)
+      {
+      console.log('    O-Box: '+oboxList[oindex].boxName+' '+oboxList[oindex].site);
+      if (oboxList[oindex].site == sboxList[i].site)
+      {
+      oBoxNodeID = sBoxNodeID + 501;
+      oBoxLevel = sSwitchLevel + 1;
+      oswitchNodeID = oBoxNodeID + 1;
+      //console.log('    O-Box: '+oboxList[oindex].boxName+ ' NodeID: '+oBoxNodeID+ ' Level: '+oBoxLevel);
+      if (oboxList[oindex].management_ip_status == 'GREEN')
+      {
+      nodes.push({id: oBoxNodeID, label: oboxList[oindex].boxName, image: DIR + 'boxgreen.png', shape: 'image', level:oBoxLevel, fixed: false, physics:false});
+      edges.push({from: oBoxNodeID, to: sswitchNodeID, length: EDGE_LENGTH_SUB, color: oboxList[oindex].data1_ip_status, label: ' '});
+      //Draw Type O Switches
+      for (var osindex in oswitchList)
+      {
+      for (var osstatusindex in oovsBridgeStatus)
+      {
+      if (oovsBridgeStatus[osstatusindex].bridge == oswitchList[osindex].bridge && oovsBridgeStatus[osstatusindex].boxID == oboxList[oindex].boxID)
+      {
+      BridgeLinkColor = oovsBridgeStatus[osstatusindex].status;
+      BridgeNodeColor = oovsBridgeStatus[osstatusindex].status;
+      //console.log(oovsBridgeStatus[osstatusindex].boxID + ' '+BridgeLinkColor);
+      break;
+      }
+      }
+      if (oswitchNodeID != oBoxNodeID + 1)
+      {
+      oSwitchLevel=oSwitchLevel + 1;
+      oswitchNodeID = oBoxNodeID + 1;
+      //console.log('      O-Switch: '+oswitchList[osindex].bridge+ ' NodeID: '+oBoxNodeID+ ' Level: '+oBoxLevel);
+      nodes.push({id: oswitchNodeID, label: oswitchList[osindex].bridge, box: oboxList[oindex].boxID, level:oSwitchLevel, image: ((BridgeNodeColor == 'GREEN') ? DIR + 'switchgreen.png' : DIR + 'switchred.png'), shape: 'image', group: 'desktop', fixed: false, physics:true});
+      edges.push({from: oswitchNodeID-1, to: oswitchNodeID, length: EDGE_LENGTH_SUB, color: BridgeLinkColor});
+      }
+      else
+      {
+      oswitchNodeID = oBoxNodeID + 10;
+      oSwitchLevel = oBoxLevel + 1;
+      //console.log('      O-Switch: '+oswitchList[osindex].bridge+ ' NodeID: '+oBoxNodeID+ ' Level: '+oBoxLevel);
+      nodes.push({id: oswitchNodeID, label: oswitchList[osindex].bridge, box: oboxList[oindex].boxID, level:oSwitchLevel, image: ((BridgeNodeColor == 'GREEN') ? DIR + 'switchgreen.png' : DIR + 'switchred.png'), shape: 'image', group: 'desktop', fixed: false, physics:true});
+      edges.push({from: oBoxNodeID, to: oswitchNodeID, length: EDGE_LENGTH_SUB, color: BridgeLinkColor});
+      }
+      }
+      //Draw IoT Hosts
+      hostLevel = oSwitchLevel + 1;
+      hostNodeID = oBoxNodeID + 14;
+      //console.log(hostLevel);
+      //console.log(oBoxNodeID);
+      for (var iotindex in iotHostList)
+      {
+      if (iotHostList[iotindex].boxID == oboxList[oindex].boxID)
+      {
+      hostNodeID = hostNodeID + 1;
+      //console.log('        IoT Host: '+iotHostList[iotindex].hostid+ ' NodeID: '+hostNodeID+ ' Level: '+hostLevel);
+      //nodes.push({id: hostNodeID, label: iotHostList[iotindex].hostid, box: iotHostList[iotindex].boxID, level:hostLevel, image: DIR + 'iotdevice.png', shape: 'image', group: 'instance', fixed: false, physics:true});
+      nodes.push({id: hostNodeID, label: iotHostList[iotindex].vlanid, box: iotHostList[iotindex].boxID, level:hostLevel, image: DIR + 'iotdevice.png', shape: 'image', group: 'instance', title: iotHostList[iotindex].macaddress, fixed: false, physics:true});
+      edges.push({from: oswitchNodeID, to: hostNodeID, length: EDGE_LENGTH_SUB, color: GREEN, dashes: true});
+      }
+      }
+      }
+      else
+      {
+      nodes.push({id: oBoxNodeID, label: oboxList[oindex].boxName, image: DIR + 'boxred.png', shape: 'image', level:oBoxLevel, fixed: false, physics:false});
+      edges.push({from: oBoxNodeID, to: sswitchNodeID, length: EDGE_LENGTH_SUB, color: oboxList[oindex].data1_ip_status, label: ' '});
+      }
+      break;
+      }
+      }
+      //Draw Type C Boxes
+      for (var cindex in cboxList)
+      {
+      if (oboxList[cindex].site == sboxList[i].site)
+      {
+      console.log('    C-Box: '+cboxList[cindex].boxName+' '+cboxList[cindex].site);
+      cBoxNodeID = sBoxNodeID + 10;
+      cBoxLevel = sSwitchLevel + 1;
+      cswitchNodeID = cBoxNodeID;
+      //console.log('cBoxNodeID ' + cBoxNodeID);
+      //console.log(cBoxLevel);
+      if (cboxList[cindex].management_ip_status == 'GREEN')
+      {
+      nodes.push({id: cBoxNodeID, label: cboxList[cindex].boxName, image: DIR + 'boxgreen.png', shape: 'image', level:cBoxLevel, group: 'desktop', fixed: false, physics:false});
+      edges.push({from: cBoxNodeID, to: sswitchNodeID, length: EDGE_LENGTH_SUB, color: cboxList[cindex].data1_ip_status, label: ' '});
+      //Draw Type C Switches
+      for (var csindex in cswitchList)
+      {
+      //console.log(cswitchList[csindex].bridge);
+      for (var csstatusindex in covsBridgeStatus)
+      {
+      if (covsBridgeStatus[csstatusindex].bridge == cswitchList[csindex].bridge && covsBridgeStatus[csstatusindex].boxID == cboxList[cindex].boxID)
+      {
+      //console.log('Matched');
+      BridgeLinkColor = covsBridgeStatus[csstatusindex].status;
+      BridgeNodeColor = covsBridgeStatus[csstatusindex].status;
+      //console.log(oovsBridgeStatus[osstatusindex].boxID + ' '+BridgeLinkColor);
+      break;
+      }
+      }
+      cswitchNodeID = cswitchNodeID + 1;
+      if (cswitchNodeID != cBoxNodeID + 1)
+      {
+      //console.log('If '+cswitchNodeID);
+      cSwitchLevel=cSwitchLevel + 1;
+      //console.log(cswitchNodeID);
+      nodes.push({id: cswitchNodeID, label: cswitchList[csindex].bridge, box: cboxList[cindex].boxID, level:cSwitchLevel, image: ((BridgeNodeColor == 'GREEN') ? DIR + 'switchgreen.png' : DIR + 'switchred.png'), shape: 'image', group: 'desktop', fixed: false, physics:true});
+      edges.push({from: cswitchNodeID-1, to: cswitchNodeID, length: EDGE_LENGTH_SUB, color: BridgeLinkColor});
+      }
+      else
+      {
+      //console.log('Else '+cswitchNodeID);
+      cSwitchLevel = cBoxLevel + 1;
+      nodes.push({id: cswitchNodeID, label: cswitchList[csindex].bridge, box: cboxList[cindex].boxID, level:cSwitchLevel, image: ((BridgeNodeColor == 'GREEN') ? DIR + 'switchgreen.png' : DIR + 'switchred.png'), shape: 'image', fixed: false, physics:true});
+      edges.push({from: cBoxNodeID, to: cswitchNodeID, length: EDGE_LENGTH_SUB, color: BridgeLinkColor});
+      }
+      }
+      //Draw OpenStack Instances
+      instanceLevel = cSwitchLevel + 1;
+      instanceNodeID = sBoxNodeID + 20;
+      //console.log(instanceLevel);
+      //console.log(instanceNodeID);
+      for (var instanceindex in instanceList)
+      {
+      if (instanceList[instanceindex].boxID == cboxList[cindex].boxID)
+      {
+      instanceNodeID = instanceNodeID + 1;
+      nodes.push({id: instanceNodeID, label: instanceList[instanceindex].name, box: instanceList[instanceindex].boxID, level:instanceLevel, image: ((instanceList[instanceindex].state == 'Running') ? DIR + 'instancegreen.png' : DIR + 'instancered.png'), shape: 'image', group: 'instance', fixed: false, physics:true});
+      edges.push({from: cswitchNodeID, to: instanceNodeID, length: EDGE_LENGTH_SUB, color: ((instanceList[instanceindex].state == 'Running') ? 'GREEN' : 'RED')});
+      }
+      }
+      }
+      else
+      {
+      nodes.push({id: cBoxNodeID, label: cboxList[cindex].boxName, image: DIR + 'boxred.png', shape: 'image', level:cBoxLevel, fixed: false, physics:false});
+      edges.push({from: cBoxNodeID, to: sswitchNodeID, length: EDGE_LENGTH_SUB, color: cboxList[cindex].data1_ip_status, label: ' '});
+      }
+      break;
+      }
+      }
+      }
+      }
+      else
+      {
+      nodes.push({id: sBoxNodeID, label: sboxList[i].boxName, image: DIR + 'boxred.png', shape: 'image', level:sBoxLevel, fixed: false, physics:false});
+      edges.push({from: 1, to: sBoxNodeID, length: EDGE_LENGTH_MAIN, width: WIDTH_SCALE * 4, color: sboxList[i].data1_ip_status, label: '0.71 mbps'});
+      }
+      }
+      //Generate HTML for Controllers
+      /*var rows='';
+      for( var controller in controllerList )
+      {
+      //console.log(controllerList[controller].controllerName);
+      var color = controllerList[controller].controllerStatus;
+      console.log(rows);
+      rows += '<tr><td style=color:'+color+';>'+controllerList[controller].controllerName+'</td></tr>';
+      }
+      document.getElementById( 'controllertable' ).innerHTML = rows;*/
+      // legend
+      var mynetwork = document.getElementById('mynetwork');
+      var x = - mynetwork.clientWidth / 2 + 50;
+      var y = - mynetwork.clientHeight / 2 + 50;
+      var step = 70;
+      // create a visualization network
+      var container = document.getElementById('mynetwork');
+      var data = {
+      nodes: nodes,
+      edges: edges
+      };
+      var options = {
+      nodes: {
+      size: 20,
+      borderWidth: 2,
+      font: {
+      size: 16,
+      color: '#000000'
+      },
+      scaling: {
+      min: 16,
+      max: 32,
+      }
+      },
+      edges: {
+      color: GRAY,
+      smooth: false,
+      width: 2
+      },
+      layout: {
+      hierarchical: {
+      enabled:true,
+      levelSeparation: 120,
+      nodeSpacing: 240,
+      direction: "DU",
+      }
+      },
+      physics:{
+      barnesHut:{gravitationalConstant:-30000},
+      stabilization: {iterations:2500}
+      },
+      interaction: {
+      navigationButtons: true,
+      hover: true,
+      keyboard: true
+      },
+      groups: {
+      'switch': {
+      shape: 'triangle',
+      color: '#FF9900' // orange
+      },
+      'instance': {
+      shape: 'square',
+      color: "#C5000B" // blue
+      }
+      }
+      };
+      network = new vis.Network(container, data, options);
+      network.on("click", function (params){
+      console.log(params);
+      params.event = "[original event]";
+      if(params.nodes == ""){
+      }
+      else
+      {
+      var nodeId = params.nodes;
+      for(var i=0; i<nodes.length; i++){
+      if(nodes[i].id == nodeId){
+      switch (nodes[i].level){
+      case 0: //Network
+      window.parent.getBoxFlow(nodes[i]);
+      case 1: // wan box
+      window.parent.getBoxFlow(nodes[i]);
+      break;
+      case 2: // brcap
+      break;
+      case 3: // cloud and access box
+      window.parent.getBoxFlow(nodes[i]);
+      case 4: // brvlan
+      break;
+      case 5: // brint
+      break;
+      case 6: // vm
+      //window.parent.receiveValueVMflow(nodes[i])
+      break;
+      case 7: // service
+      break;
+      }
+      break;
+      }
+      }
+      }
+      });
+      var myInput = $("#mynetwork");
+      var inputOpentip = new Opentip(myInput, { showOn: null, style: 'glass' });
+      var count = 0;
+      network.on("hoverNode", function (params){
+      params.event = "[original event]";
+      var nodeId = params.node;
+      for(var i=0; i<nodes.length; i++){
+      if(nodes[i].id == nodeId){
+      count = i;
+      break;
+      }
+      }
+      inputOpentip.setContent(nodes[count].label +" ( "+ nodes[count].id+" )");
+      inputOpentip.show();
+      });
+      /*network.on("blurNode", function (params){
+      inputOpentip.hide();
+      });*/
+      }
+  body(onload='draw()')
+    p
+    p
+    #mynetwork(align='center')

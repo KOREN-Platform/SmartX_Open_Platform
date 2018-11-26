@@ -1,0 +1,48 @@
+doctype html
+html
+  head
+    title Onion-ring Visualization (API)
+    script(type='text/javascript', src='javascripts/d3.v3.min.js')
+    script(type='text/javascript', src='//cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.js')
+    script(type='text/javascript', src='javascripts/psd3.js')
+    link(type='text/css', rel='stylesheet', href='opentip/css/opentip.css')
+    link(rel='stylesheet', type='text/css', href='stylesheets/psd3.css')
+  body(style='margin: 15px;')
+    .container
+      #chartContainer.well
+    script(type='text/javascript').
+      var data =  !{data};
+      //* Important Data is the data of psd3
+      var config = {
+      containerId: "chartContainer",
+      width: 650,
+      height: 650,
+      data: data,
+      label: function(d) {
+      return d.data.label;
+      },
+      textBoder : function(d){
+      return d.data.colorBoder;
+      },
+      value: "resource",
+      inner: "drilldown",
+      tooltip: function(d) {
+      return "<div style='background-color: #4a4; color: white; padding: 15px; text-align: middle; border: dotted 1px black;'><strong>" + d.info;
+      },
+      textColor: function(d){
+      return d.data.color;
+      },
+      transition: "linear",
+      transitionDuration: 20,
+      donutRadius: 30,
+      gradient: true,
+      colors: d3.scale.category20(),
+      labelColor: "black",
+      stroke: "#eee",
+      strokeWidth: 2,
+      drilldownTransition: "linear",
+      drilldownTransitionDuration: 0,
+      highlightColor: "#c00",
+      rotateLabel: false
+      };
+      var samplePie = new psd3.Pie(config);

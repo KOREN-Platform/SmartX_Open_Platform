@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, render_template
 from flask_restful import Resource, Api
 from flask_restful import reqparse
 from flaskext.mysql import MySQL
@@ -44,28 +44,30 @@ mysql.init_app(app)
 def hello_world():  
 
 
-  name = request.authorization.username
-  password = request.authorization.password
+  return render_template('test3.html')
 
-  cmd="cd ../cred && bash auth_check.sh " + name + " " + password
+  #name = request.authorization.username
+  #password = request.authorization.password
+
+  #cmd="cd ../cred && bash auth_check.sh " + name + " " + password
 
 
-  result = subprocess.check_output (cmd , shell=True)
+  #result = subprocess.check_output (cmd , shell=True)
 
-  response= result.decode()
-  response= response.replace("\n","")
+  #response= result.decode()
+  #response= response.replace("\n","")
 
-  print (response)
+  #print (response)
 
-  if response == "True":
-    return "success"
+  #if response == "True":
+  #  return "success"
 
 
 
 #  if request.authorization and request.authorization.username == 'username' and request.authorization.password == 'password':
 #    return "success"
 
-  return make_response('Coud not verify!', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
+  #return make_response('Coud not verify!', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
 
 @app.route("/slices")
@@ -436,7 +438,7 @@ def access_slice_create():
     con = mysql.connect()
     cur = con.cursor()
 
-    cmd = "insert into IoT values('" + mac + "', '" + ip + "', '"  + slice_id + "', '" + intent_key + "', 'cloud');"
+    cmd = "insert into IoT values('" + mac + "', '" + ip + "', '"  + slice_id + "', '" + intent_key + "', 'cloud', '" + location + "');"
     cur.execute(cmd)
     con.commit()
 
@@ -498,7 +500,7 @@ def access_slice_create():
   cur = con.cursor()
 
 
-  cmd = "insert into IoT values('" + mac + "', '" + ip + "', '" +  slice_id + "', '" + intent_key + "', 'IoT');"
+  cmd = "insert into IoT values('" + mac + "', '" + ip + "', '" +  slice_id + "', '" + intent_key + "', 'IoT', '" + location + "');"
 
   cur.execute(cmd)
   con.commit()

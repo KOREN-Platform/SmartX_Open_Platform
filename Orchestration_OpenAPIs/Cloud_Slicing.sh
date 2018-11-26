@@ -251,7 +251,7 @@ done
 
 cat << EOF | mysql -h $DB_HOST -uroot -p$DB_PASS
 use Slicing_Management;
-INSERT INTO Instance VALUES ('$Instance_ID', '$Instance_IP', '$Slicing');
+INSERT INTO Instance VALUES ('$Instance_ID', '$Instance_IP', '$Slicing', '$REGION');
 quit
 EOF
 

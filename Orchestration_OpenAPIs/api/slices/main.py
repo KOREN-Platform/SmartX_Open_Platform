@@ -209,6 +209,8 @@ def cloud_slice_create():
   response= result.decode()
   response= response.replace("\n","")
 
+
+
   return response + "\n"
 
 
@@ -513,6 +515,16 @@ def access_slice_create():
 
 
 
+  # update Json file
+
+  cmd="cd ../ && bash json_access_create.sh " + ip + " " + slice_id + " " + location
+
+  result = subprocess.check_output (cmd , shell=True)
+
+
+
+
+
   # Json format
 
   cur = mysql.connect().cursor()
@@ -639,6 +651,25 @@ def access_slice_delete():
   res = requests.delete(url, auth=('karaf', 'karaf'))
 
 
+  # update Json file
+  # we need to get IP
+  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='IoT';"
+  cur.execute(para)
+
+  flag = 0
+  for row in cur:
+      flag = flag + 1
+  
+  if (flag == 0):
+    return ("Error: IP does not existed!\n")
+
+  ip = str(row[1])
+  cmd="cd ../ && bash json_access_delete.sh " + ip + " " + slice_id + " " + location
+  result = subprocess.check_output (cmd , shell=True)
+
+
+
+
   # Delete MySQL tuple
   con = mysql.connect()
   cur = con.cursor()
@@ -679,6 +710,10 @@ def access_slice_delete():
     cmd = "delete from IoT where Slicing_ID ='" + slice_id +"' and direction='cloud';"
     cur.execute(cmd)
     con.commit()
+
+ 
+
+
 
 
   return ("Success\n")

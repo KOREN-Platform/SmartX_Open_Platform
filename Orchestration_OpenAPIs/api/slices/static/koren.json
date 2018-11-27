@@ -1,0 +1,24 @@
+{"nodes":[
+  {"id":"1", "label":"Type C GJ", "color": "rgb(209,178,255)"}
+  ,{"id":"2", "label":"Type S GJ", "color": "rgb(97,168,7)"}
+  ,{"id":"3", "label":"Type O GJ"}
+  ,{"id":"4", "label":"Type C KN", "color": "rgb(209,178,255)"}
+  ,{"id":"5", "label":"Type S KN", "color": "rgb(97,168,7)"}
+  ,{"id":"6", "label":"Type O KN"}
+  ,{"id":"7", "label":"Type O- JJ"}
+  ,{"id":"8", "label":"Type O- JNU"}
+  ,{"id":"9", "label":"Type O- KU"}
+  ,{"id":"10", "label":"KOREN", "color": {"background": "cyan", "border": "blue"}}
+],
+"edges":[
+  {"from":"10", "to":"2", "color": {"color": "black"}, "dashes": "true"}
+  ,{"from":"10", "to":"5", "color": {"color": "black"}, "dashes": "true"}
+  ,{"from":"10", "to":"7", "color": {"color": "black"}, "dashes": "true"}
+  ,{"from":"10", "to":"8", "color": {"color": "black"}, "dashes": "true"}
+  ,{"from":"10", "to":"9", "color": {"color": "black"}, "dashes": "true"}
+  ,{"from":"2", "to":"1", "color": {"color": "black"}, "dashes": "true"}
+  ,{"from":"2", "to":"3", "color": {"color": "black"}, "dashes": "true"}
+  ,{"from":"5", "to":"4", "color": {"color": "black"}, "dashes": "true"}
+  ,{"from":"5", "to":"6", "color": {"color": "black"}, "dashes": "true"}
+]
+}

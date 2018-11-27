@@ -256,6 +256,9 @@ quit
 EOF
 
 
+# update json file
+bash json_cloud_create.sh $Instance_IP $Slicing $REGION
+
 
 
 # Output

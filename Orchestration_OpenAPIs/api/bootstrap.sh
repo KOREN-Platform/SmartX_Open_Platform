@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# update json file 
 cd ../ && bash json_init.sh
 
 cd api

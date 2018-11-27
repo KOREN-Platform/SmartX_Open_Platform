@@ -22,6 +22,18 @@ LOCATION=$3
 # location = {GJ, KN, JJ, JNU, KU}
 
 
+
+# edge color
+color_array=("orange" "red" "blue" "purple")
+
+
+let temp=$Slicing_ID%4
+#echo ${color_array[$temp]}
+
+
+
+
+
 # Parsing Function
 get_config_value()
 {
@@ -49,7 +61,7 @@ if [ "$LOCATION" == "GJ" ]; then
 	        lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 	
 		# create Edge (KOREN - Type S GJ)
-		sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-GJ_S\", \"from\":\"10\", \"to\":\"2\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+		sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-GJ_S\", \"from\":\"10\", \"to\":\"2\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"200\"}" api/slices/static/test.json
         fi
 
 
@@ -62,7 +74,7 @@ if [ "$LOCATION" == "GJ" ]; then
                 lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
 		# create Edge (Type S GJ - Type O GJ)
-                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-GJ_S-GJ_O\", \"from\":\"3\", \"to\":\"2\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-GJ_S-GJ_O\", \"from\":\"3\", \"to\":\"2\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"200\"}" api/slices/static/test.json
         fi
 
 	
@@ -70,12 +82,12 @@ if [ "$LOCATION" == "GJ" ]; then
 	lineNum="$(grep -n "\"id\":\"10\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
         # add new node (Type O GJ)
-        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(255,217,250)\"}" api/slices/static/test.json
+        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(29,219,22)\"}" api/slices/static/test.json
 
         # add new edge (Type O GJ - New node)
         # find line number
         lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
-        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-GJ_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"3\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-GJ_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"3\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"60\"}" api/slices/static/test.json
 
 elif [ "$LOCATION" == "KN" ]; then
 
@@ -85,7 +97,7 @@ elif [ "$LOCATION" == "KN" ]; then
         if [ "$lineNum" == "" ]; then
 		lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 		# create Edge (KOREN - Type S GJ)
-                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-KN_S\", \"from\":\"10\", \"to\":\"5\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-KN_S\", \"from\":\"10\", \"to\":\"5\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"200\"}" api/slices/static/test.json
         fi
 
 
@@ -97,7 +109,7 @@ elif [ "$LOCATION" == "KN" ]; then
                 lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
 		# create Edge (Type S GJ - Type O GJ)
-                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KN_S-KN_O\", \"from\":\"6\", \"to\":\"5\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KN_S-KN_O\", \"from\":\"6\", \"to\":\"5\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"200\"}" api/slices/static/test.json
         fi
 
 
@@ -105,12 +117,12 @@ elif [ "$LOCATION" == "KN" ]; then
         lineNum="$(grep -n "\"id\":\"10\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
         # add new node (Type O GJ)
-        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(255,217,250)\"}" api/slices/static/test.json
+        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(29,219,22)\"}" api/slices/static/test.json
 
         # add new edge (Type O KN - New node)
         # find line number
         lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
-        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KN_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"6\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KN_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"6\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"60\"}" api/slices/static/test.json
 
 
 elif [ "$LOCATION" == "JJ" ]; then
@@ -124,7 +136,7 @@ elif [ "$LOCATION" == "JJ" ]; then
 	        lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
 		# create Edge (KOREN - Type O JJ)
-                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-JJ_O\", \"from\":\"10\", \"to\":\"7\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-JJ_O\", \"from\":\"10\", \"to\":\"7\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"200\"}" api/slices/static/test.json
         fi
 
 
@@ -132,12 +144,12 @@ elif [ "$LOCATION" == "JJ" ]; then
         lineNum="$(grep -n "\"id\":\"10\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
         # add new node (Type O JJ)
-        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(255,217,250)\"}" api/slices/static/test.json
+        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(29,219,22)\"}" api/slices/static/test.json
 
         # add new edge (Type O JJ - New node)
         # find line number
         lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
-        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-JJ_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"7\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-JJ_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"7\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"60\"}" api/slices/static/test.json
 
 
 elif [ "$LOCATION" == "JNU" ]; then
@@ -150,7 +162,7 @@ elif [ "$LOCATION" == "JNU" ]; then
 	        lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
 		# create Edge (KOREN - Type O JNU)
-                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-JNU_O\", \"from\":\"10\", \"to\":\"8\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-JNU_O\", \"from\":\"10\", \"to\":\"8\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"200\"}" api/slices/static/test.json
         fi
 
 
@@ -158,12 +170,12 @@ elif [ "$LOCATION" == "JNU" ]; then
         lineNum="$(grep -n "\"id\":\"10\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
         # add new node (Type O JNU)
-        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(255,217,250)\"}" api/slices/static/test.json
+        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(29,219,22)\"}" api/slices/static/test.json
 
         # add new edge (Type O JNU - New node)
         # find line number
         lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
-        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-JNU_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"8\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-JNU_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"8\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"60\"}" api/slices/static/test.json
 
 
 
@@ -180,7 +192,7 @@ elif [ "$LOCATION" == "KU" ]; then
 	        lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
 		# create Edge (KOREN - Type O KU)
-                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-KU_O\", \"from\":\"10\", \"to\":\"9\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+                sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KOREN-KU_O\", \"from\":\"10\", \"to\":\"9\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"200\"}" api/slices/static/test.json
         fi
 
 
@@ -188,12 +200,12 @@ elif [ "$LOCATION" == "KU" ]; then
         lineNum="$(grep -n "\"id\":\"10\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
 
         # add new node (Type O KU)
-        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(255,217,250)\"}" api/slices/static/test.json
+        sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-$MAC_IP\", \"label\":\"$MAC_IP\", \"color\":\"rgb(29,219,22)\"}" api/slices/static/test.json
 
         # add new edge (Type O KU - New node)
         # find line number
         lineNum="$(grep -n "\"from\":\"5\", \"to\":\"6\"" api/slices/static/test.json | head -n 1 | cut -d: -f1)"
-	sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KU_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"9\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"red\"}}" api/slices/static/test.json
+	sed -i "$lineNum a\\,{\"id\":\"$Slicing_ID-KU_O-$MAC_IP\", \"from\":\"$Slicing_ID-$MAC_IP\", \"to\":\"9\", \"label\":\"$Slicing_ID\", \"color\":{\"color\":\"${color_array[$temp]}\"}, \"length\":\"60\"}" api/slices/static/test.json
 
 fi
 

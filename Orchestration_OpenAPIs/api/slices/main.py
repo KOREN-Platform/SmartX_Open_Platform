@@ -379,7 +379,7 @@ def access_slice_create():
 
 
    # Check cloud_slice is existed
-  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='cloud'"
+  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='cloud' and location='" + location + "';"
   cur.execute(para)
 
   flag = 0
@@ -445,7 +445,11 @@ def access_slice_create():
     con.commit()
 
 
-  
+    # create IP tables rule
+
+    cmd="cd ../ && bash iptables_create.sh " + slice_id + " " + location
+    result = subprocess.check_output (cmd , shell=True)
+ 
 
 
   # Call ONOS API data
@@ -683,7 +687,7 @@ def access_slice_delete():
 
 
   # find another slice with same id
-  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='IoT';"
+  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='IoT' and location='" + location +"';"
   cur.execute(para)
   
   flag = 0
@@ -692,7 +696,7 @@ def access_slice_delete():
 
   if (flag == 0):
     # we need to delete cloud_slice
-    para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='cloud';"
+    para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='cloud' and location='" + location +"';"
     cur.execute(para)
 
     for row in cur:
@@ -711,6 +715,9 @@ def access_slice_delete():
     cur.execute(cmd)
     con.commit()
 
+    # delete IP tables rule
+    cmd="cd ../ && bash iptables_delete.sh " + slice_id + " " + location
+    result = subprocess.check_output (cmd , shell=True)
  
 
 

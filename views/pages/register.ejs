@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <% include ../partial/head %>
-  <body class="bg-dark">
+<body class="bg-dark">
+<script type="text/javascript" src="js/register.js" defer async></script>
+
 <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -16,75 +18,41 @@
                     <br>
                         <label data-error="wrong" data-success="right" for="defaultForm-email"><h5><i class="fa fa-lock prefix grey-text"></i> Your first name</h5></label>
                     <input type="text" id="firstName" class="form-control validate" placeholder="First name" autofocus="autofocus">
-
                 </div>
-
                 <div class="md-form mb-4">
                     <label data-error="wrong" data-success="right" for="defaultForm-pass"><h5><i class="fa fa-lock prefix grey-text"></i> Your last name</h5></label>
                     <input type="text" id="lastName" class="form-control validate" placeholder="Last name">
                 </div>
-
                 <div class="md-form mb-4">
                     <label data-error="wrong" data-success="right" for="defaultForm-pass"><h5><i class="fa fa-lock prefix grey-text"></i> Your email</h5></label>
                     <input type="email" id="inputEmail" class="form-control validate" placeholder="Email address">
                 </div>
-                
                 <div class="md-form mb-2">
                     <label data-error="wrong" data-success="right" for="defaultForm-pass"><h5><i class="fa fa-lock prefix grey-text"></i> Your password</h5></label>
                     <input type="password" id="inputPassword" class="form-control validate" placeholder="Password">
                 </div>
             </div>
-
             <div id="roleRadio" class="mb-4 text-center">
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" class="custom-control-input" id="userRadio" name="roleRadio" checked value=1>
-                  <label class="custom-control-label" for="userRadio">User</label>
+                    <input type="radio" class="custom-control-input" id="userRadio" name="roleRadio" checked value=1>
+                    <label class="custom-control-label" for="userRadio">User</label>
                 </div>
                 <!-- Default inline 2-->
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" class="custom-control-input" id="developerRadio" name="roleRadio" value=2>
-                  <label class="custom-control-label" for="developerRadio">Developer</label>
+                    <input type="radio" class="custom-control-input" id="developerRadio" name="roleRadio" value=2>
+                    <label class="custom-control-label" for="developerRadio">Developer</label>
                 </div>
                 <!-- Default inline 3-->
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" class="custom-control-input" id="managerRadio" name="roleRadio" value=3>
-                  <label class="custom-control-label" for="managerRadio">Manager</label>
+                    <input type="radio" class="custom-control-input" id="managerRadio" name="roleRadio" value=3>
+                    <label class="custom-control-label" for="managerRadio">Manager</label>
                 </div>
-              </div>
-
-                <button id="registerBtn" class="btn btn-info btn_noradi">Register</button>
-                <button class="btn btn-dark btn_noradi">Cancel</button>
+            </div>
+            <button id="registerBtn" class="btn btn-info btn_noradi">Register</button>
+            <button class="btn btn-dark btn_noradi">Cancel</button>
         </div>
     </div>
 </div>
 </body>
 <% include ../partial/body %>
-<script>
-    $('#registerBtn').click(function(){
-        inputUser = {
-            email : $('#inputEmail').val(),
-            password : $('#inputPassword').val(),
-            firstName : $('#firstName').val(),
-            lastName : $('#lastName').val(),
-            role : $('input[name="roleRadio"]:checked').val()
-        }
-        
-        $.ajax({
-            url:'/register',
-            method :'post',
-            dataType:'json',
-            data: inputUser,
-            success: function(result) {
-                alert("success!")
-                location.href = "/"
-            },
-            error : function(error) {
-                alert("failed regist")
-                location.reload()
-            }
-        })
-    })
-</script>
-  </body>
-
 </html>

@@ -1,10 +1,10 @@
 <html lang="en">
   <% include ../partial/head %>
   <body id="page-top">
-      <% include ../partial/toolbar %>
-      <script type="text/javascript" src="js/logout.js" defer></script>
+    <% include ../partial/toolbar %>
+    <script type="text/javascript" src="js/logout.js" defer></script>
     <div id="wrapper">
-        <% include ../partial/sidebar %>
+      <% include ../partial/sidebar %>
       <div id="content-wrapper">
         <div class="container-fluid">
           <!-- Breadcrumbs-->
@@ -15,22 +15,19 @@
             <li class="breadcrumb-item active">About</li>
           </ol>
           <!-- Icon Cards-->
-          <div class="card mb-3">
-            <!--zookeeper state-->
-            <div class="card-header">
-              <i class="fas fa-table"></i>About</div>
-            <div class="card-body">
-              <div class="table-responsive" style=" overflow-x:  hidden;">
-                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                  
+        <div class="card mb-3">
+          <!--zookeeper state-->
+          <div class="card-header">
+            <i class="fas fa-table"></i>About</div>
+              <div class="card-body">
+                <div class="table-responsive" style=" overflow-x:  hidden;">
+                  <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"></div>
                 </div>
               </div>
-            </div>
             <div class="card-footer small text-muted"></div>
           </div>
         </div>
       </div>
     </div>
-    <% include ../partial/body %>
-</body>
+  </body>
 </html>

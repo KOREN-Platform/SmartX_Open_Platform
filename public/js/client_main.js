@@ -116,7 +116,7 @@ function readyToRun(){
 
             for(var i=0 ; i<result.applist.length ; i++){
             $('#select_APP').append(
-            '<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" name="APP_check" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td><td><button type="button" class="btn btn-dark" href="download/'+result.applist[i].appName.split('.')[0]+".zip"+'">download</button></td></tr><tr>'
+            '<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" name="APP_check" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td><td><button type="button" class="btn btn-dark"><a href="download/'+result.applist[i].appName.split('.')[0]+".zip"+'">download</a></button></td></tr><tr>'
             );
           }
           
@@ -327,7 +327,6 @@ function readyToRun(){
 
     
     $('#metaFile').change(function(e) {
-
         document.getElementById("metaFileName").innerHTML = metaFile.files[0].name
 
         const files = e.target.files;

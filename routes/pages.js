@@ -9,6 +9,6 @@ let isAuthenticated = function(req, res, next) {
 	res.redirect('/')
 }
 router.get('/',isAuthenticated, function(req,res) {
-	res.render('cluster',{user:req.user, title:"Cluster"})
+	res.render(req.query.name,{user:req.user, title: req.query.name})
 })
 module.exports = router;

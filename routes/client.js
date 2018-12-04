@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-
 // yarn 상태 데이터를 가져오는 기능 파일
 const YarnStateServices = require('../policies/YarnStateServices')
 const ClientControllerServices = require('../policies/ClientControllerServices')
@@ -32,21 +31,12 @@ router.post('/dataUpload',ClientControllerServices.dataUpload)
 router.post('/dataDelete',ClientControllerServices.dataDelete)
 //mongoDB에서 선택한 App에 대한 메타데이터를 받아온다.
 router.post('/makeParameterBlank',ClientControllerServices.makeParameterBlank)
-//spark log Data를 받아온다.
-router.post('/sparkLog', ClientControllerServices.sparkLog)
 // ClientControllerServices.delApp : spark 앱 삭제 및 데이터 삭제
 router.get('/delApp', ClientControllerServices.delApp)
 // ClientControllerServices.saveFile :spark app 파일 저장 , ClientControllerServices.saveInfo : spark parameter 저장
 router.post('/saveApp', ClientControllerServices.saveFile, ClientControllerServices.saveInfo);
 // ClientControllerServices.appData : spark 앱 데이터 가져옴
 router.get('/appData',ClientControllerServices.appData)
-
-// router.post('/resultSave', ResultSaveLoad.resultSave)
 router.post('/resultLoad', ResultSaveLoad.resultLoad)
 
-
-
-
-//router.post('/slacklist', Slack.CheckUser,Slack.sendToService)
-//router.get('/yarnAllState', YarnStateServices.AllYarnStates)
 module.exports = router;

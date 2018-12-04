@@ -18,21 +18,8 @@ const dbconfig = require('./config/database');
 const indexRouter = require('./routes/index');
 const clientRouter = require('./routes/client');
 const adminRouter = require('./routes/admin');
-
 //page 라우트 파일
-const clientmainRouter = require('./routes/client_main');
-const developermainRouter = require('./routes/developer_main');
-const appstatusRouter = require('./routes/app_status');
-const clusterRouter = require('./routes/cluster');
-const hdfsRouter = require('./routes/hdfs');
-const yarnRouter = require('./routes/yarn');
-const zooRouter = require('./routes/zoo');
-const historyRouter = require('./routes/history')
-const aboutRouter = require('./routes/about')
-
-//member 라우트 파일
-const loginRouter = require('./routes/login');
-const registerRouter = require('./routes/register');
+const pagesRouter = require('./routes/pages');
 
 //mongoDB 설정
 mongoose.set('useCreateIndex', true)
@@ -70,20 +57,8 @@ app.use('/', indexRouter);
 app.use('/admin', adminRouter)
 // /client hosting
 app.use('/client', clientRouter);
-
-//user pages hosting
-app.use('/client_main',clientmainRouter);
-app.use('/developer_main',developermainRouter);
-app.use('/app_status', appstatusRouter);
-app.use('/cluster', clusterRouter);
-app.use('/hdfs', hdfsRouter);
-app.use('/yarn', yarnRouter);
-app.use('/zoo', zooRouter);
-app.use('/history', historyRouter);
-app.use('/about', aboutRouter)
-//member ages hosting
-app.use('/login',loginRouter);
-app.use('/register',registerRouter);
+// pages
+app.use('/pages', pagesRouter)
 //spark 앱 저장
 app.use('/saveApp', adminRouter)
 //spark 앱 리스트
@@ -108,7 +83,7 @@ app.use('/yarnAllState', clientRouter)
 //yarn 상세 데이터
 app.use('/appState', clientRouter)
 //login router
-app.use('/service', indexRouter);
+//app.use('/service', indexRouter);
 app.use('/register', indexRouter)
 //로그인시 로그인 유무 판단
 app.use('/profile', indexRouter)

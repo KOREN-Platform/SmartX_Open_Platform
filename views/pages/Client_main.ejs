@@ -33,6 +33,7 @@
                     </thead>
                     <tbody id='select_APP'></tbody>
                   </table>
+                  <h2 id="role"><%= (user.role) %></h2>
                   <% if (user.role == 1) { %> <!-- user mode -->
                     <button type="button" class="btn btn-success" id='ready_button' onclick='readyToRun();' disabled><b>READY TO RUN</b></button>
                     <% } else if (user.role == 2) {%> <!-- developer mode -->

@@ -1,0 +1,10 @@
+{
+    "appName" : "wordcount.py",
+    "description" : "Apps that count the number of all characters",
+    "author" : {
+	"name" : "Kim",
+            "email" : "4qazwsx@naver.com"
+    },
+    "parameters" : [{}],
+   "version" : "0.0.1"
+}

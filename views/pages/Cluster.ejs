@@ -1,9 +1,10 @@
 <html lang="en">
-    <% include ../partial/head %>
+  <% include ../partial/head %>
   <body id="page-top">
-      <% include ../partial/toolbar %>
+    <% include ../partial/toolbar %>
+    <script type="text/javascript" src="js/logout.js" defer></script>
     <div id="wrapper">
-        <% include ../partial/sidebar %>
+      <% include ../partial/sidebar %>
       <div id="content-wrapper">
         <div class="container-fluid">
           <!-- Breadcrumbs-->
@@ -11,22 +12,19 @@
             <li class="breadcrumb-item">
               <a href="#">Spark</a>
             </li>
-            <li class="breadcrumb-item active">Hdfs</li>
+            <li class="breadcrumb-item active">Cluster</li>
           </ol>
           <!-- Icon Cards-->
           <div class="card mb-3">
             <div class="card-header">
-              <!--hdfs state-->
-              <i class="fas fa-table"></i>Hdfs Status</div>
+              <i class="fas fa-table"></i>Cluster Status</div>
             <div class="card-body">
+              <!--cluster state-->
               <div class="table-responsive" style="overflow-x:  hidden;">
                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
                   <div class="row">
                     <div class="col-sm-12">
-                      <div class="row">
-                        <iframe src="http://192.168.2.10:7180/cmf/services/14/status" style="width: 100%; height:  100%;"scrolling="auto" frameborder="0">
-                        </iframe>
-                      </div>
+                      <iframe src="http://192.168.2.10:7180/cmf/clusters/1/status" style="width:100%; height:100%;" scrolling="auto" frameborder="0" ></iframe>
                     </div>
                   </div>
                 </div>
@@ -37,20 +35,5 @@
         </div>
       </div>
     </div>
-    <% include ../partial/body %>
-<script>
-  $('#logoutBtn').click(function(){
-        $.ajax({
-				url: '/logout',
-				type: 'GET',
-				success:function(result) {
-          alert("success")
-          location.href = "/"
-				},	
-				error:function(error) {
-					console.log("error : " + error)	
-				}
-			  })
-      })
-</script>
-</body></html>
+  </body>
+</html>

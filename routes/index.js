@@ -8,8 +8,7 @@ const SparkPolicy = require('../policies/SparkPolicy')
 const ResultSendToServices = require('../policies/ResultSendToServices')
 /* GET home page. */
 router.get('/', function(req,res) {
-	//res.render('index')
-	res.render('intro', {title: "Big Data App Container Service"})
+	res.render('Intro', {title: "Big Data App Container Service"})
 })
 
 // authenticateServices.login : 로그인 처리,authenticateServices.loginResult : 로그인 결과값
@@ -42,7 +41,6 @@ router.get('/logout', function(req, res) {
 	req.session.destroy(function(err){
 		if(err){res.send({status:false, message: err})}
 		else{
-			//res.redirect('/')
 			res.send({status:true, message: "success logout"})
 		}
 	})

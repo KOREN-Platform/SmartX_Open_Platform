@@ -8,14 +8,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session')
 const passport = require('passport');
-const passportPolicy = require('./policies/AuthencationServices')
-const favicon = require('express-favicon')
-// const jsyaml = require('js-yaml');
-// const fs = require('fs')
-
-
-
-
+const passportPolicy = require('./policies/AuthencationServices');
+const favicon = require('express-favicon');
 
 //mongoDB 설정 파일
 const dbconfig = require('./config/database');
@@ -24,21 +18,8 @@ const dbconfig = require('./config/database');
 const indexRouter = require('./routes/index');
 const clientRouter = require('./routes/client');
 const adminRouter = require('./routes/admin');
-
 //page 라우트 파일
-const clientmainRouter = require('./routes/client_main');
-const developermainRouter = require('./routes/developer_main');
-const appstatusRouter = require('./routes/app_status');
-const clusterRouter = require('./routes/cluster');
-const hdfsRouter = require('./routes/hdfs');
-const yarnRouter = require('./routes/yarn');
-const zooRouter = require('./routes/zoo');
-const historyRouter = require('./routes/history')
-const aboutRouter = require('./routes/about')
-
-//member 라우트 파일
-const loginRouter = require('./routes/login');
-const registerRouter = require('./routes/register');
+const pagesRouter = require('./routes/pages');
 
 //mongoDB 설정
 mongoose.set('useCreateIndex', true)
@@ -70,36 +51,14 @@ app.use(passport.initialize())
 app.use(passport.session())
 passportPolicy.service()
 
-//swagger-ui routing
-app.use('/swagger-ui', express.static(path.join(__dirname, './node_modules/swagger-ui/dist')));
-
-app.use('/v1/swagger.json', function(req, res) {
-  res.json(require('./swagger.json'));
-});
-
-// default
 // /index hosting
 app.use('/', indexRouter);
 // /admin hosting
 app.use('/admin', adminRouter)
 // /client hosting
 app.use('/client', clientRouter);
-
-//user pages hosting
-app.use('/client_main',clientmainRouter);
-app.use('/developer_main',developermainRouter);
-app.use('/app_status', appstatusRouter);
-app.use('/cluster', clusterRouter);
-app.use('/hdfs', hdfsRouter);
-app.use('/yarn', yarnRouter);
-app.use('/zoo', zooRouter);
-app.use('/history', historyRouter);
-app.use('/about', aboutRouter)
-//member ages hosting
-app.use('/login',loginRouter);
-app.use('/register',registerRouter);
-
-//admin router
+// pages
+app.use('/pages', pagesRouter)
 //spark 앱 저장
 app.use('/saveApp', adminRouter)
 //spark 앱 리스트
@@ -108,7 +67,6 @@ app.use('/appList', adminRouter)
 app.use('/appData', adminRouter)
 //spark 앱 삭제
 app.use('/delApp',adminRouter)
-
 //HDFS에 Data 파일을 업로드
 app.use('/dataUpload', clientRouter)
 //HDFS에 업로드된 Data 파일 삭제
@@ -117,37 +75,27 @@ app.use('/dataDelete', clientRouter)
 app.use('/makeList', clientRouter)
 //App 선택시 해당 App에서 필요한 Parameter를 입력하는 빈칸을 생성
 app.use('/makeParamaterBlank', clientRouter)
-
 //result save and load
 app.use('/resultSave', clientRouter)
 app.use('/resultLoad', clientRouter)
-
 //yarn 전체 상태
 app.use('/yarnAllState', clientRouter)
 //yarn 상세 데이터
 app.use('/appState', clientRouter)
-
 //login router
-app.use('/service', indexRouter);
+//app.use('/service', indexRouter);
 app.use('/register', indexRouter)
 //로그인시 로그인 유무 판단
 app.use('/profile', indexRouter)
 //로그아웃
 app.use('/logout',indexRouter)
-
+//code stub download
 app.get('/download/:fileName',adminRouter)
+// api document
 app.get('/apiDoc/',adminRouter)
 
 //css&js&data
-app.use('/css', express.static(__dirname +'/node_modules/bootstrap/dist/css'));
-app.use('/js', express.static(__dirname +'/node_modules/bootstrap/dist/js'));
-app.use('/img', express.static(__dirname +'/node_modules/bootstrap/dist/img'));
-app.use('/fonts', express.static(__dirname +'/node_modules/bootstrap/dist/fonts'));
-app.use('/vendor', express.static(__dirname +'/node_modules/bootstrap/vendor'));
-app.use('/data', express.static(__dirname +'/node_modules/bootstrap/data'));
-app.use('/dist', express.static(__dirname +'/node_modules/bootstrap/dist'));
-app.use('/scss', express.static(__dirname +'/node_modules/bootstrap/scss'));
-
+app.use('/bootstrap', express.static(__dirname +'/node_modules/bootstrap'));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

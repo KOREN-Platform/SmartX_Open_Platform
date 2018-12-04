@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-
 // yarn 상태 데이터를 가져오는 기능 파일
 const YarnStateServices = require('../policies/YarnStateServices')
 const ClientControllerServices = require('../policies/ClientControllerServices')
@@ -38,13 +37,6 @@ router.get('/delApp', ClientControllerServices.delApp)
 router.post('/saveApp', ClientControllerServices.saveFile, ClientControllerServices.saveInfo);
 // ClientControllerServices.appData : spark 앱 데이터 가져옴
 router.get('/appData',ClientControllerServices.appData)
-
-// router.post('/resultSave', ResultSaveLoad.resultSave)
 router.post('/resultLoad', ResultSaveLoad.resultLoad)
 
-
-
-
-//router.post('/slacklist', Slack.CheckUser,Slack.sendToService)
-//router.get('/yarnAllState', YarnStateServices.AllYarnStates)
 module.exports = router;

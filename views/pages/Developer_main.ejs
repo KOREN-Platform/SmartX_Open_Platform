@@ -1,0 +1,69 @@
+<html lang="en">
+  <% include ../partial/head %>
+  <body id="page-top">
+    <% include ../partial/toolbar %>
+    <div id="wrapper">
+      <% include ../partial/sidebar %>
+      <div id="content-wrapper">
+        <div class="container-fluid">
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="#">Data</a>
+            </li>
+            <li class="breadcrumb-item active">List</li>
+          </ol>
+          <!-- Icon Cards-->
+          <div class="card mb-3">
+            <div class="card-body">
+              <!--working space-->
+              <h2><ion-icon name="document"></ion-icon> Data List</h2>
+              <p class="lead">You can check a list of data, <kbd>Upload</kbd> it, or <kbd>Delete</kbd> it.</p>
+              <table class="table table-hover"> <!-- .table thead th -->
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Data name</th>
+                    <th scope="col">File Size</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Uploader</th>
+                  </tr>
+                </thead>
+                <tbody id='select_data'>
+                </tbody>
+              </table>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">File : </span>
+            </div>
+            <div class="custom-file">
+              <form id='fileForm' method='post' enctype='multipart/form-data' action=''>
+                <input type="file" class="custom-file-input" id="fileInput" name="fileInput" accept=".txt, .log">
+                <label class="custom-file-label" id="dataFileName" for="fileInput">Choose a file</label>
+              </form>
+            </div>
+          </div>
+
+          <div class="alert alert-secondary" role="alert" id="data_description" style="display: none">
+              <h5 id="decription_title"><ion-icon name="create"></ion-icon>Data description</h5>
+            <hr class="my-2">
+            <div class="form-group">
+              <textarea class="form-control" id="description" rows="3" placeholder="please input description of upload data"></textarea>
+            </div>
+          </div>
+
+        <% if (user.role == 1) { %> <!-- user mode -->
+          <button type="button" class="sparkRun btn btn-success" id="data_upload" disabled><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
+        <button type="button" class="sparkRun btn btn-success" id="delete" disabled><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>
+          <% } else if (user.role == 2) {%> <!-- developer mode -->
+            <button type="button" class="sparkRun btn btn-info" id="data_upload" disabled><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
+            <button type="button" class="sparkRun btn btn-info" id="delete" disabled><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>
+          <% } else {%> <!-- manager mode -->
+            <button type="button" class="sparkRun btn btn-danger" id="data_upload" disabled><b><ion-icon name="save"></ion-icon> DATA FILE UPLOAD</b></button>
+        <button type="button" class="sparkRun btn btn-danger" id="delete" disabled><b><ion-icon name="close-circle"></ion-icon> DATA FILE DELETE</b></button>         
+          <% } %>
+      </div>
+    </div>
+  </body>
+</html>

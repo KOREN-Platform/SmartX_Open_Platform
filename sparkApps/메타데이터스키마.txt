@@ -1,0 +1,68 @@
+/*
+name : 파라미터이름
+description : 파라미터 설명
+"inputType" : {
+        "boxType" : String, //input 타입
+        "data" : Array,  //안에들어갈 데이터
+        "min" : Number,  //최솟값
+        "max" : Number,  //최댓값
+    },
+    "default" : String  //디폴트값
+
+var appSchema = new Schema({
+    "appName" : String,  //앱파일이름
+    "description" : String,  //앱 설명
+    "author" : {   //제작자 정보
+        "name" : String,    
+        "email" : {
+            type: String,
+            lowercase : true
+        }
+    },
+    "parameters" : [parameterSchema],  //위에 파라미터 배열로 받아요~
+    "version" : {  //버전
+        type : String, 
+        default: "0.0.1"
+    },
+    "type" : String,  //JSON타입
+    "issuedDate" : {  //생성된 시간
+        type : Date, 
+        default: Date.now
+    }
+})
+
+*/
+
+var parameterSchema = new Schema({
+    "name" : String,
+    "description" : String,
+    "inputType" : {
+        "boxType" : String,
+        "data" : Array,
+        "min" : Number,
+        "max" : Number,
+    },
+    "default" : String
+})
+
+var appSchema = new Schema({
+    "appName" : String,
+    "description" : String,
+    "author" : {
+        "name" : String,
+        "email" : {
+            type: String,
+            lowercase : true
+        }
+    },
+    "parameters" : [parameterSchema],
+    "version" : {
+        type : String, 
+        default: "0.0.1"
+    },
+    "type" : String,
+    "issuedDate" : {
+        type : Date, 
+        default: Date.now
+    }
+})

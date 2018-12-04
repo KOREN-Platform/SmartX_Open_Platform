@@ -19,62 +19,30 @@ module.exports = {
     makeList(req, res) {
 		let role = req.user.role
 
-		if(role == 2){
-			//developer
-			//condtion = {email :req.user.email}
-			Users.findOne({email : req.user.email}).populate('apps').exec(function(err, appList){
-				if (err) {res.send  ({err:err})}
-				if (appList) {
-					Data.find({},function(err, dataList){
-						if (err){
-							console.log('mongodb err')
-						}else{
-							//console.log(appList)
-							res.send({applist: appList.apps, datalist : dataList})
-						}
-					})
-				}
-			})
-		}else {
-			//user
-			//condtion = {}
-			App.find({}, function(err, appList){
-				if (err){
-					console.log('mongodb err')
-				}else{
-					Data.find({},function(err, dataList){
-						if (err){
-							console.log('mongodb err')
-						}else{
-							//console.log(appList)
-							res.send({applist: appList, datalist : dataList})
-						}
-					})
-				}
-			})
-		}
-
 		const appList = function(){
 			return new Promise(function(resolve, reject){
-				App.find({}, function(err, appList){
-					if(err){
-						reject("MongoDB AppList fine Failed")			
-					}else{
-						resolve(appList)
-					}
-				})
-			})
-		}
-		//developers can only use their own
-		const developersAppList = function(){
-			return new Promise(function(resolve, reject){
-				Users.findOne({email : req.user.email}).populate('apps').exec(function(err, appList){
-					if(err){
-						reject("MongoDB AppList find Failed")
-					}else{
-						resolve(appList)
-					}
-				})
+				//developers can only use their own
+				if(role == 2){//user == developer
+					Users.findOne({email : req.user.email}).populate('apps').exec(function(err, appList){
+						if(err){
+							console.log('reject')
+							reject("MongoDB AppList find Failed")
+						}else{
+							console.log('resolve')
+							console.log(appList)
+							resolve(appList.apps)
+						}
+					})
+				}else{
+					App.find({}, function(err, appList){
+						if(err){
+							reject("MongoDB AppList fine Failed")			
+						}else{
+							console.log(appList)
+							resolve(appList)
+						}
+					})
+				}		
 			})
 		}
 
@@ -90,19 +58,13 @@ module.exports = {
 			})
 		}
 
-		// if(role == 2){//user == developer
-		// 	developersAppList()
-		// 	.then(appList => dataList())
-		// 	.then(dataList =>{
-		// 		res.send({applist: appList, datalist : dataList})
-		// 	})
-		// }else{
-		// 	appList()
-		// 	.then(appList => dataList())
-		// 	.then(dataList =>{
-		// 		res.send({applist: appList, datalist : dataList})
-		// 	})
-		// }		
+		appList()
+		.then(appList => dataList()
+		.then(dataList => {
+			res.send({applist: appList, datalist : dataList})
+		})
+		)
+		
 	},
 	/**
 	 * @name dataUpload
@@ -123,62 +85,113 @@ module.exports = {
 			uploadDir: DummyPath,
 			//maxFilesSize: 1024 * 1024 * 5
 		})
-		form.parse(req, function(err, fields, files){
-			if (err){
-				console.log(err)
-			}else{
 
-				const jsonObj = JSON.stringify(fields.data)
-				console.log(fields.description[0])
-				console.log(fields.fileSize[0])
-				
-				const description = fields.description[0]
-				const fileSize = fields.fileSize[0]
+		const formParsing = function(){
+			return new Promise(function(resolve, reject){
+				form.parse(req, function(err, fields, files){
+					if(err){
+						reject("File Form Error")
+					}else{
+						const description = fields.description[0]
+						const fileSize = fields.fileSize[0]
+
+						let formData = new Array()
+
+						formData[0] = fields
+						formData[1] = files
+						resolve(formData)
+					}
+				})
+			})
+		}
+
+		const fileRename = function(formData){
+			return new Promise(function(resolve, reject){
+
+				const files = formData[1]
 
 				const path = files.fileInput[0].path
 				const originalName = files.fileInput[0].originalFilename
-				//HDFS에 올릴 파일을 임시로 생성하고 rename
+
 				fs.rename(path, DummyPath+originalName, function (err){
 					if(err){
-						console.log('error : dummy file rename failed')
+						reject("dummy file rename Failed")
 					}else{
-						//HDFS에 Data 파일을 업로드
-						exec('hdfs dfs -put '+DummyPath+originalName+' '+conf.DataFolder , function(err, stdout, stderr){
-							if(err){
-								console.log('error : can not upload to HDFS')
-								console.log(stdout)
-								console.log(stderr)
-							}else{
-								//임시 생성한 파일을 삭제
-								fs.unlink(DummyPath+originalName, function(err){
-									if(err){
-										console.log('error : can not remove dummyfile')
-									}else{
-										console.log('data file upload success')
-
-										data = new Data({
-											"Uploader" : email,
-											"dataName" : originalName,
-											"file_loca" : conf.DataFolder,
-											"description" : description,
-											"size" : fileSize
-										})
-										data.save(function(err, user) {
-											if(err){
-												console.log('error : db save error')
-												console.log(err)
-											}else{
-												res.send({status: true, result: user})
-											}
-										})
-									}
-								})
-							}
-						})
+						resolve(true)
 					}
 				})
-			}
+			})
+		}
+
+		const fileUnlink = function(formData){
+			return new Promise(function(resolve, reject){
+
+				const files = formData[1]
+				const originalName = files.fileInput[0].originalFilename
+
+				fs.unlink(DummyPath+originalName, function(err){
+					if(err){
+						reject("Can not remove dummyfile")
+					}else{
+						
+						console.log('data file upload success')
+						resolve(true)
+					}
+				})
+			})
+		}
+
+		const fileDataSave = function(formData){
+			return new Promise(function(resolve, reject){
+
+				const fields = formData[0]
+				const files = formData[1]
+				const originalName = files.fileInput[0].originalFilename
+				const description = fields.description[0]
+				const fileSize = fields.fileSize[0]
+
+				data = new Data({
+					"Uploader" : email,
+					"dataName" : originalName,
+					"file_loca" : conf.DataFolder,
+					"description" : description,
+					"size" : fileSize
+				})
+				data.save(function(err, user) {
+					if(err){
+						reject("DB save Error")
+					}else{
+						resolve(user)
+					}
+				})
+			})
+		}
+
+		const uploadHDFS = function(formData){
+			return new Promise(function(resolve, reject){
+
+				const files = formData[1]
+				const originalName = files.fileInput[0].originalFilename
+
+				exec('hdfs dfs -put '+DummyPath+originalName+' '+conf.DataFolder , function(err, stdout, stderr){
+					if(err){
+						reject("HDFS upload Failed")
+					}else{
+						resolve(true)
+					}
+				})
+			})
+		}
+
+		formParsing()
+		.then(formData => fileRename(formData)
+		.then(asd => uploadHDFS(formData))
+		.then(asd => fileUnlink(formData))
+		.then(asd => fileDataSave(formData))
+		.then(user => {
+			res.send({status: true, result: user})
 		})
+		)
 	},
 	/**
 	 * @name dataDelete

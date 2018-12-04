@@ -18,6 +18,7 @@ module.exports = {
 	 */
     makeList(req, res) {
 		let role = req.user.role
+
 		if(role == 2){
 			//developer
 			//condtion = {email :req.user.email}
@@ -52,8 +53,56 @@ module.exports = {
 				}
 			})
 		}
-		
-		
+
+		const appList = function(){
+			return new Promise(function(resolve, reject){
+				App.find({}, function(err, appList){
+					if(err){
+						reject("MongoDB AppList fine Failed")			
+					}else{
+						resolve(appList)
+					}
+				})
+			})
+		}
+		//developers can only use their own
+		const developersAppList = function(){
+			return new Promise(function(resolve, reject){
+				Users.findOne({email : req.user.email}).populate('apps').exec(function(err, appList){
+					if(err){
+						reject("MongoDB AppList find Failed")
+					}else{
+						resolve(appList)
+					}
+				})
+			})
+		}
+
+		const dataList = function(){
+			return new Promise(function(resolve, reject){
+				Data.find({},function(err, dataList){
+					if(err){
+						reject("MongoDB DataList find Failed")
+					}else{
+						resolve(dataList)
+					}
+				})
+			})
+		}
+
+		// if(role == 2){//user == developer
+		// 	developersAppList()
+		// 	.then(appList => dataList())
+		// 	.then(dataList =>{
+		// 		res.send({applist: appList, datalist : dataList})
+		// 	})
+		// }else{
+		// 	appList()
+		// 	.then(appList => dataList())
+		// 	.then(dataList =>{
+		// 		res.send({applist: appList, datalist : dataList})
+		// 	})
+		// }		
 	},
 	/**
 	 * @name dataUpload

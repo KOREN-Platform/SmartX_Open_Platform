@@ -1,0 +1,137 @@
+{
+"swagger": "2.0",
+"info": {
+"description": "Apps that count the number of specific characters",
+"version": "0.0.1",
+"title": "wordcount_search",
+"termsOfService": "http://swagger.io/terms/",
+"contact": {
+"email": "ghwlchlaks"
+},
+"license": {
+"name": "Apache-2.0",
+"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+}
+},
+"host": "zest2:3000",
+"basePath": "/api/v2",
+"tags": [
+{
+"name": "wordcount_search",
+"description": "Apps that count the number of specific characters",
+"externalDocs": {
+"description": "Find out more",
+"url": "http://192.168.2.12:3000"
+}
+}
+],
+"schemes": [
+"http"
+],
+"paths": {
+"/wordcount_search": {
+"post": {
+"tags": [
+"sparkApps"
+],
+"summary": "Apps that count the number of specific characters",
+"description": "Apps that count the number of specific characters",
+"operationId": "wordcount_search",
+"consumes": [
+"application/json",
+"application/xml"
+],
+"produces": [
+"application/xml",
+"application/json"
+],
+"parameters": [
+{
+"in": "body",
+"name": "body",
+"description": "Arguments for running the app",
+"required": true,
+"schema": {
+"$ref": "#/definitions/JSON"
+}
+}
+],
+"responses": {
+"200": {
+"description": "successful operation"
+},
+"400": {
+"description": "Invalid status value"
+},
+"404": {
+"description": "not found"
+},
+"500": {
+"description": "server error"
+}
+},
+"x-swagger-router-controller": "Spark"
+}
+}
+},
+"definitions": {
+"Spark": {
+"type": "object",
+"required": [
+"account",
+"file",
+"parameter",
+"app_name"
+],
+"properties": {
+"account": {
+"type": "string",
+"example": "ghwlchlaks@naver.com",
+"description": "issuer's account(email)"
+},
+"app_name": {
+"type": "string",
+"example": "wordcount_search.py",
+"description": "app name"
+},
+"file": {
+"type": "string",
+"example": "AtoZ.txt",
+"description": "target file name"
+},
+"callback_method": {
+"type": "string",
+"example": "email",
+"description": "callback target (email or slack)"
+},
+"callback_addr": {
+"type": "string",
+"example": "Your@email.com",
+"description": "callback address"
+},
+"--word": {
+"type": "string",
+"example": "A",
+"description": "Option to count the number of specific words (case sensitive)"
+}
+},
+"title": "A spark",
+"description": "running spark",
+"example": {
+"account": "ghwlchlaks@naver.com",
+"app_name": "wordcount_search.py",
+"file": "AtoZ.txt",
+"parameter": "--word A ",
+"callback_method": "email",
+"callback_addr": "Your@email.com"
+},
+"xml": {
+"name": "Spark"
+}
+}
+},
+"externalDocs": {
+"description": "Find out more about Swagger",
+"url": "http://swagger.io"
+}
+}

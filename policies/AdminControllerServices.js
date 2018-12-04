@@ -321,7 +321,7 @@ module.exports = {
 		});	
 	},
 	/**
-	 * @name appList
+	 * @name appData
 	 * @description spark 앱 데이터 가져오기
 	 * @method
 	 * @param {Object} req.query.id - 앱 아이디
@@ -348,6 +348,58 @@ module.exports = {
 		const id = req.query.id.split('.')[0]
 		let path = conf.AppFolder+id+'/'+id+'.py'
 		console.log('id='+id)
+
+		// const exists = function (){
+		// 	return new Promise(function(resolve, reject){
+		// 		fs.exists(path, function(Exists) {
+		// 			if(!Exists) {
+		// 				res.send({status: false, result: "not exists"})
+		// 			}else{
+		// 				resolve(true)
+		// 			}
+		// 		})
+		// 	})
+		// }
+
+		// const unlink = function (){
+		// 	return new Promise(function(resolve, reject){
+		// 		if(err) {
+		// 			res.send({status: false, result: "permission denied"})
+		// 		}else{
+		// 			resolve(true)
+		// 		}
+		// 	})
+		// }
+
+		// const rmdir = function (){
+		// 	return new Promise(function(resolve, reject){
+		// 		if(err) {
+		// 			res.send({status: false, result: "permission denied"})
+		// 		}
+		// 		else{
+		// 			resolve(true)
+		// 		}
+		// 	})
+		// }
+
+		// const removeDBData = function (){
+		// 	return new Promise(function(resolve, reject){
+		// 		App.findOneAndRemove({appName : id+'.py'}, function(err, app) {
+		// 			if(err){
+		// 				throw err
+		// 			}else{
+
+		// 			}
+		// 		})
+		// 	})
+		// }
+
+		// const exists = function (){
+		// 	return new Promise(function(resolve, reject){
+
+		// 	})
+		// }
+
 		fs.exists(path, function(appExists) {
 			if(!appExists) {res.send({status: false, result: "not exists"})}
 			else {
@@ -365,7 +417,6 @@ module.exports = {
 										fs.rmdir(path, function(err){
 											if(err) {res.send({status: false, result: "permission denied"})}
 											else{
-
 												App.findOneAndRemove({appName : id+'.py'}, function(err, app) {
 													if(err) throw err
 													if(app){

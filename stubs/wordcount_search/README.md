@@ -83,5 +83,5 @@ Class | Method | HTTP request | Description
 
 ## Author
 
-ghwlchlaks
+ghwlchlaks@naver.com
 

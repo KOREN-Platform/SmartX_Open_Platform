@@ -32,8 +32,6 @@ router.post('/dataUpload',ClientControllerServices.dataUpload)
 router.post('/dataDelete',ClientControllerServices.dataDelete)
 //mongoDB에서 선택한 App에 대한 메타데이터를 받아온다.
 router.post('/makeParameterBlank',ClientControllerServices.makeParameterBlank)
-//spark log Data를 받아온다.
-router.post('/sparkLog', ClientControllerServices.sparkLog)
 // ClientControllerServices.delApp : spark 앱 삭제 및 데이터 삭제
 router.get('/delApp', ClientControllerServices.delApp)
 // ClientControllerServices.saveFile :spark app 파일 저장 , ClientControllerServices.saveInfo : spark parameter 저장

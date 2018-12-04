@@ -90,7 +90,7 @@ module.exports = {
 			return new Promise(function(resolve, reject){
 				form.parse(req, function(err, fields, files){
 					if(err){
-						reject("File Form Error")
+						res.send({status: true, result: "File Form parsing Error"})
 					}else{
 						const description = fields.description[0]
 						const fileSize = fields.fileSize[0]
@@ -115,7 +115,7 @@ module.exports = {
 
 				fs.rename(path, DummyPath+originalName, function (err){
 					if(err){
-						reject("dummy file rename Failed")
+						res.send({status: true, result: "dummyfile rename Failed"})
 					}else{
 						resolve(true)
 					}
@@ -131,7 +131,7 @@ module.exports = {
 
 				fs.unlink(DummyPath+originalName, function(err){
 					if(err){
-						reject("Can not remove dummyfile")
+						res.send({status: true, result: "dummyfile remove Failed"})
 					}else{
 						
 						console.log('data file upload success')
@@ -159,7 +159,7 @@ module.exports = {
 				})
 				data.save(function(err, user) {
 					if(err){
-						reject("DB save Error")
+						res.send({status: true, result: "DB save Error"})
 					}else{
 						resolve(user)
 					}
@@ -175,7 +175,7 @@ module.exports = {
 
 				exec('hdfs dfs -put '+DummyPath+originalName+' '+conf.DataFolder , function(err, stdout, stderr){
 					if(err){
-						reject("HDFS upload Failed")
+						res.send({status: true, result: "HDFS upload Failed"})
 					}else{
 						resolve(true)
 					}
@@ -185,9 +185,9 @@ module.exports = {
 
 		formParsing()
 		.then(formData => fileRename(formData)
-		.then(asd => uploadHDFS(formData))
-		.then(asd => fileUnlink(formData))
-		.then(asd => fileDataSave(formData))
+		.then(result => uploadHDFS(formData))
+		.then(result => fileUnlink(formData))
+		.then(result => fileDataSave(formData))
 		.then(user => {
 			res.send({status: true, result: user})
 		})
@@ -208,7 +208,8 @@ module.exports = {
 			console.log('Remove DATA to HDFS')
 			Data.deleteOne({dataName : req.body.data},function(err, result) {
 				if(err){
-					console.log('error : db delete error')
+					console.log('DB delete Error')
+					res.send({status: false, result: "DB delete Error"})
 				}else{
 					res.send({status: true, result: result})
 				}
@@ -223,7 +224,7 @@ module.exports = {
 	 * @param {Object} res
 	 */
 	 makeParameterBlank(req, res){
-		const appname = req.body.appname//+'.py'
+		const appname = req.body.appname
 		App.findOne({appName : appname}, function(error, metadata){
 				if(error){
 					console.log(error)
@@ -257,11 +258,6 @@ module.exports = {
 
 					//데이터 넘기기
 					res.send({	
-						// appname : metadata.appName,
-			
-						// author : metadata.author,
-						// version : metadata.version,
-						// description : metadata.description,
 						nameList : nameList,
 						descriptionList : descriptionList,
 						defaultList : defaultList,
@@ -274,96 +270,72 @@ module.exports = {
 				}
 		})
 	},
-	/**
-	 * @name sparkLog
-	 * @description spark log data를 받아온다. log를 받아야할 파일이 없다면 만든다.
-	 * @method
-	 * @param {Object} req
-	 * @param {Object} res
-	 */
-	sparkLog(req, res){
-		//spark log가 저장되는 파일을 불러온다.
-		fs.readFile('/var/log/spark.log', 'utf-8', function(err, data){
-			//log4j 설정 내용
-			const addLog4j = "log4j.rootLogger=${root.logger}\nlog4j.appender.RollingAppender=org.apache.log4j.DailyRollingFileAppender\nlog4j.appender.RollingAppender.File=/var/log/spark.log\nlog4j.appender.RollingAppender.DatePattern='.'yyyy-MM-dd\nlog4j.appender.RollingAppender.layout=org.apache.log4j.PatternLayout\nlog4j.appender.RollingAppender.layout.ConversionPattern=[%p] %d %c %M - %m%n\n# By default, everything goes to console and file\nlog4j.rootLogger=INFO, RollingAppender\nroot.logger=INFO,console\nlog4j.appender.console=org.apache.log4j.ConsoleAppender\nlog4j.appender.console.target=System.err\nlog4j.appender.console.layout=org.apache.log4j.PatternLayout\nlog4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c{2}: %m%n\nshell.log.level=WARN\nlog4j.logger.org.eclipse.jetty=WARN\nlog4j.logger.org.spark-project.jetty=WARN\nlog4j.logger.org.spark-project.jetty.util.component.AbstractLifeCycle=ERROR\nlog4j.logger.org.apache.spark.repl.SparkIMain$exprTyper=INFO\nlog4j.logger.org.apache.spark.repl.SparkILoop$SparkILoopInterpreter=INFO\nlog4j.logger.org.apache.parquet=ERROR\nlog4j.logger.parquet=ERROR\nlog4j.logger.org.apache.hadoop.hive.metastore.RetryingHMSHandler=FATAL\nlog4j.logger.org.apache.hadoop.hive.ql.exec.FunctionRegistry=ERROR\nlog4j.logger.org.apache.spark.repl.Main=${shell.log.level}\nlog4j.logger.org.apache.spark.api.python.PythonGatewayServer=${shell.log.level}\nlog4j.logger.org.apache.spark.repl.Main=${shell.log.level}\nlog4j.logger.org.apache.spark.api.python.PythonGatewayServer=${shell.log.level}"
-
-			if(err){//spark.log 파일을 찾을 수 없을 경우 spark.log 파일을 만들고 log4j를 수정하여 spark.log에 log 데이터를 저장 하도록 설정한다.
-
-				//log4j 파일 수정(cloudera를 이용하여 설치 하였을 경우 한정)
-				fs.writeFile('/opt/cloudera/parcels/CDH/lib/spark/conf/log4j.properties',addLog4j,'utf-8',function(err){
-					if(err){
-						//console.log('first, install spark with Cloudera Manager')
-					} else {
-						//console.log('revise log4j')
-					}
-				})
-
-				//spark.log를 생성
-				fs.writeFile('/var/log/spark.log','make new log file','utf-8',function(err){
-					if(err){
-					} else {
-						//console.log('make new log file')
-					}
-				})
-			
-			} else {
-				let latelyLog = new Array()
-				latelyLog[0] = ''
-				//보여주는 log 줄 수 (모든 로그를 보여주면 양이 너무 많아서 매우 느려짐)
-				const visibleLog = 20
-
-				data = data.split('\n')
-
-				for(i = data.length-2 ; i > data.length-visibleLog ; i--){
-					for(j = visibleLog+2 ; j > -1 ; j--){
-						latelyLog[j] = latelyLog[j] + data[i] + '\n'
-					}
-				}
-				//latelyLog : 최근 log data
-				//allLog : 모든 log data
-				res.send({latelyLog : latelyLog, allLog : data})
-			}
-		})
-	},
 	delApp(req, res) {
 		const id = req.query.id.split('.')[0]
 		let path = conf.AppFolder+id+'/'+id+'.py'
 		console.log('id='+id)
-		fs.exists(path, function(appExists) {
-			if(!appExists) {res.send({status: false, result: "not exists"})}
-			else {
-				fs.unlink(path, function(err){
-					if(err) {res.send({status: false, result: "permission denied"})}
-					else {
-						 path = conf.AppFolder+id+'/'+id+".json"
-						 fs.exists(path, function(jsonExists){
-						 	if(!jsonExists) {res.send({status: false, result: "not exists"})}
-						 	else {
-						 		fs.unlink(path, function(err) {
-						 			if(err) {res.send({status: false, result: "permission denied"})}
-						 			else {
-										path = conf.AppFolder+id
-										fs.rmdir(path, function(err){
-											if(err) {res.send({status: false, result: "permission denied"})}
-											else{
-												App.deleteOne({appName : id+'.py'},function(err, result) {
-													if(err) {res.send({status: false, result:err})}
-													if(!result) {res.send({status: false, result: result})}
-													else {
-														res.send({status: true, result: result})
-													}
-												})													
-											}
-										})
-									 }
-								})
-							}
-						})
+
+		const exists = function(){
+			return new Promise(function(resolve, reject){
+				fs.exists(path, function(Exists) {
+					if(!Exists) {
+						res.send({status: false, result: "not exists"})
+					}else{
+						resolve(true)
 					}
-				}) 
-			}
+				})
+			})
+		}
+
+		const unlink = function(){
+			return new Promise(function(resolve, reject){
+				fs.unlink(path, function(err){
+					if(err) {
+						res.send({status: false, result: "permission denied"})
+					}else{
+						resolve(true)
+					}
+				})
+			})
+		}
+
+		const rmdir = function(){
+			return new Promise(function(resolve, reject){
+				fs.rmdir(path, function(err){
+					if(err) {
+						res.send({status: false, result: "permission denied"})
+					}else{
+						resolve(true)
+					}
+				})
+			})
+		}
+
+		const DBDataRemove = function(){
+			return new Promise(function(resolve, reject){
+				App.deleteOne({appName : id+'.py'},function(err, result) {
+					if(err) {res.send({status: false, result:err})}
+					if(!result) {res.send({status: false, result: result})}
+					else {
+						resolve(result)
+					}
+				})
+			})
+		}
+
+		exists()
+		.then(result => unlink())
+		.then(result => {
+			path = conf.AppFolder+id+'/'+id+".json"
+			exists()
 		})
-		
+		.then(result => unlink())
+		.then(result => rmdir())
+		.then(result => DBDataRemove())
+		.then(result => {
+			res.send({status: true, result: result})
+		})
+
 	},
 	/**
 	 * @name saveInfo
@@ -405,7 +377,6 @@ module.exports = {
 			}
 		})
 	},
-	
 	/**
 	 * @name saveFile
 	 * @description spark 앱 파일과 스키마 파일 저장
@@ -418,40 +389,65 @@ module.exports = {
 		const form = new multiparty.Form({
 			autoFiles: false,
 			uploadDir: conf.AppFolder,
-		});
+		});	
+
 		form.parse(req, function(error, fields, files){
 			let path = files.appFile[0].path
 			let originalName = files.appFile[0].originalFilename
 			let splitName = originalName.split('.')[0]
-			
-			App.findOne({"appName" : originalFilename}, function(err, data) {
-				if(err){
-					{res.send({status:false, result:err})}
-				} else{
-					if(data == null){
-						{res.send({status:false, result:'A file with the same name exists.'})}
-					} else{
-						fs.mkdir(conf.AppFolder+splitName, function(err){
-							if(err) {res.send({status: false, result: err})}
-							else {
-								fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err){
-									if(err) {res.send({status: false, result: err})}
-									else {
-										path = files.appFile[1].path
-										originalName = files.appFile[1].originalFilename
-										fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err) {
-											if(err) {res.send({status:false, result:err})}
-											else {
-												req.info = originalName
-												next()
-											}
-										})
-									}
-								})
+
+			const existCheckDB = function(){
+				return new Promise(function(resolve, reject){
+					App.findOne({"appName" : originalFilename}, function(err, data) {
+						if(err) {
+							{res.send({status:false, result:err})}
+						}
+						else {
+							if(data == null){
+								{res.send({status:false, result:'A file with the same name exists.'})}
+							}else{
+								resolve(true)
 							}
-						})
-					}
-				}
+						}
+					})
+				})
+			}
+
+			const mkdir = function(){
+				return new Promise(function(resolve, reject){
+					fs.mkdir(conf.AppFolder+splitName, function(err){
+						if(err) {
+							res.send({status: false, result: err})
+						}else{
+							resolve(true)
+						}
+					})
+				})
+			}
+
+			const rename = function(){
+				return new Promise(function(resolve, reject){
+					fs.rename(path, conf.AppFolder+splitName+'/'+originalName, function(err){
+						if(err){
+							res.send({status: false, result: err})
+						}else{
+							resolve(true)
+						}
+					})
+				})
+			}
+
+			existCheckDB()
+			.then(result => mkdir())
+			.then(result => rename())
+			.then(result => {
+				path = files.appFile[1].path
+				originalName = files.appFile[1].originalFilename
+				rename()
+			})
+			.then(result => {
+				req.info = originalName
+				next()
 			})
 		})
 	},

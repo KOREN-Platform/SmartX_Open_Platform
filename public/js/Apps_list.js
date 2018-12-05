@@ -186,7 +186,7 @@ function readyToRun(){
         }
       }
       })
-      location.replace("controller?name=App_status")
+      location.replace("controller?name=Apps_status")
     }
     }
   })

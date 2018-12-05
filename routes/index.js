@@ -11,14 +11,8 @@ router.get('/', function(req,res) {
 	res.render('Intro', {title: "Big Data App Container Service"})
 })
 
-// authenticateServices.login : 로그인 처리,authenticateServices.loginResult : 로그인 결과값
  router.post('/login', authenticateServices.login, authenticateServices.loginResult)
-// 회원가입
-/*
-isAuthenticated : 로그인유무
-SparkPolicy.sparkSubmit  : spark parameter 호출
-ResultSendToServices.sendToService : slack 또는 email로 콜백
-*/
+
 router.post('/api/v2/*', SparkPolicy.sparkSubmit , ResultSendToServices.sendToService)
 router.post('/register', authenticateServices.register)
 //로그인 유무 체크

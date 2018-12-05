@@ -1,7 +1,7 @@
 //ready to run button event
 function readyToRun(){
   $.ajax({
-    url: '/apiDoc',
+    url: '/controller/apiDoc',
     type: 'GET',
     data: {"appName": $('input:checkbox[id=APP_check]:checked').val()},
     success:function(result) {
@@ -44,19 +44,6 @@ function readyToRun(){
       makeParaBlank()
     }
   }    
-  $('#logoutBtn').click(function(){
-    $.ajax({
-      url: '/logout',
-      type: 'GET',
-      success:function(result) {
-        alert("success")
-        location.href = "/"
-      },	
-      error:function(error) {
-          console.log("error : " + error)	
-      }
-    })
-  })
   $('.API_description').click(function(){
   if($('.collapse').hasClass('show')){
     $('.collapse').removeClass('show')
@@ -66,7 +53,7 @@ function readyToRun(){
   })
   function makeParaBlank(){
   $.ajax({
-    url: '/client/makeParameterBlank',
+    url: '/controller/makeParameterBlank',
     method: 'post',
     data: {'appname' : $('input:checkbox[id=APP_check]:checked').val()},
     dataType: 'json',
@@ -97,14 +84,14 @@ function readyToRun(){
 
   function listRef() {
   $.ajax({
-    url: '/client/makeList',
+    url: '/controller/makeList',
     method: 'post',
     success: function(result) {
     if(result){
       $('#select_APP').empty();
       $('#select_data').empty();
         for(let i=0 ; i<result.applist.length ; i++){
-        $('#select_APP').append('<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" name="APP_check" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td><td><button type="button" class="btn btn-dark"><a href="download/'+result.applist[i].appName.split('.')[0]+".zip"+'">download</a></button></td></tr><tr>');
+        $('#select_APP').append('<tr id="'+result.applist[i].appName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" name="APP_check" id="APP_check" value="'+result.applist[i].appName+'"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.applist[i].appName+'</td><td>'+result.applist[i].version+'</td><td>'+result.applist[i].description+'</td><td>'+result.applist[i].author.name+'</td><td>'+result.applist[i].author.email+'</td><td><button type="button" class="btn btn-dark"><a href="/controller/download/'+result.applist[i].appName.split('.')[0]+".zip"+'">download</a></button></td></tr><tr>');
         }
         for(let i=0 ; i<result.datalist.length ; i++){
         $('#select_data').append('<tr id="'+result.datalist[i].dataName+'"><th scope="row"><div class="checkbox"><label style="font-size: 1em"><input type="checkbox" value="'+result.datalist[i].dataName+'" id="data_check"><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div></th><td>'+result.datalist[i].dataName+'</td><td>'+result.datalist[i].size+'</td><td>'+result.datalist[i].description+'</td><td>'+result.datalist[i].Uploader+'</td></tr></tr>');
@@ -199,7 +186,7 @@ function readyToRun(){
         }
       }
       })
-      location.replace("pages?name=App_status")
+      location.replace("controller?name=Apps_status")
     }
     }
   })
@@ -218,7 +205,7 @@ function readyToRun(){
       for(let i = 0 ; i < $('input:checkbox[id=APP_check]:checked').length ; i++){
         let selectedApp = $('input:checkbox[id=APP_check]:checked')[i].value
         $.ajax({
-          url: "/admin/delApp",
+          url: "/controller/delApp",
           dataType: "json",
           method: "get",
           data : {"id" : selectedApp},
@@ -250,7 +237,7 @@ function readyToRun(){
       formData.append("metaFile",$('#metaFile'))
       //save : app(.py..) + parameterFile(.json..) in mongodb 
       $.ajax({
-          url: '/admin/saveApp',
+          url: '/controller/saveApp',
           data: formData,
           method: 'POST',
           processData: false,

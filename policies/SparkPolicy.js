@@ -1,7 +1,7 @@
-const exec = require('child_process').exec;
-const conf = require('../config/config.json')
-const Results = require('../models/resultSchema').Results
-const fs = require('fs')
+const exec = require("child_process").exec
+const conf = require("../config/config.json")
+const Results = require("../models/resultSchema").Results
+const fs = require("fs")
 let count = 0
 
 module.exports = {
@@ -22,14 +22,14 @@ module.exports = {
 			account = req.user.email
 		}
 
-		const submit = 'spark-submit '+'--name '+account+' '+conf.AppFolder+req.body.app_name.split('.')[0]+'/'+req.body.app_name+' --file='+req.body.file + ' ' +  req.body.parameter
+		const submit = "spark-submit "+"--name "+account+" "+conf.AppFolder+req.body.app_name.split(".")[0]+"/"+req.body.app_name+" --file="+req.body.file + " " +  req.body.parameter
 		count+=1
 
 		const sparkSubmit = function (){
 			return new Promise(function(resolve, reject){
 				exec(submit, function (err, stdout, stderr) {
 					if(err !== null) {
-						console.log('exec error :' + err)
+						console.log("exec error :" + err)
 						res.send({status: false, result:"error"})
 					} else{
 						resolve(stdout)
@@ -43,7 +43,7 @@ module.exports = {
 				console.log("count "+ count)
 				req.body.stdout = stdout
 				let file = account+count+".txt"
-				fs.writeFile(file, stdout, 'utf8', function(err){
+				fs.writeFile(file, stdout, "utf8", function(err){
 					if (err) {throw err}
 					else{
 						resolve(file)
@@ -54,7 +54,7 @@ module.exports = {
 
 		const resultFileUploadToHDFS = function (file){
 			return new Promise(function(resolve, reject){
-				exec('hdfs dfs -put '+file+' /result', function(err, stdout, stderr){
+				exec("hdfs dfs -put "+file+" /result", function(err, stdout, stderr){
 					if (err){
 						console.log(err)
 						throw err
@@ -98,13 +98,13 @@ module.exports = {
 		}
 
 		sparkSubmit()
-		.then(stdout => makeResultFile(stdout))
-		.then(file => resultFileUploadToHDFS(file))
-		.then(file => deleteResultFile(file))
-		.then(file => resultDataSaveToDB(file))
-		.then(result => {
-			next()
-		})
+			.then(stdout => makeResultFile(stdout))
+			.then(file => resultFileUploadToHDFS(file))
+			.then(file => deleteResultFile(file))
+			.then(file => resultDataSaveToDB(file))
+			.then(result => {
+				next()
+			})
 	},
 	startCount(){
 		Results.find({}, function(err, results){

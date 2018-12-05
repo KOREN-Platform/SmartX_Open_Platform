@@ -1,34 +1,34 @@
-const exec = require('child_process').exec;
-const fs = require('fs')
-const multiparty = require('multiparty');
-const conf = require('../config/config.json')
+const exec = require("child_process").exec
+const fs = require("fs")
+const multiparty = require("multiparty")
+const conf = require("../config/config.json")
 
 //mongodb model
-const App = require('../models/appSchema').App
-const Users = require('../models/users').Users
-const Data = require('../models/dataSchema').Datas
+const App = require("../models/appSchema").App
+const Users = require("../models/users").Users
+const Data = require("../models/dataSchema").Datas
 
 module.exports = {
-    /**
+	/**
 	 * @name makeList
 	 * @description makeList : HDFS에 접근하여 HDFS Data에 업로드된 Data의 리스트와 app폴더에 있는 App의 리스트를 가져온다.
 	 * @method
 	 * @param {Object} req
 	 * @param {Object} res
 	 */
-    makeList(req, res) {
+	makeList(req, res) {
 		let role = req.user.role
 
 		const appList = function(){
 			return new Promise(function(resolve, reject){
 				//developers can only use their own
 				if(role == 2){//user == developer
-					Users.findOne({email : req.user.email}).populate('apps').exec(function(err, appList){
+					Users.findOne({email : req.user.email}).populate("apps").exec(function(err, appList){
 						if(err){
-							console.log('reject')
+							console.log("reject")
 							reject("MongoDB AppList find Failed")
 						}else{
-							console.log('resolve')
+							console.log("resolve")
 							console.log(appList)
 							resolve(appList.apps)
 						}
@@ -59,11 +59,11 @@ module.exports = {
 		}
 
 		appList()
-		.then(appList => dataList()
-		.then(dataList => {
-			res.send({applist: appList, datalist : dataList})
-		})
-		)	
+			.then(appList => dataList()
+				.then(dataList => {
+					res.send({applist: appList, datalist : dataList})
+				})
+			)	
 	},
 	/**
 	 * @name dataUpload
@@ -78,7 +78,7 @@ module.exports = {
 		const email = req.user.email
 
 		const form = new multiparty.Form({
-			fileNames: 'Dummy.txt',
+			fileNames: "Dummy.txt",
 			autoFiles: false,
 			uploadDir: DummyPath,
 			//maxFilesSize: 1024 * 1024 * 5
@@ -90,9 +90,6 @@ module.exports = {
 					if(err){
 						res.send({status: true, result: "File Form parsing Error"})
 					}else{
-						const description = fields.description[0]
-						const fileSize = fields.fileSize[0]
-
 						let formData = new Array()
 
 						formData[0] = fields
@@ -132,7 +129,7 @@ module.exports = {
 						res.send({status: true, result: "dummyfile remove Failed"})
 					}else{
 						
-						console.log('data file upload success')
+						console.log("data file upload success")
 						resolve(true)
 					}
 				})
@@ -148,7 +145,7 @@ module.exports = {
 				const description = fields.description[0]
 				const fileSize = fields.fileSize[0]
 
-				data = new Data({
+				let data = new Data({
 					"Uploader" : email,
 					"dataName" : originalName,
 					"file_loca" : conf.DataFolder,
@@ -171,7 +168,7 @@ module.exports = {
 				const files = formData[1]
 				const originalName = files.fileInput[0].originalFilename
 
-				exec('hdfs dfs -put '+DummyPath+originalName+' '+conf.DataFolder , function(err, stdout, stderr){
+				exec("hdfs dfs -put "+DummyPath+originalName+" "+conf.DataFolder , function(err, stdout, stderr){
 					if(err){
 						res.send({status: true, result: "HDFS upload Failed"})
 					}else{
@@ -182,14 +179,14 @@ module.exports = {
 		}
 
 		formParsing()
-		.then(formData => fileRename(formData)
-		.then(result => uploadHDFS(formData))
-		.then(result => fileUnlink(formData))
-		.then(result => fileDataSave(formData))
-		.then(user => {
-			res.send({status: true, result: user})
-		})
-		)
+			.then(formData => fileRename(formData)
+				.then(result => uploadHDFS(formData))
+				.then(result => fileUnlink(formData))
+				.then(result => fileDataSave(formData))
+				.then(user => {
+					res.send({status: true, result: user})
+				})
+			)
 	},
 	/**
 	 * @name dataDelete
@@ -200,16 +197,16 @@ module.exports = {
 	 */
 	dataDelete(req, res){
 		//Remove DATA to HDFS
-		exec('hdfs dfs -rm ' + conf.DataFolder +'/'+ req.body.data , function(err, stdout, stderr){
-			console.log('Remove DATA to HDFS')
+		exec("hdfs dfs -rm " + conf.DataFolder +"/"+ req.body.data , function(err, stdout, stderr){
+			console.log("Remove DATA to HDFS")
 			Data.deleteOne({dataName : req.body.data},function(err, result) {
 				if(err){
-					console.log('DB delete Error')
+					console.log("DB delete Error")
 					res.send({status: false, result: "DB delete Error"})
 				}else{
 					res.send({status: true, result: result})
 				}
 			})
 		})
-    }
+	}
 }

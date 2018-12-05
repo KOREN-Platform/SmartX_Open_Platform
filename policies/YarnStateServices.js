@@ -1,7 +1,7 @@
-const exec = require('child_process').exec;
+const exec = require("child_process").exec
 
 //mongodb model
-const Result = require('../models/resultSchema').Results
+const Result = require("../models/resultSchema").Results
 
 module.exports = {
 	/**
@@ -12,18 +12,18 @@ module.exports = {
 	 * @param {Object} res
 	 * @return {JSON}
 	 */
-    AllYarnStates(req, res) {
-		const exec_command = 'curl --compressed -H "Accept:application/json"  POST  "http://zest2:8088/ws/v1/cluster/apps"'
+	AllYarnStates(req, res) {
+		const exec_command = "curl --compressed -H \"Accept:application/json\"  POST  \"http://zest2:8088/ws/v1/cluster/apps\""
 		
-		child = exec(exec_command, function(error, stdout, stderr){
+		exec(exec_command, function(error, stdout, stderr){
 			if(error !== null) {
-				console.log('exec error :' + error)
+				console.log("exec error :" + error)
 				res.send({status: false, result:"error"})
 			}
-			const data = JSON.parse(stdout).apps.app;
+			const data = JSON.parse(stdout).apps.app
 			console.log(data)
 			data.sort(function(a,b){
-				return a.startedTime > b.startedTime ? -1 : a.startedTime < b.startedTime ? 1 : 0;
+				return a.startedTime > b.startedTime ? -1 : a.startedTime < b.startedTime ? 1 : 0
 			})
 			res.send({status:true, result:data})			
 		})
@@ -37,15 +37,15 @@ module.exports = {
 	 */
 	appState(req, res) {
 		const application_id =req.query.id
-		const exec_command = 'curl --compressed -H "Accept:application/json"  POST  "http://zest2:8088/ws/v1/cluster/apps/"'+application_id
-		 child = exec(exec_command, function(error, stdout, stderr){
-                        if(error !== null) {
-                                console.log('exec error :' + error)
-                                res.send({status: false, result:"error"})
-                        }
-                        const data = JSON.parse(stdout).app;
-                        res.send({status:true, result:data})
-                })
+		const exec_command = "curl --compressed -H \"Accept:application/json\"  POST  \"http://zest2:8088/ws/v1/cluster/apps/\""+application_id
+		exec(exec_command, function(error, stdout, stderr){
+			if(error !== null) {
+				console.log("exec error :" + error)
+				res.send({status: false, result:"error"})
+			}
+			const data = JSON.parse(stdout).app
+			res.send({status:true, result:data})
+		})
 	},
 	/**
 	 * @name clientAllYarnStates
@@ -56,15 +56,15 @@ module.exports = {
 	 * @return {JSON}
 	 */
 	clientAllYarnStates(req, res) {
-		const email = req.user.email;
-		const exec_command = `curl --compressed -H "Accept:application/json" POST  "http://zest2:8088/ws/v1/cluster/apps"`
+		const email = req.user.email
+		const exec_command = "curl --compressed -H \"Accept:application/json\" POST  \"http://zest2:8088/ws/v1/cluster/apps\""
 
-		child = exec(exec_command, function(error, stdout, stderr){
+		exec(exec_command, function(error, stdout, stderr){
 			if(error !== null) {
-				console.log('exec error :' + error)
+				console.log("exec error :" + error)
 				res.send({status: false, result:"error"})
 			}
-			const data = JSON.parse(stdout).apps.app;
+			const data = JSON.parse(stdout).apps.app
 			let clientData = []
 			if (req.user.role == 3){
 				clientData = data
@@ -78,7 +78,7 @@ module.exports = {
 			}
 			//console.log(clientData)
 			clientData.sort(function(a,b){
-				return a.startedTime > b.startedTime ? -1 : a.startedTime < b.startedTime ? 1 : 0;
+				return a.startedTime > b.startedTime ? -1 : a.startedTime < b.startedTime ? 1 : 0
 			})
 			res.send({status:true, result:clientData})			
 		})
@@ -93,7 +93,7 @@ module.exports = {
 	resultLoad(req, res){
 		
 		//clicked application's id
-		app_id = req.body.app_id
+		let app_id = req.body.app_id
 
 		//find result file's data to db
 		const findDataToMongo = function (){
@@ -110,7 +110,7 @@ module.exports = {
 		//Loading data from hdfs
 		const loadToHDFS = function(data){
 			return new Promise(function(resolve, reject){
-				exec('curl -L "http://192.168.2.12:9870/webhdfs/v1//'+data.path+'?op=OPEN"', function(err, stdout, stderr){
+				exec("curl -L \"http://192.168.2.12:9870/webhdfs/v1//"+data.path+"?op=OPEN\"", function(err, stdout, stderr){
 					if(!err){
 						resolve(stdout)
 					}else{
@@ -121,13 +121,13 @@ module.exports = {
 		}
 
 		findDataToMongo()
-		.then(result => loadToHDFS(result))
-		.then(result2 => {
-			res.send({status: true, result: result2})
-		})
-		.catch(function (err){
-			console.log(err)
-		})
+			.then(result => loadToHDFS(result))
+			.then(result2 => {
+				res.send({status: true, result: result2})
+			})
+			.catch(function (err){
+				console.log(err)
+			})
 
 	}
 }

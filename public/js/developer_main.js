@@ -5,7 +5,7 @@ $(document).ready(function(){
 //list refresh function
 function listRef() {
   $.ajax({
-    url: '/client/makeList',
+    url: '/controller/makeList',
     method: 'post',
     success: function(result) {
     if(result){
@@ -55,7 +55,7 @@ if($('#fileInput').val() == ""){
 }else{
   if(check){
     $.ajax({
-      url:'/client/dataUpload',
+      url:'/controller/dataUpload',
       processData: false,
       contentType: false,
       data : formData,
@@ -80,9 +80,10 @@ if(check){
   if ($('input:checkbox[id=data_check]').is(':checked') == false){
     alert('please select data file')
   }else{
-    for(let i = 0 ; $('input:checkbox[id=data_check]:checked').length > 0 ; i++){
+    let len = $('input:checkbox[id=data_check]:checked').length
+    for(let i = 0 ; i <len; i++){
       $.ajax({
-        url: '/client/dataDelete',
+        url: '/controller/dataDelete',
         method: 'post',
         data: {
           'data' : $('input:checkbox[id=data_check]:checked')[i].value

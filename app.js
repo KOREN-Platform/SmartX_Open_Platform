@@ -14,12 +14,10 @@ const favicon = require('express-favicon');
 //mongoDB 설정 파일
 const dbconfig = require('./config/database');
 
-//index, admin , client 라우트 파일
-const indexRouter = require('./routes/index');
-const clientRouter = require('./routes/client');
-const adminRouter = require('./routes/admin');
-//page 라우트 파일
-const pagesRouter = require('./routes/pages');
+//auth, controllers , api 라우트 파일
+const authRouter = require('./routes/auth');
+const controllerRouter = require('./routes/controllers');
+const apiRouter = require('./routes/api');
 
 //mongoDB 설정
 mongoose.set('useCreateIndex', true)
@@ -37,6 +35,8 @@ const app = express();
 app.set('views', path.join(__dirname, 'views/pages/'));
 app.set('view engine', 'ejs');
 
+//css&js&data
+app.use('/bootstrap', express.static(__dirname +'/node_modules/bootstrap'));
 app.use(favicon(path.join(__dirname,'public','images','favicon.ico')))
 app.use(cors());
 app.use(logger('dev'));
@@ -49,53 +49,70 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({secret: "abc", resave:true, saveUninitialized: false}));
 app.use(passport.initialize())
 app.use(passport.session())
+
+//db count
 passportPolicy.service()
 
-// /index hosting
-app.use('/', indexRouter);
-// /admin hosting
-app.use('/admin', adminRouter)
-// /client hosting
-app.use('/client', clientRouter);
-// pages
-app.use('/pages', pagesRouter)
-//spark 앱 저장
-app.use('/saveApp', adminRouter)
-//spark 앱 리스트
-app.use('/appList', adminRouter)
-//spark 앱 상세 데이터
-app.use('/appData', adminRouter)
-//spark 앱 삭제
-app.use('/delApp',adminRouter)
-//HDFS에 Data 파일을 업로드
-app.use('/dataUpload', clientRouter)
-//HDFS에 업로드된 Data 파일 삭제
-app.use('/dataDelete', clientRouter)
-//HDFS에 업로드된 Data 파일 List를 받는다.
-app.use('/makeList', clientRouter)
-//App 선택시 해당 App에서 필요한 Parameter를 입력하는 빈칸을 생성
-app.use('/makeParamaterBlank', clientRouter)
-//result save and load
-app.use('/resultSave', clientRouter)
-app.use('/resultLoad', clientRouter)
-//yarn 전체 상태
-app.use('/yarnAllState', clientRouter)
-//yarn 상세 데이터
-app.use('/appState', clientRouter)
-//login router
-//app.use('/service', indexRouter);
-app.use('/register', indexRouter)
-//로그인시 로그인 유무 판단
-app.use('/profile', indexRouter)
-//로그아웃
-app.use('/logout',indexRouter)
-//code stub download
-app.get('/download/:fileName',adminRouter)
-// api document
-app.get('/apiDoc/',adminRouter)
 
-//css&js&data
-app.use('/bootstrap', express.static(__dirname +'/node_modules/bootstrap'));
+
+/*
+/auth routing
+*/
+app.use('/', authRouter)
+//login
+app.use('/login', authRouter)
+//register
+app.use('/register', authRouter)
+//logout
+app.use('/logout',authRouter)
+
+
+
+
+
+/* 
+/controller routing
+*/
+app.use('/controller', controllerRouter);
+//spark 앱 저장
+app.use('/saveApp', controllerRouter)
+//spark 앱 리스트
+app.use('/appList', controllerRouter)
+//spark 앱 상세 데이터
+app.use('/appData', controllerRouter)
+//spark 앱 삭제
+app.use('/delApp',controllerRouter)
+//App 선택시 해당 App에서 필요한 Parameter를 입력하는 빈칸을 생성
+app.use('/makeParamaterBlank', controllerRouter)
+//result save and load
+app.use('/resultSave', controllerRouter)
+//code stub download
+app.get('/download/:fileName',controllerRouter)
+// api document
+app.get('/apiDoc/',controllerRouter)
+
+app.use('/resultLoad', controllerRouter)
+//yarn 전체 상태
+app.use('/yarnAllState', controllerRouter)
+//yarn 상세 데이터
+app.use('/appState', controllerRouter)
+
+//HDFS에 Data 파일을 업로드
+app.use('/dataUpload', controllerRouter)
+//HDFS에 업로드된 Data 파일 삭제
+app.use('/dataDelete', controllerRouter)
+//HDFS에 업로드된 Data 파일 List를 받는다.
+app.use('/makeList', controllerRouter)
+
+
+
+/* 
+/api routing
+*/
+app.use('/api',apiRouter)
+
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

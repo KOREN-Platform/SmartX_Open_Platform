@@ -11,7 +11,7 @@ $(document).ready(function() {
   $('.stateList').change(function() {
     let application_id = $(this).val()
     $.ajax({
-      url: '/client/appState',
+      url: '/controller/appState',
       dataType: 'json',
       type: 'GET',
       data: {"id":application_id},
@@ -38,7 +38,7 @@ let beforeRunningLen = null
 let beforeFinishedLen = null
 function allRefreshState() {
   $.ajax({
-  url:'/client/clientYarnAll',
+  url:'/controller/clientYarnAll',
   method:'get',
   success: function(result){
     let stateLen = result.result.length;
@@ -121,7 +121,7 @@ function allRefreshState() {
         let app_id = table2.row(this).data()[0].split('_')[1]
         app_id *= 1
         $.ajax({
-          url: '/client/resultLoad',
+          url: '/controller/resultLoad',
           method: 'post',
           data: {
             'app_id' : app_id

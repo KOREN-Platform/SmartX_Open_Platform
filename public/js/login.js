@@ -13,7 +13,7 @@ $('#loginBtn').click(function(){
           alert('welcome admin!')
         }
         else {alert('welcome!')}
-        location.href = '/pages?name=Client_main'
+        location.href = '/controller?name=Client_main'
         },
       error : function (error) {
         alert("not exists")

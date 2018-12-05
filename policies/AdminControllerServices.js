@@ -349,118 +349,156 @@ module.exports = {
 		let path = conf.AppFolder+id+'/'+id+'.py'
 		console.log('id='+id)
 
-		// const exists = function (){
-		// 	return new Promise(function(resolve, reject){
-		// 		fs.exists(path, function(Exists) {
-		// 			if(!Exists) {
-		// 				res.send({status: false, result: "not exists"})
-		// 			}else{
-		// 				resolve(true)
-		// 			}
-		// 		})
-		// 	})
-		// }
-
-		// const unlink = function (){
-		// 	return new Promise(function(resolve, reject){
-		// 		if(err) {
-		// 			res.send({status: false, result: "permission denied"})
-		// 		}else{
-		// 			resolve(true)
-		// 		}
-		// 	})
-		// }
-
-		// const rmdir = function (){
-		// 	return new Promise(function(resolve, reject){
-		// 		if(err) {
-		// 			res.send({status: false, result: "permission denied"})
-		// 		}
-		// 		else{
-		// 			resolve(true)
-		// 		}
-		// 	})
-		// }
-
-		// const removeDBData = function (){
-		// 	return new Promise(function(resolve, reject){
-		// 		App.findOneAndRemove({appName : id+'.py'}, function(err, app) {
-		// 			if(err){
-		// 				throw err
-		// 			}else{
-
-		// 			}
-		// 		})
-		// 	})
-		// }
-
-		// const exists = function (){
-		// 	return new Promise(function(resolve, reject){
-
-		// 	})
-		// }
-
-		fs.exists(path, function(appExists) {
-			if(!appExists) {res.send({status: false, result: "not exists"})}
-			else {
-				fs.unlink(path, function(err){
-					if(err) {res.send({status: false, result: "permission denied"})}
-					else {
-						 path = conf.AppFolder+id+'/'+id+".json"
-						 fs.exists(path, function(jsonExists){
-						 	if(!jsonExists) {res.send({status: false, result: "not exists"})}
-						 	else {
-						 		fs.unlink(path, function(err) {
-						 			if(err) {res.send({status: false, result: "permission denied"})}
-						 			else {
-										path = conf.AppFolder+id
-										fs.rmdir(path, function(err){
-											if(err) {res.send({status: false, result: "permission denied"})}
-											else{
-												App.findOneAndRemove({appName : id+'.py'}, function(err, app) {
-													if(err) throw err
-													if(app){
-														console.log("findOneAndRemove"+ app)
-														Users.update(
-															{"apps" : app._id},
-															{"$pull" : {"apps" : app._id}},
-															function(err, result){
-																if(err) throw err
-																if (result){
-																	exec('rm -r '+conf.SwaggerFolder+id, function(err, stdout, stderr){
-																		if(err){
-																			res.send({status: false, result: 'rmdir err'})
-																		} else {
-																			fs.unlink(conf.SwaggerFolder+id+'.zip',function(err){
-																				if(err){
-																					res.send({status: false, result: 'unlink err'})
-																				}else{
-																					fs.unlink(conf.SwaggerFolder+id+'.json',function(err){
-																						if(err){
-																							res.send({status: false, result: 'unlink err'})
-																						} else{
-																							res.send({status: true, result: result})
-																						}
-																					})
-																				}
-																			})
-																		}
-																	})
-																}
-															}
-														)
-													}
-												})				
-											}
-										})
-									 }
-								})
-							}
-						})
+		const exists = function (){
+			return new Promise(function(resolve, reject){
+				fs.exists(path, function(Exists) {
+					if(!Exists) {
+						res.send({status: false, result: "not exists"})
+					}else{
+						resolve(true)
 					}
-				}) 
-			}
+				})
+			})
+		}
+
+		const unlink = function (){
+			return new Promise(function(resolve, reject){
+				fs.unlink(path, function(err) {
+					if(err) {
+						res.send({status: false, result: "unlink Failed"})
+					}else{
+						resolve(true)
+					}
+				})
+			})
+		}
+
+		const rmdir = function (){
+			return new Promise(function(resolve, reject){
+				fs.rmdir(path, function(err){
+					if(err) {
+						res.send({status: false, result: "permission denied"})
+					}else{
+						resolve(true)
+					}
+				})
+			})
+		}
+
+		const removeDBData = function (){
+			return new Promise(function(resolve, reject){
+				App.findOneAndRemove({appName : id+'.py'}, function(err, app) {
+					if(err){
+						res.send({status: false, result: "remove MongoDB's data Failed"})
+					}else{
+						console.log("findOneAndRemove"+ app)
+						Users.update(
+							{"apps" : app._id},
+							{"$pull" : {"apps" : app._id}}
+						)
+						resolve(true)
+					}
+				})
+			})
+		}
+
+		const removeSwaggerFolder = function (){
+			return new Promise(function(resolve, reject){
+				exec('rm -r '+conf.SwaggerFolder+id, function(err, stdout, stderr){
+					if(err){
+						res.send({status: false, result: "remove swagger folder Failed"})
+					}else{
+						resolve(true)
+					}
+				})
+			})
+		}
+
+		exists()
+		.then(result => unlink())
+		.then(result => {
+			path = conf.AppFolder+id+'/'+id+".json"
+			exists()
 		})
+		.then(result => unlink())
+		.then(result => {
+			path = conf.AppFolder+id
+			rmdir()
+		})
+		.then(result => removeSwaggerFolder())
+		.then(result => {
+			path = conf.SwaggerFolder+id+'.zip'
+			unlink()
+		})
+		.then(result => {
+			path = conf.SwaggerFolder+id+'.json'
+		})
+		.then(result => removeDBData())
+		.then(result => {
+			res.send({status: true, result: result})
+		})
+
+	// 	fs.exists(path, function(appExists) {
+	// 		if(!appExists) {res.send({status: false, result: "not exists"})}
+	// 		else {
+	// 			fs.unlink(path, function(err){
+	// 				if(err) {res.send({status: false, result: "permission denied"})}
+	// 				else {
+	// 					 path = conf.AppFolder+id+'/'+id+".json"
+	// 					 fs.exists(path, function(jsonExists){
+	// 					 	if(!jsonExists) {res.send({status: false, result: "not exists"})}
+	// 					 	else {
+	// 					 		fs.unlink(path, function(err) {
+	// 					 			if(err) {res.send({status: false, result: "permission denied"})}
+	// 					 			else {
+	// 									path = conf.AppFolder+id
+	// 									fs.rmdir(path, function(err){
+	// 										if(err) {res.send({status: false, result: "permission denied"})}
+	// 										else{
+	// 											App.findOneAndRemove({appName : id+'.py'}, function(err, app) {
+	// 												if(err) throw err
+	// 												if(app){
+	// 													console.log("findOneAndRemove"+ app)
+	// 													Users.update(
+	// 														{"apps" : app._id},
+	// 														{"$pull" : {"apps" : app._id}},
+	// 														function(err, result){
+	// 															if(err) throw err
+	// 															if (result){
+	// 																exec('rm -r '+conf.SwaggerFolder+id, function(err, stdout, stderr){
+	// 																	if(err){
+	// 																		res.send({status: false, result: 'rmdir err'})
+	// 																	} else {
+	// 																		fs.unlink(conf.SwaggerFolder+id+'.zip',function(err){
+	// 																			if(err){
+	// 																				res.send({status: false, result: 'unlink err'})
+	// 																			}else{
+	// 																				fs.unlink(conf.SwaggerFolder+id+'.json',function(err){
+	// 																					if(err){
+	// 																						res.send({status: false, result: 'unlink err'})
+	// 																					} else{
+	// 																						res.send({status: true, result: result})
+	// 																					}
+	// 																				})
+	// 																			}
+	// 																		})
+	// 																	}
+	// 																})
+	// 															}
+	// 														}
+	// 													)
+	// 												}
+	// 											})				
+	// 										}
+	// 									})
+	// 								 }
+	// 							})
+	// 						}
+	// 					})
+	// 				}
+	// 			}) 
+	// 		}
+	// 	})
 		
 	}
 }

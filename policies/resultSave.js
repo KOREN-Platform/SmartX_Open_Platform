@@ -7,7 +7,7 @@ const Result = require('../models/resultSchema').Results
 module.exports = {
 	/**
 	 * @name resultLoad
-	 * @description resultLoad : Load result file to hdfs / require mongodb's results collection
+	 * @description resultLoad : Load result file to hdfs
 	 * @method
 	 * @param {Object} req
 	 * @param {Object} res

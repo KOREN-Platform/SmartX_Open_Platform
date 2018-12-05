@@ -485,6 +485,62 @@ module.exports = {
 		.then(result => {
 			res.send({status: true, result: result})
 		})		
-	}
+    },
+    /**
+     * @name makeParameterBlank
+     * @description 파라미터 입력 빈칸을 만들기위해 metaData 값을 mongoDB에서 받아서 전달한다.
+     * @method
+     * @param {Object} req.body.appname - 선택한 앱 이름
+     * @param {Object} res
+     */
+    makeParameterBlank(req, res){
+        const appname = req.body.appname
+        App.findOne({appName : appname}, function(error, metadata){
+                if(error){
+                    console.log(error)
+                }else{
+                    //넘겨줄 데이터 리스트
+                    let nameList = new Array()
+                    let descriptionList = new Array()
+                    let defaultList = new Array()
+                    let typeList = new Array()
+                    let typeDataList = new Array()
+                    let typeMaxList = new Array()
+                    let typeMinList = new Array()
+
+                    //리스트 작성
+                    for (let i=0 ; i < metadata.parameters.length ; i++ ){
+                        nameList[i] = metadata.parameters[i].name
+                        console.log(nameList)
+                        descriptionList[i] = metadata.parameters[i].description
+                        console.log(descriptionList)
+                        defaultList[i] = metadata.parameters[i].default
+                        console.log(defaultList)
+                        typeList[i] = metadata.parameters[i].inputType.boxType
+                        console.log(typeList)
+                        typeDataList[i] = metadata.parameters[i].inputType.data
+                        console.log(typeDataList)
+                        typeMaxList[i] = metadata.parameters[i].inputType.max
+                        console.log(typeMaxList)
+                        typeMinList[i] = metadata.parameters[i].inputType.min
+                        console.log(typeMinList)
+                    }
+
+                    //데이터 넘기기
+                    res.send({	
+                        nameList : nameList,
+                        descriptionList : descriptionList,
+                        defaultList : defaultList,
+                        typeList : typeList,
+                        typeDataList : typeDataList,
+                        typeMaxList : typeMaxList,
+                        typeMinList : typeMinList,
+                        metadata : metadata
+                        })
+                }
+        })
+    }
 }
+
+
 

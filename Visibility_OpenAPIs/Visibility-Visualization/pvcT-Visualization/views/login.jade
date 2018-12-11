@@ -1,0 +1,123 @@
+doctype html
+head
+    meta(charset='UTF-8')
+    |     
+    title Login/Logout animation concept
+    |     
+    meta(name='viewport', content='width=device-width, initial-scale=1, user-scalable=yes')
+    |     
+    |     
+    |     
+    link(rel='stylesheet prefetch', href='http://fonts.googleapis.com/css?family=Open+Sans')
+    |         
+    link(rel='stylesheet', href='css/style.css')
+  |   
+body
+    .cont
+      .demo
+        .login
+          .login__check
+          |       
+          .login__form
+            .login__row
+              svg.login__icon.name.svg-icon(viewbox='0 0 20 20')
+                path(d='M0,20 a10,8 0 0,1 20,0z M10,0 a4,4 0 0,1 0,8 a4,4 0 0,1 0,-8')
+              |           
+              input.login__input.name(type='text', id='name', placeholder='Username')
+            |         
+            .login__row
+              svg.login__icon.pass.svg-icon(viewbox='0 0 20 20')
+                path(d='M0,20 20,20 20,8 0,8z M10,13 10,16z M4,8 a6,8 0 0,1 12,0')
+              |           
+              input.login__input.pass(type='password', id='pass', placeholder='Password')
+            |         
+            button.login__submit(type='button') Login
+            |         
+            p.login__signup
+              | Don&apos;t have an account? &nbsp;
+              a Sign up
+          |       
+          .app__logout
+            svg.app__logout-icon.svg-icon(viewbox='0 0 20 20')
+              path(d='M6,3 a8,8 0 1,0 8,0 M10,0 10,12')
+    |     
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js')
+    script(src='https://cdn.socket.io/socket.io-1.4.5.js')
+    script(type='text/javascript').
+      sessionStorage.removeItem('ss_user_name');
+      sessionStorage.removeItem('ss_role');
+      $(document).ready(function() {
+      var animating = false,
+          submitPhase1 = 1100,
+          submitPhase2 = 400,
+          logoutPhase1 = 800,
+          $login = $(".login"),
+          $app = $(".app");
+      function ripple(elem, e) {
+        $(".ripple").remove();
+        var elTop = elem.offset().top,
+            elLeft = elem.offset().left,
+            x = e.pageX - elLeft,
+            y = e.pageY - elTop;
+        var $ripple = $("<div class='ripple'></div>");
+        $ripple.css({top: y, left: x});
+        elem.append($ripple);
+      };
+  
+      $(document).on("click", ".login__submit", function(e) {
+        if (animating) return;
+        animating = true;
+        var that = this;
+        ripple($(that), e);
+        $(that).addClass("processing");
+        var name =$("#name").val();
+        var pass =$("#pass").val();
+        var check =true;
+        try {
+          var server = io.connect('http://103.22.221.56:8090');
+        }
+        catch(e) {
+          alert('Sorry, we couldn\'t connect. Please try again later \n\n' + e);
+        }
+        if(server !== undefined) {
+          console.log("Connection established...");
+          // send the values to the server
+            server.emit('login', {
+                user_name: name,
+                user_password: pass
+            });
+        
+        // alert error messages returned from the server
+        server.on('alert', function(msg){
+            alert(msg);
+            location.reload();
+        });
+        
+        server.on('redirect', function(msg){
+            sessionStorage.setItem('ss_user_name', name);
+            sessionStorage.setItem('ss_role', msg);
+            window.location.assign('http://103.22.221.56:3012/menu');
+        });
+        }
+        $(that).removeClass("success processing");
+      });
+  
+      $(document).on("click", ".app__logout", function(e) {
+        if (animating) return;
+        $(".ripple").remove();
+        animating = true;
+        var that = this;
+        $(that).addClass("clicked");
+        setTimeout(function() {
+          $app.removeClass("active");
+          $login.show();
+          $login.css("top");
+          $login.removeClass("inactive");
+        }, logoutPhase1 - 120);
+        setTimeout(function() {
+          $app.hide();
+          animating = false;
+          $(that).removeClass("clicked");
+        }, logoutPhase1);
+      });
+      });

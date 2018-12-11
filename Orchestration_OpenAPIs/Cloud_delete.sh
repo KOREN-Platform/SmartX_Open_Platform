@@ -84,6 +84,12 @@ sql=$(mysql -u root -h $DB_HOST --password=$DB_PASS -e "use Slicing_Management; 
 Slicing_ID=`echo $sql | awk '{print $2}'`
 
 
+# get the Instance IP
+
+IP=$(mysql -u root -h $DB_HOST --password=$DB_PASS -e "use Slicing_Management; select IP from Instance;" | column -t | sed 1d )
+
+
+
 # delete database
 sql=$(mysql -u root -h $DB_HOST --password=$DB_PASS -e "use Slicing_Management; delete from Instance where Instance_ID='$Instance_ID';")
 
@@ -104,6 +110,11 @@ if [ "$sql" == "" ]; then
   openstack network delete --os-region-name $region vlan_$Slicing_ID 
 
 fi
+
+
+# update json file
+bash json_cloud_delete.sh $IP $Slicing_ID $region
+
 
 
 echo "Success"

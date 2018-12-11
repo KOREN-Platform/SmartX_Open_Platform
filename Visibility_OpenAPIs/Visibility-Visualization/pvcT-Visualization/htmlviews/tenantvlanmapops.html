@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			table {
+			width:100%;
+			}
+			table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			}
+			th, td {
+			padding: 5px;
+			text-align: left;
+			}
+			table#t01 tr:nth-child(even) {
+			background-color: #eee;
+			}
+			table#t01 tr:nth-child(odd) {
+			background-color:#fff;
+			}
+			table#t01 th {
+			background-color: #003366;
+			color: white;
+			}
+		</style>
+		<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript">
+			var tenantList = tenantList;
+      $(document).ready(function(){
+      $("#t01 tbody tr").click(function(){
+      var tenantid=$(this).children('td:nth-child(1)').text();
+	  var vlan=$(this).children('td:nth-child(3)').text();
+      window.parent.getFlowPathTrace(tenantid+'&'+vlan);
+      });
+      });
+		</script>
+	</head>
+	<body>
+		<h2>Tenant List</h2>
+		<table id="t01">
+			<thead>
+				<tr>
+					<th>Tenant-ID</th>
+					<th>Tenant-Name</th>
+					<th>VLAN</th>
+					<th>USER-ID</th>
+					<th>USER-Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				each tenant in tenantList
+				<tr>
+					<td><a href="flowtracingviewops/"+tenant.tenantid>#{tenant.tenantid}</a></td>
+					<td>tenant.tenantname</td>
+					<td>tenant.vlan</td>
+					<td>tenant.userid</td>
+					<td>tenant.username</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>

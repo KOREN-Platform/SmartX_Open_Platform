@@ -1,0 +1,309 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    // Bootstrap Core CSS
+    link(href='../bower_components/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
+    // MetisMenu CSS
+    link(href='../node_modules/metismenu/dist/metisMenu.min.css', rel='stylesheet')
+    // Custom CSS
+    link(href='../node_modules/startbootstrap-sb-admin-2/dist/css/sb-admin-2.css', rel='stylesheet')
+    // Custom Fonts
+    link(href='../node_modules/font-awesome/css/font-awesome.min.css', rel='stylesheet', type='text/css')
+    script(src='../node_modules/html5shiv/dist/html5shiv.js')
+    script(src='../node_modules/responder/lib/responder.js')
+    script(type='text/javascript').
+      var serverIP="103.22.221.56";
+      var serverPort="3011";
+      //redirect to login page if user is not logged
+      var session_username = sessionStorage.getItem('ss_user_name');
+      var session_userrole = sessionStorage.getItem('ss_role');
+      if(session_username === null){
+      window.location.replace("http://"+serverIP+":"+serverPort+"/login");
+      }
+      //Resource-level Functions Start
+      //receive Box objects
+      function receiveValueBox(boxs){
+      var iframe = document.getElementById('grafanaIframe');
+      console.log(boxs);
+      iframe.src = 'http://'+serverIP+':3000/dashboard/db/resource-dashboard-'+boxs.label;
+      }
+      //receive tenant objects
+      function receiveTenantID(data){
+      //- console.log("Receive Data Success " + data.info);
+      var iframe = document.getElementById('grafanaIframe');
+      iframe.src = 'http://'+serverIP+':3000/dashboard/db/resource-dashboard-'+data.boxID;
+      }
+      //receive tenant objects
+      function receiveSampledFlows(data){
+      //- console.log("Receive Data Success " + data.info);
+      var iframe = document.getElementById('grafanaIframe');
+      iframe.src = 'http://'+serverIP+':8008/app/dashboard-example/html/';
+      }
+      //receive tenant objects
+      function receiveTracedPkts(data){
+      //- console.log("Receive Data Success " + data.info);
+      var iframe = document.getElementById('grafanaIframe');
+      iframe.src = 'http://'+serverIP+':8008/agents/html';
+      }
+      //receive brCap Objects
+      function receiveValueBrCap(brCaps){
+      var iframe = document.getElementById('grafanaIframe');
+      console.log(brCaps);
+      ////iframe.src = 'http://'+serverIP+':3000/dashboard/db/flow-dashboard-'+brCaps.label+'-'+brCaps.box;
+      //iframe.src = 'http://'+serverIP+':'+serverPort+'/opsflowrules/'+brCaps.box;
+      }
+      //receive VM Objects
+      function receiveValueVM(vms){
+      var iframe = document.getElementById('grafanaIframe');
+      console.log(vms);
+      //iframe.src = 'http://'+serverIP+':3000/dashboard/db/flow-dashboard-instance-'+vms.label+'-'+vms.box;
+      }
+      //Resource-level Functions End
+      //Flow-level Functions Start
+      //Route to Network Flow View
+      function getNetworkFlow(network){
+      var iframe = document.getElementById('grafanaIframe');
+      iframe.src = 'http://'+serverIP+':8008/app/dashboard-example/html/';
+      }
+      //Route to Box Flow View
+      function getBoxFlow(boxs){
+      var iframe = document.getElementById('grafanaIframe');
+      //console.log(boxs);
+      if (boxs.id === 1)
+      iframe.src = "http://"+serverIP+":5601/app/kibana#/dashboard/dab0b840-c90a-11e7-9140-dfb68f1deddf?_g=(refreshInterval%3A('%24%24hashKey'%3A'object%3A344'%2Cdisplay%3A'5%20seconds'%2Cpause%3A!f%2Csection%3A1%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-30m%2Cmode%3Aquick%2Cto%3Anow))";
+      else
+      iframe.src = 'http://'+serverIP+':3000/dashboard/db/iovisortracing-'+boxs.label;
+      console.log('http://'+serverIP+':3000/dashboard/db/iovisortracing-'+boxs.label);
+      /*if (boxs.label === 'GIST-WAN-Box')
+      iframe.src = 'http://'+serverIP+':3000/dashboard/db/iovisortracing-'+boxs.label;
+      else if (boxs.label === 'GIST-Cloud-Box')
+      iframe.src = 'http://'+serverIP+':5601/goto/48e591f431b051ae64b4ad3f451c36d9';
+      else if (boxs.label === 'GIST-Access-Box')
+      iframe.src = 'http://'+serverIP+':5601/goto/48e591f431b051ae64b4ad3f451c36d9';*/
+      }
+      //Route to Flow Rules + Stats View
+      function getBrCapFlow(brCaps){
+      var iframe = document.getElementById('grafanaIframe');
+      console.log(brCaps);
+      iframe.src = 'http://'+serverIP+':'+serverPort+'/opsflowrules/'+brCaps.box;
+      }
+      //Route to VM Flow View
+      function getVMFlow(vms){
+      var iframe = document.getElementById('grafanaIframe');
+      console.log(vms);
+      //iframe.src = 'http://'+serverIP+':'+serverPort+'/opsflowrules/'+brCaps.box;
+      }
+      //Route to Flow Path Trace View
+      function getFlowPathTrace(vlan){
+      var iframe = document.getElementById('topoIframe');
+      console.log('In Menu '+vlan);
+      iframe.src = 'http://'+serverIP+':'+serverPort+'/flowtracingviewops/'+vlan;
+      }
+      //Route to Onion-ring Multi-View for tenant
+      function getOnionRingTenant(vlan){
+      var iframe = document.getElementById('topoIframe');
+      iframe.src = 'http://'+serverIP+':'+serverPort+'/onionringviewtenant/'+vlan;
+      }
+      //Flow-level Functions End
+      //Show Panel on Click
+      function showPanel(itemID){
+      var iframe = document.getElementById('topoIframe');
+      console.log(itemID);
+      iframe.src = 'http://'+serverIP+':'+serverPort+'/'+itemID.label+'-'+itemID.box;
+      }
+      // Called when the Visualization API is loaded.
+      function draw()
+      {
+      document.getElementById('usertext').innerHTML="Logged In User:  "+session_username;
+      //Update********************************************************
+      var iframe1     = document.getElementById('topoIframe');
+      var iframe2     = document.getElementById('grafanaIframe');
+      var resource    = document.getElementById('resourcecentricviewops');
+      var onionops    = document.getElementById('onionops');
+      var oniontenant = document.getElementById('oniontenant');
+      var flowrules   = document.getElementById('flowrulesviewops');
+      var flowtracing = document.getElementById('flowtracingviewops');
+      var flowmeasure = document.getElementById('flowmeasureviewops');
+      var slicingviewops = document.getElementById('slicingviewops');
+      var service     = document.getElementById('servicecentricviewops');
+      //manh start
+      var sliceview       = document.getElementById('sliceview');
+      var sliceviewtenant = document.getElementById('sliceviewtenant');
+      //manh end
+      tcptopology.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Playground Overlay Topology View</p></b>';
+      iframe1.src = 'http://'+serverIP+':'+serverPort+'/tcptopologyviewops';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });
+      onionops.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Onion-ring-based Visualization (Operator)</p></b>';
+      iframe1.src = 'http://'+serverIP+':'+serverPort+'/onionringviewops';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });
+      oniontenant.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Onion-ring-based Visualization (Tenant)</p></b>';
+      //iframe1.src = 'http://'+serverIP+':'+serverPort+'/onionringviewtenant';
+      iframe2.src = 'http://'+serverIP+':'+serverPort+'/tenantvlanmaponionring';
+      });
+      resource.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Resource-Centric Topological View (Playground View)</p></b>';
+      iframe1.src = 'http://'+serverIP+':'+serverPort+'/resourcecentricviewops';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });
+      flowrules.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Flow-Centric Topological View</p></b>';
+      iframe1.src = 'http://'+serverIP+':'+serverPort+'/flowrulesviewops';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });
+      flowtracing.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Flow-Centric Topological View</p></b>';
+      //iframe1.src = 'http://'+serverIP+':'+serverPort+'/flowtracingviewops';
+      iframe2.src = 'http://'+serverIP+':'+serverPort+'/tenantvlanmapops';
+      });
+      flowmeasure.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Flow-Centric Topological View (sFlow-based)</p></b>';
+      iframe1.src = 'http://'+serverIP+':'+serverPort+'/flowmeasureviewops';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });
+      flowiovisorviewops.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Flow-Centric Topological View (IO Visor-based)</p></b>';
+      iframe1.src = 'http://'+serverIP+':'+serverPort+'/flowiovisorviewops';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });
+      slicingviewops.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Slicing View</p></b>';
+      iframe1.src = 'http://103.22.221.51:6126/';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });
+      /*flowboxviewops.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Flow-Centric Topological View (sFlow-based)</p></b>';
+      iframe1.src = 'http://'+serverIP+':5601/goto/1cf86a106a8725db0f3ab9c33c72bf60';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });
+      flowclusterviewops.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Flow-Centric Topological View</p></b>';
+      iframe1.src = 'http://'+serverIP+':5601/goto/20e35e15d09a942539b445badc77693c';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });*/
+      service.addEventListener('click', function() {
+      document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:12;color:#e6eeff;text-align:center;">Service-Centric Topological View</p></b>';
+      iframe1.src = 'http://'+serverIP+':'+serverPort+'/servicecentricviewops';
+      //iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+      });
+      }
+  body(onload='draw()')
+    #wrapper(style='width: 1430px;')
+      // Navigation
+      nav.navbar.navbar-default.navbar-static-top(role='navigation', style='margin-bottom: 0')
+        .navbar-header(style='background-color:#e0e0d1;width: 1460px; height: 50px; display:inline-block')
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          p
+          #titlediv
+            b
+              h1(style='color:#ff8000;font-family:verdana;text-align:center;display:inline;') SmartX Multi-View Dashboard
+          p
+        .navbar-default.sidebar(role='navigation')
+          .sidebar-nav.navbar-collapse
+            ul#side-menu.nav
+              li.sidebar-search(style='background-color:#e0e0d1;font-size:12;color:#737373;text-align:center;width: 250px; height: 40px;')
+                #usertext.input-group.custom-search-form
+              li
+                a(href='#', style='background-color:#eaeae1;color:#3c3c2a;')
+                  i.fa.fa-bookmark.fa-fw
+                  | Topology Visualization
+                  span.fa.arrow
+                ul#parent-list.nav.nav-second-level(style='background-color:#ffffff;')
+                  li
+                    a#tcptopology(href='#', style='background-color:#ffffff;') Topology View
+              li
+                a(href='#', style='background-color:#eaeae1;color:#3c3c2a;')
+                  i.fa.fa-bookmark.fa-fw
+                  | Onion-ring-based Visualization
+                  span.fa.arrow
+                ul#parent-list.nav.nav-second-level(style='background-color:#ffffff;')
+                  li
+                    a#onionops(href='#', style='background-color:#ffffff;') Operator Visualization
+                  li
+                    a#oniontenant(href='#', style='background-color:#ffffff;') Tenant Visualization
+              li
+                a(href='#', style='background-color:#eaeae1;color:#3c3c2a;')
+                  i.fa.fa-bookmark.fa-fw
+                  | Network-based Visualization
+                  span.fa.arrow
+                ul#parent-list.nav.nav-second-level(style='background-color:#ffffff;')
+                  li
+                    a#resourcecentricviewops(href='#', style='background-color:#ffffff;') Playground View
+                  li
+                    a#flowrulesviewops(href='#', style='background-color:#ffffff;') vSwich-Flows Info
+                  li
+                    a#flowtracingviewops(href='#', style='background-color:#ffffff;') Inter-connected Flow Path
+              li
+                a(href='#', style='background-color:#eaeae1;color:#3c3c2a;')
+                  i.fa.fa-bookmark.fa-fw
+                  | Slicing Visualization
+                  span.fa.arrow
+                ul#parent-list.nav.nav-second-level(style='background-color:#ffffff;')
+                  li
+                    a#slicingviewops(href='#', style='background-color:#ffffff;') Infrastructure Slicing 
+              li
+                a(href='#', style='background-color:#eaeae1;color:#3c3c2a;')
+                  i.fa.fa-bookmark.fa-fw
+                  | Flow-layer Visualization
+                  span.fa.arrow
+                ul#parent-list.nav.nav-second-level(style='background-color:#ffffff;')
+                  li
+                    a#flowmeasureviewops(href='#', style='background-color:#ffffff;') Packets Sampling 
+                  li
+                    a#flowiovisorviewops(href='#', style='background-color:#ffffff;') Packets Tracing 
+              li
+                a(href='#', style='background-color:#eaeae1;color:#3c3c2a;')
+                  i.fa.fa-bookmark.fa-fw
+                  | Workload-layer Visualization
+                  span.fa.arrow
+                ul#parent-list.nav.nav-second-level
+                  li
+                    a#servicecentricviewops(href='#', style='background-color:#ffffff;') Workload-centric View
+              li
+                a(href='login', style='background-color:#ffe6e6;color:#ff0000;')
+                  i.fa.fa-sign-out.fa-fw
+                  b Logout
+      #page-wrapper(style='width: 1210px;')
+        .container-fluid
+          .row
+            .col-lg-12
+              // h1.page-header
+        .row(style='width: 1180px;')
+          .col-lg-12
+            .panel.panel-default
+              #panel-heading-id.panel-heading(style='background-color:#003399;text-align:center')
+                b
+                  p(style='display:inline;font-size:12;color:#e6eeff;text-align:center;') Onion-ring-style Visualization
+              .panel-body
+                p
+                  iframe#topoIframe(src='http://103.22.221.56:3011/onionringviewops', width='1120', height='800')
+        .row(style='width: 1180px;')
+          .col-lg-12
+            .panel.panel-default
+              .panel-heading(style='background-color:#003399;text-align:center')
+                b
+                  p(style='display:inline;font-size:12;color:#e6eeff;text-align:center;') Metrics Visualization Panel
+              .panel-body
+                p
+                  iframe#grafanaIframe(src='', width='1120', height='500')
+    // jQuery
+    script(src='../node_modules/jquery/dist/jquery.min.js')
+    // Bootstrap Core JavaScript
+    script(src='../bower_components/bootstrap/dist/js/bootstrap.min.js')
+    // Metis Menu Plugin JavaScript
+    script(src='../node_modules/metismenu/dist/metisMenu.min.js')
+    // Custom Theme JavaScript
+    script(src='../node_modules/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js')

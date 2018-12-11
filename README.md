@@ -1,24 +1,24 @@
 # KOREN SmartX_Open_Platform
 
-KOREN ±â¹İÀÇ Á¤º¸ ±â¼ú ¹× ¼­ºñ½º °³¹ß/¿î¿µÀ» À§ÇÑ KOREN »ç¿ëÀÚ Áß½ÉÀÇ ¿ÀÇÂ ÇÃ·§Æû
+KOREN ê¸°ë°˜ì˜ ì •ë³´ ê¸°ìˆ  ë° ì„œë¹„ìŠ¤ ê°œë°œ/ìš´ì˜ì„ ìœ„í•œ KOREN ì‚¬ìš©ì ì¤‘ì‹¬ì˜ ì˜¤í”ˆ í”Œë«í¼
 
 ## System Architecture
   * Main Architecture
-    - ¿ÀÇÂ¼Ò½º ¼ÒÇÁÆ®¿ş¾î ±â¹İÀ¸·Î SDN/NFV/Cloud¸¦ ÅëÇÕÇÑ ¼ÒÇÁÆ®¿ş¾î-Á¤ÀÇ (Software-Defined) ÀÎÇÁ¶óÀÇ ±¸Ãà°ú ¿î¿ëÀ» À§ÇÑ ¿ÀÇÂ ÇÃ·§Æû
-    - ONOS/OpenStack ±â¹İ SD-Access/Cloud/SD-WAN Á¦¾î¿Í Á¾´Ü°£ °¡½ÃÈ­°¡ ÀÌ·ïÁö´Â °üÁ¦Å¸¿ö¸¦ ±¸¼ºÇÏ¿© Visibility/Orchestration¸¦ È°¿ëÇÒ ¼ö ÀÖ´Â OpenAPIs Á¦°ø
+    - ì˜¤í”ˆì†ŒìŠ¤ ì†Œí”„íŠ¸ì›¨ì–´ ê¸°ë°˜ìœ¼ë¡œ SDN/NFV/Cloudë¥¼ í†µí•©í•œ ì†Œí”„íŠ¸ì›¨ì–´-ì •ì˜ (Software-Defined) ì¸í”„ë¼ì˜ êµ¬ì¶•ê³¼ ìš´ìš©ì„ ìœ„í•œ ì˜¤í”ˆ í”Œë«í¼
+    - ONOS/OpenStack ê¸°ë°˜ SD-Access/Cloud/SD-WAN ì œì–´ì™€ ì¢…ë‹¨ê°„ ê°€ì‹œí™”ê°€ ì´ë¤„ì§€ëŠ” ê´€ì œíƒ€ì›Œë¥¼ êµ¬ì„±í•˜ì—¬ Visibility/Orchestrationë¥¼ í™œìš©í•  ìˆ˜ ìˆëŠ” OpenAPIs ì œê³µ
 ![Architecture](./Images/Architecture.png)
 
   * Network Architecture
-    - Box : ¿ÀÇÂ ÇÃ·§ÆûÀ» È°¿ëÇÏ¿© ¼­ºñ½º ½Ã½ºÅÛÀ» ±¸ÃàÇÏ±â À§ÇØ ÇÊ¿äÇÑ ÀÚ¿ø(ÄÄÇ»ÆÃ/³×Æ®¿öÅ·)À» °¡»óÈ­µÈ ¼öÁØ¿¡¼­ Á¦°ø
-    - Box´Â OpenStack ±â¹İÀÇ Å¬¶ó¿ìµå¿¡ ´ëÀÀÇÏ´Â Type C(Cloud Box), Server¿Í Switch¸¦ ÇÑ ¹Ú½º¿¡ ´ã°í ÀÖ´Â Type S(Server/Switch Box), IoT-Cloud¿¡ ´ëÀÀÇÏ´Â Type O(SD-Access Box)·Î ±¸¼º
+    - Box : ì˜¤í”ˆ í”Œë«í¼ì„ í™œìš©í•˜ì—¬ ì„œë¹„ìŠ¤ ì‹œìŠ¤í…œì„ êµ¬ì¶•í•˜ê¸° ìœ„í•´ í•„ìš”í•œ ìì›(ì»´í“¨íŒ…/ë„¤íŠ¸ì›Œí‚¹)ì„ ê°€ìƒí™”ëœ ìˆ˜ì¤€ì—ì„œ ì œê³µ
+    - BoxëŠ” OpenStack ê¸°ë°˜ì˜ í´ë¼ìš°ë“œì— ëŒ€ì‘í•˜ëŠ” Type C(Cloud Box), Serverì™€ Switchë¥¼ í•œ ë°•ìŠ¤ì— ë‹´ê³  ìˆëŠ” Type S(Server/Switch Box), IoT-Cloudì— ëŒ€ì‘í•˜ëŠ” Type O(SD-Access Box)ë¡œ êµ¬ì„±
 ![Boxes](./Images/Boxes.png)
 
 ### Component Links
   
   * Service
      - [Smart Air IoT-Cloud Service](https://github.com/KOREN-Platform/IoT-Cloud_Services/tree/master/Smart_Air_IoT_Cloud_Service)
-     - [Smart Campus Safety Service](https://github.com/dudtntdud/Smart-Campus-Safety-Service)
-     - [Smart Disaster Safety Service]
+     - [Smart Campus Safety Service](https://github.com/KOREN-Platform/Smart-Campus-Safety-Service)
+     - Smart Disaster Safety Service
   
   * Control Tower
      - [O+P Center](https://github.com/KOREN-Platform/SmartX_Open_Platform/tree/master/Centers/P%2BO%20Center)
@@ -33,6 +33,6 @@ KOREN ±â¹İÀÇ Á¤º¸ ±â¼ú ¹× ¼­ºñ½º °³¹ß/¿î¿µÀ» À§ÇÑ KOREN »ç¿ëÀÚ Áß½ÉÀÇ ¿ÀÇÂ ÇÃ·§Æ
 
 ### Links
   - [Playground User Guide](https://github.com/KOREN-Platform/SmartX_Playground/blob/master/Playground_Introduction_Guide/User_Guide/readme.md)
-  - [»ó¼¼°¡ÀÌµå](https://goo.gl/xyXfpd)
+  - [ìƒì„¸ê°€ì´ë“œ](https://goo.gl/xyXfpd)
   - [Collaboration_2017](https://github.com/KOREN-Platform/Collaboration_2017)
   - [Technical_Documents](https://github.com/KOREN-Platform/Technical_Documents)

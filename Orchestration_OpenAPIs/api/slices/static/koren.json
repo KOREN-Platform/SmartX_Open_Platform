@@ -1,0 +1,24 @@
+{"nodes":[
+  {"id":"1", "label":"Type C GJ", "color": "rgb(209,178,255)", "image":"static/type-c.png", "shape":"image", "size":"40"}
+  ,{"id":"2", "label":"Type S GJ", "image":"static/switch.png", "shape":"image", "color": "rgb(97,168,7)", "size":"40"}
+  ,{"id":"3", "label":"Type O GJ", "image":"static/type-o.png", "shape":"image"}
+  ,{"id":"4", "label":"Type C KN", "color": "rgb(209,178,255)", "image":"static/type-c.png", "shape":"image", "size":"40"}
+  ,{"id":"5", "label":"Type S KN", "image":"static/switch.png", "shape":"image", "color": "rgb(97,168,7)", "size":"40"}
+  ,{"id":"6", "label":"Type O KN", "image":"static/type-o.png", "shape":"image"}
+  ,{"id":"7", "label":"Type O- JJ", "image":"static/type-o.png", "shape":"image"}
+  ,{"id":"8", "label":"Type O- JNU", "image":"static/type-o.png", "shape":"image"}
+  ,{"id":"9", "label":"Type O- KU", "image":"static/type-o.png", "shape":"image"}
+  ,{"id":"10", "image":"static/koren.png", "shape":"image", "color": {"background": "cyan", "border": "blue"}, "size":"20"}
+],
+"edges":[
+  {"from":"10", "to":"2", "color": {"color": "black"}, "dashes": "true", "length": "200"}
+  ,{"from":"10", "to":"5", "color": {"color": "black"}, "dashes": "true", "length": "200"}
+  ,{"from":"10", "to":"7", "color": {"color": "black"}, "dashes": "true", "length": "200"}
+  ,{"from":"10", "to":"8", "color": {"color": "black"}, "dashes": "true", "length": "200"}
+  ,{"from":"10", "to":"9", "color": {"color": "black"}, "dashes": "true", "length": "200"}
+  ,{"from":"2", "to":"1", "color": {"color": "black"}, "dashes": "true", "length": "200"}
+  ,{"from":"2", "to":"3", "color": {"color": "black"}, "dashes": "true", "length": "200"}
+  ,{"from":"5", "to":"4", "color": {"color": "black"}, "dashes": "true", "length": "200"}
+  ,{"from":"5", "to":"6", "color": {"color": "black"}, "dashes": "true", "length": "200"}
+]
+}

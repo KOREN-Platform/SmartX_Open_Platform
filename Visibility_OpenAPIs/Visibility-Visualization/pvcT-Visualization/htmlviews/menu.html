@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <!-- Bootstrap Core CSS-->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS-->
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS-->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts-->
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script type="text/javascript">
+		var serverIP="103.22.221.56";
+		var serverPort="3012";
+		//redirect to login page if user is not logged
+		var session_username = sessionStorage.getItem('ss_user_name');
+		var session_userrole = sessionStorage.getItem('ss_role');
+		if(session_username === null){
+			window.location.replace("http://"+serverIP+":"+serverPort+"/login");
+		}
+		
+		//Resource-level Functions Start
+		//receive Box objects
+		function receiveValueBox(boxs){
+			var iframe = document.getElementById('grafanaIframe');
+			console.log(boxs);
+			iframe.src = 'http://'+serverIP+':3000/dashboard/db/resource-dashboard-'+boxs.label;
+		}
+		//receive brCap Objects
+		function receiveValueBrCap(brCaps){
+			var iframe = document.getElementById('grafanaIframe');
+			console.log(brCaps);
+			////iframe.src = 'http://'+serverIP+':3000/dashboard/db/flow-dashboard-'+brCaps.label+'-'+brCaps.box;
+			//iframe.src = 'http://'+serverIP+':'+serverPort+'/opsflowrules/'+brCaps.box;
+		}
+		//receive VM Objects
+		function receiveValueVM(vms){
+			var iframe = document.getElementById('grafanaIframe');
+			console.log(vms);
+			//iframe.src = 'http://'+serverIP+':3000/dashboard/db/flow-dashboard-instance-'+vms.label+'-'+vms.box;
+		}
+		//Resource-level Functions End
+		//Flow-level Functions Start
+		//Route to Network Flow View
+		function getNetworkFlow(network){
+			var iframe = document.getElementById('grafanaIframe');
+			iframe.src = 'http://'+serverIP+':8008/app/dashboard-example/html/';
+		}
+		//Route to Box Flow View
+		function getBoxFlow(boxs){
+			var iframe = document.getElementById('grafanaIframe');
+			//console.log(boxs);
+      if (boxs.id === 1)
+        iframe.src = "http://"+serverIP+":5601/app/kibana#/dashboard/dab0b840-c90a-11e7-9140-dfb68f1deddf?_g=(refreshInterval%3A('%24%24hashKey'%3A'object%3A344'%2Cdisplay%3A'5%20seconds'%2Cpause%3A!f%2Csection%3A1%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-30m%2Cmode%3Aquick%2Cto%3Anow))";
+      else
+        iframe.src = 'http://'+serverIP+':3000/dashboard/db/iovisortracing-'+boxs.label;
+      
+      console.log('http://'+serverIP+':3000/dashboard/db/iovisortracing-'+boxs.label);
+      
+			/*if (boxs.label === 'GIST-WAN-Box')
+				iframe.src = 'http://'+serverIP+':3000/dashboard/db/iovisortracing-'+boxs.label;
+			else if (boxs.label === 'GIST-Cloud-Box')
+				iframe.src = 'http://'+serverIP+':5601/goto/48e591f431b051ae64b4ad3f451c36d9';
+      else if (boxs.label === 'GIST-Access-Box')
+				iframe.src = 'http://'+serverIP+':5601/goto/48e591f431b051ae64b4ad3f451c36d9';*/
+		}
+		//Route to Flow Rules + Stats View
+		function getBrCapFlow(brCaps){
+			var iframe = document.getElementById('grafanaIframe');
+			console.log(brCaps);
+			iframe.src = 'http://'+serverIP+':'+serverPort+'/opsflowrules/'+brCaps.box;
+		}
+		//Route to VM Flow View
+		function getVMFlow(vms){
+			var iframe = document.getElementById('grafanaIframe');
+			console.log(vms);
+			//iframe.src = 'http://'+serverIP+':'+serverPort+'/opsflowrules/'+brCaps.box;
+		}
+		//Route to Flow Path Trace View
+		function getFlowPathTrace(vlan){
+			var iframe = document.getElementById('topoIframe');
+			console.log('In Menu '+vlan);
+			iframe.src = 'http://'+serverIP+':'+serverPort+'/flowtracingviewops/'+vlan;
+		}
+		//Flow-level Functions End
+		//Show Panel on Click
+		function showPanel(itemID){
+			var iframe = document.getElementById('topoIframe');
+			console.log(itemID);
+			iframe.src = 'http://'+serverIP+':'+serverPort+'/'+itemID.label+'-'+itemID.box;
+		}
+		// Called when the Visualization API is loaded.
+		function draw()
+		{
+			document.getElementById('usertext').innerHTML="Logged In User:  "+session_userrole;
+			//Update********************************************************
+			var iframe1     = document.getElementById('topoIframe');
+			var iframe2     = document.getElementById('grafanaIframe');
+			var resource    = document.getElementById('resourcecentricviewops');
+			var flowrules   = document.getElementById('flowrulesviewops');
+			var flowtracing = document.getElementById('flowtracingviewops');
+			var flowmeasure = document.getElementById('flowmeasureviewops');
+			var service     = document.getElementById('servicecentricviewops');
+			
+			resource.addEventListener('click', function() {
+				document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Resource-Centric Topological View (Playground View)</p></b>';
+				iframe1.src = 'http://'+serverIP+':'+serverPort+'/resourcecentricviewops';
+				//iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+			});
+	
+			flowrules.addEventListener('click', function() {
+				document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Flow-Centric Topological View</p></b>';
+				iframe1.src = 'http://'+serverIP+':'+serverPort+'/flowrulesviewops';
+				//iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+			});
+			flowtracing.addEventListener('click', function() {
+				document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Flow-Centric Topological View</p></b>';
+				//iframe1.src = 'http://'+serverIP+':'+serverPort+'/flowtracingviewops';
+				iframe2.src = 'http://'+serverIP+':'+serverPort+'/tenantvlanmapops';
+			});
+			flowmeasure.addEventListener('click', function() {
+				document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Flow-Centric Topological View (sFlow-based)</p></b>';
+				iframe1.src = 'http://'+serverIP+':'+serverPort+'/flowmeasureviewops';
+				//iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+			});
+      flowiovisorviewops.addEventListener('click', function() {
+				document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Flow-Centric Topological View (IO Visor-based)</p></b>';
+				iframe1.src = 'http://'+serverIP+':'+serverPort+'/flowiovisorviewops';
+				//iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+			});
+			flowboxviewops.addEventListener('click', function() {
+				document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Flow-Centric Topological View (sFlow-based)</p></b>';
+				iframe1.src = 'http://'+serverIP+':5601/goto/1cf86a106a8725db0f3ab9c33c72bf60';
+				//iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+			});
+			flowclusterviewops.addEventListener('click', function() {
+				document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Flow-Centric Topological View</p></b>';
+				iframe1.src = 'http://'+serverIP+':5601/goto/20e35e15d09a942539b445badc77693c';
+				//iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+			});
+			service.addEventListener('click', function() {
+				document.getElementById('panel-heading-id').innerHTML = '<b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Service-Centric Topological View</p></b>';
+				iframe1.src = 'http://'+serverIP+':'+serverPort+'/servicecentricviewops';
+				//iframe2.src = 'http://'+serverIP+':'+serverPort+'/#';
+			});
+		}
+    </script>
+	</head>
+	<body onload="draw()">
+		<div id="wrapper">
+			<!-- Navigation-->
+			<nav role="navigation" style="margin-bottom: 0" class="navbar navbar-default navbar-static-top">
+				<div class="navbar-header" style="background-color:#e0e0d1;width: 1660px; height: 50px; ;display:inline-block">
+				<button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+				<p>
+					<div id="titlediv"><b><h1 style="color:#ff8000;font-family:verdana;text-align:center;display:inline;">SmartX MultiView Dashboard</h1></b></div>
+				</p>
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+          <li class="dropdown"><a data-toggle="dropdown" href="#" class="dropdown-toggle"><i class="fa fa-envelope fa-fw"></i><i class="fa fa-caret-down"></i></a>
+            <ul class="dropdown-menu dropdown-messages"></ul>
+          </li>
+          <li class="dropdown"><a data-toggle="dropdown" href="#" class="dropdown-toggle"><i class="fa fa-tasks fa-fw"></i><i class="fa fa-caret-down"></i></a>
+            <ul class="dropdown-menu dropdown-tasks"></ul>
+          </li>
+          <li class="dropdown"><a data-toggle="dropdown" href="#" class="dropdown-toggle"><i class="fa fa-bell fa-fw"></i><i class="fa fa-caret-down"></i></a>
+            <ul class="dropdown-menu dropdown-alerts"></ul>
+          </li>
+          <li class="dropdown"><a data-toggle="dropdown" href="#" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i><i class="fa fa-caret-down"></i></a>
+            <ul class="dropdown-menu dropdown-user">
+              <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
+              <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
+              <li class="divider"></li>
+              <li><a href="login"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+		
+        <div role="navigation" class="navbar-default sidebar">
+          <div class="sidebar-nav navbar-collapse">
+            <ul id="side-menu" class="nav">
+      				<li class="sidebar-search" style="background-color:#e0e0d1;font-size:2;color:#737373;text-align:center;width: 250px; height: 40px;">
+      					<div class="input-group custom-search-form" id="usertext"></div>
+      				</li>
+              <li><a href="#" style="background-color:#eaeae1;color:#3c3c2a;"><i class="fa fa-bookmark fa-fw"></i>Resource-layer Visibility<span class="fa arrow"></span></a>
+                <ul id="parent-list" class="nav nav-second-level" style="background-color:#ffffff;">
+                  <li><a id="resourcecentricviewops" href="#" style="background-color:#ffffff;">Playground View</a></li>
+                </ul>
+              </li>
+              <li><a href="#" style="background-color:#eaeae1;color:#3c3c2a;"><i class="fa fa-bookmark fa-fw"></i>Flow-layer Visibility<span class="fa arrow"></span></a>
+                <ul id="parent-list" class="nav nav-second-level" style="background-color:#ffffff;">
+                  <li><a id="flowmeasureviewops" href="#" style="background-color:#ffffff;">Packets Sampling </a></li>
+                  <li><a id="flowiovisorviewops" href="#" style="background-color:#ffffff;">Packets Tracing </a></li>
+                </ul>
+              </li>
+              <li><a href="#" style="background-color:#eaeae1;color:#3c3c2a;"><i class="fa fa-bookmark fa-fw" ></i>Workload-layer Visibility<span class="fa arrow"></span></a>
+                <ul id="parent-list" class="nav nav-second-level">
+                  <li><a id="servicecentricviewops" href="#" style="background-color:#ffffff;">Workload-centric View</a></li>
+                </ul>
+              </li>
+              <li><a href="#" style="background-color:#eaeae1;color:#3c3c2a;"><i class="fa fa-bookmark fa-fw" ></i>Integrated Visibility<span class="fa arrow"></span></a>
+                <ul id="parent-list" class="nav nav-second-level" style="background-color:#ffffff;">
+                  <li><a id="flowrulesviewops" href="#" style="background-color:#ffffff;">vSwich-Flows Info</a></li>
+                  <li><a id="flowtracingviewops" href="#" style="background-color:#ffffff;">Inter-connected Flow Path</a></li>
+                </ul>
+              </li>
+              <li><a href="login" style="background-color:#ffe6e6;color:#ff0000;"><i class="fa fa-sign-out fa-fw"></i> <b>Logout</b></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div id="page-wrapper">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12">
+              <!-- h1.page-header-->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div id="panel-heading-id" class="panel-heading" style="background-color:#003399;text-align:center"><b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Resource-Centric Topological View (Playground View)</p></b></div>
+              <div class="panel-body">
+                <p>
+                  <iframe id="topoIframe" src="http://103.22.221.56:3012/resourcecentricviewops" width="1560" height="600"></iframe>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div class="panel-heading" style="background-color:#003399;text-align:center"><b><p style="display:inline;font-size:6;color:#e6eeff;text-align:center;">Metrics Visualization Panel</p></b></div>
+              <div class="panel-body">
+                <p>
+                  <iframe id="grafanaIframe" src="" width="1560" height="500"></iframe>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<!-- jQuery-->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript-->
+    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript-->
+    <script src="../dist/js/sb-admin-2.js"></script>
+  </body>
+</html>

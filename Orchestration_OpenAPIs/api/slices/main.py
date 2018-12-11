@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, render_template
 from flask_restful import Resource, Api
 from flask_restful import reqparse
 from flaskext.mysql import MySQL
@@ -44,28 +44,30 @@ mysql.init_app(app)
 def hello_world():  
 
 
-  name = request.authorization.username
-  password = request.authorization.password
+  return render_template('test3.html')
 
-  cmd="cd ../cred && bash auth_check.sh " + name + " " + password
+  #name = request.authorization.username
+  #password = request.authorization.password
+
+  #cmd="cd ../cred && bash auth_check.sh " + name + " " + password
 
 
-  result = subprocess.check_output (cmd , shell=True)
+  #result = subprocess.check_output (cmd , shell=True)
 
-  response= result.decode()
-  response= response.replace("\n","")
+  #response= result.decode()
+  #response= response.replace("\n","")
 
-  print (response)
+  #print (response)
 
-  if response == "True":
-    return "success"
+  #if response == "True":
+  #  return "success"
 
 
 
 #  if request.authorization and request.authorization.username == 'username' and request.authorization.password == 'password':
 #    return "success"
 
-  return make_response('Coud not verify!', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
+  #return make_response('Coud not verify!', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
 
 @app.route("/slices")
@@ -166,7 +168,7 @@ def cloud_slice_list():
   # Json format 
  
   cur = mysql.connect().cursor()
-  cur.execute("select distinct Instance_ID,IP,Instance.Slicing_ID from Slicing join Instance where Tenant_ID='" + name +"';")
+  cur.execute("select distinct Instance_ID,IP,Instance.Slicing_ID from Slicing join Instance where Tenant_ID='" + name +"' and Slicing.Slicing_ID=Instance.Slicing_ID;")
 
 
   result = []
@@ -206,6 +208,8 @@ def cloud_slice_create():
 
   response= result.decode()
   response= response.replace("\n","")
+
+
 
   return response + "\n"
 
@@ -259,7 +263,7 @@ def access_slice_list():
   # Json format
 
   cur = mysql.connect().cursor()
-  cur.execute("select distinct MAC, IP, IoT.Slicing_ID, Intent, direction from Slicing join IoT where Tenant_ID='" + name +"';")
+  cur.execute("select distinct MAC, IP, IoT.Slicing_ID, Intent, direction from Slicing join IoT where Tenant_ID='" + name +"' and Slicing.Slicing_ID=IoT.Slicing_ID;")
 
 
   result = []
@@ -375,12 +379,15 @@ def access_slice_create():
 
 
    # Check cloud_slice is existed
-  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='cloud'"
+  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='cloud' and location='" + location + "';"
   cur.execute(para)
 
   flag = 0
   for row in cur:
     flag = flag + 1
+
+  print ("Flag: ")
+  print (flag)
 
   if (flag == 0):
     # we need to create cloud_slice
@@ -433,12 +440,16 @@ def access_slice_create():
     con = mysql.connect()
     cur = con.cursor()
 
-    cmd = "insert into IoT values('" + mac + "', '" + ip + "', '"  + slice_id + "', '" + intent_key + "', 'cloud');"
+    cmd = "insert into IoT values('" + mac + "', '" + ip + "', '"  + slice_id + "', '" + intent_key + "', 'cloud', '" + location + "');"
     cur.execute(cmd)
     con.commit()
 
 
-  
+    # create IP tables rule
+
+    cmd="cd ../ && bash iptables_create.sh " + slice_id + " " + location
+    result = subprocess.check_output (cmd , shell=True)
+ 
 
 
   # Call ONOS API data
@@ -495,7 +506,7 @@ def access_slice_create():
   cur = con.cursor()
 
 
-  cmd = "insert into IoT values('" + mac + "', '" + ip + "', '" +  slice_id + "', '" + intent_key + "', 'IoT');"
+  cmd = "insert into IoT values('" + mac + "', '" + ip + "', '" +  slice_id + "', '" + intent_key + "', 'IoT', '" + location + "');"
 
   cur.execute(cmd)
   con.commit()
@@ -505,6 +516,16 @@ def access_slice_create():
 
   print (Cloud_Interface)
   print (IoT_Interface)
+
+
+
+  # update Json file
+
+  cmd="cd ../ && bash json_access_create.sh " + ip + " " + slice_id + " " + location
+
+  result = subprocess.check_output (cmd , shell=True)
+
+
 
 
 
@@ -634,6 +655,25 @@ def access_slice_delete():
   res = requests.delete(url, auth=('karaf', 'karaf'))
 
 
+  # update Json file
+  # we need to get IP
+  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='IoT';"
+  cur.execute(para)
+
+  flag = 0
+  for row in cur:
+      flag = flag + 1
+  
+  if (flag == 0):
+    return ("Error: IP does not existed!\n")
+
+  ip = str(row[1])
+  cmd="cd ../ && bash json_access_delete.sh " + ip + " " + slice_id + " " + location
+  result = subprocess.check_output (cmd , shell=True)
+
+
+
+
   # Delete MySQL tuple
   con = mysql.connect()
   cur = con.cursor()
@@ -647,7 +687,7 @@ def access_slice_delete():
 
 
   # find another slice with same id
-  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='IoT';"
+  para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='IoT' and location='" + location +"';"
   cur.execute(para)
   
   flag = 0
@@ -656,7 +696,7 @@ def access_slice_delete():
 
   if (flag == 0):
     # we need to delete cloud_slice
-    para = "select * from IoT where MAC='" + mac + "' and direction='cloud';"
+    para = "select * from IoT where Slicing_ID='" + slice_id + "' and direction='cloud' and location='" + location +"';"
     cur.execute(para)
 
     for row in cur:
@@ -671,9 +711,16 @@ def access_slice_delete():
     res = requests.delete(url, auth=('karaf', 'karaf'))
 
     # delete mysql
-    cmd = "delete from IoT where MAC ='" + mac +"' and direction='cloud';"
+    cmd = "delete from IoT where Slicing_ID ='" + slice_id +"' and direction='cloud';"
     cur.execute(cmd)
     con.commit()
+
+    # delete IP tables rule
+    cmd="cd ../ && bash iptables_delete.sh " + slice_id + " " + location
+    result = subprocess.check_output (cmd , shell=True)
+ 
+
+
 
 
   return ("Success\n")

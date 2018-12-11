@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MultiView : Hierarchical View</title>
+    <style type="text/css">
+      body {
+      color: #d3d3d3;
+      font: 12pt arial;
+      background-color: #222222;
+      }
+      #mynetwork {
+      position: absolute;
+      margin: auto;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      
+      width: 100%;
+      height: 100%;
+      border: 1px solid lightgray;
+      #background: #ffffff;
+      }
+      
+    </style>
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/vis.js"></script>
+    <script type="text/javascript" src="javascripts/boxes.json"></script>
+    <link href="stylesheets/vis.css" rel="stylesheet" type="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheets/opentip.css">
+    <script type="text/javascript" src="javascripts/opentip-jquery.js"></script>
+    <script type="text/javascript">
+      //Huynh start
+      var session_username = sessionStorage.getItem('ss_user_name');
+      if(session_username === null){
+      window.location.replace("http://103.22.221.55:3006/login");
+      }
+      
+      //Huynh End
+      //var boxes = JSON.parse(data);
+      // Receive Active Boxes List
+      var boxList         = !{boxList};
+      var switchList      = !{switchList};
+      var instanceList    = !{instanceList};
+      var serviceList     = !{serviceList};
+      //var pPathStatus     = !{pPathStatus};
+      var ovsBridgeStatus = !{ovsBridgeStatus};
+      var index=0, boxlevel=1, switchlevel=0, instancelevel=0, servicelevel=0;
+      var nodes             = null;
+      var edges             = null;
+      var network           = null;
+      var DIR               = 'images/';
+      var EDGE_LENGTH_MAIN  = 350;
+      var EDGE_LENGTH_SUB   = 150;
+      var BridgeLinkColor = 'GREEN';
+      var BridgeNodeColor = '#3399ff';
+      var LENGTH_SERVER     = 150,
+      LENGTH_SUB = 50,
+      WIDTH_SCALE = 2,
+      GREEN = 'green',
+      RED = '#C5000B',
+      ORANGE = 'orange',
+      //GRAY = '#666666',
+      GRAY = 'gray',
+      BLACK = '#2B1B17';
+      // Called when the Visualization API is loaded.
+      function draw() {
+      // Create a data table with nodes.
+      nodes = [];
+      // Create a data table with links.
+      edges = [];
+      //Add network Node
+      nodes.push({id: 1, image: DIR + 'tein.png', shape: 'image', level:0, fixed: true, physics:true});
+      //nodes.push({id: 1001, x: x, y: y, label: 'Desktop', group: 'desktop', value: 4, fixed: false, physics:false});
+      //edges.push({from: 1000, to: 1001, length: EDGE_LENGTH_MAIN, width: WIDTH_SCALE * 6, color: GREEN, label: '0.71 mbps'});
+      //Draw the Physical Boxes
+      for (var i in boxList)
+      {
+      index=index+1;
+      BoxNodeID = index * 1000;
+      if (boxList[i].management_ip_status == 'GREEN')
+      {
+      nodes.push({id: BoxNodeID, label: boxList[i].host, image: DIR + 'pboxgreen.jpg', shape: 'image', level:boxlevel, fixed: false, physics:true});
+      edges.push({from: 1, to: BoxNodeID, length: EDGE_LENGTH_MAIN, width: WIDTH_SCALE * 4, color: boxList[i].data_ip_status, label: '0.71 mbps'});
+      console.log(boxList[i].management_ip_status);
+      }
+      else
+      {
+      nodes.push({id: BoxNodeID, label: boxList[i].host, image: DIR + 'pboxred.jpg', shape: 'image', level:boxlevel, fixed: false, physics:true});
+      edges.push({from: 1, to: BoxNodeID, length: EDGE_LENGTH_MAIN, width: WIDTH_SCALE * 4, color: boxList[i].data_ip_status, label: '0.71 mbps'});
+      }
+      //Draw the OVS Bridges
+      switchNodeID = BoxNodeID;
+      for (var j in switchList)
+      {
+      if (switchList[j].bridge !== 'br-ex')
+      {
+      for (var a in ovsBridgeStatus)
+      {
+      if (ovsBridgeStatus[a].bridge == switchList[j].bridge && ovsBridgeStatus[a].box == boxList[i].box)
+      {
+      if (ovsBridgeStatus[a].status == 'UP')
+      {
+      BridgeLinkColor = 'GREEN';
+      BridgeNodeColor = '#3399ff'
+      console.log(ovsBridgeStatus[a].box + ' '+BridgeLinkColor);
+      }
+      else
+      {
+      BridgeLinkColor='RED';
+      BridgeNodeColor = 'RED'
+      }
+      break;
+      }
+      }
+      switchNodeID = switchNodeID + 1;
+      if (switchNodeID != BoxNodeID + 1)
+      {
+      switchlevel=switchlevel + 1;
+      // Huynh: insert box field
+      nodes.push({id: switchNodeID, label: switchList[j].bridge, box: boxList[i].box, level:switchlevel, group: 'desktop', value: 3, fixed: false, physics:false, color: BridgeNodeColor});
+      edges.push({from: switchNodeID-1, to: switchNodeID, length: EDGE_LENGTH_SUB, color: BridgeLinkColor});
+      }
+      else
+      {
+      switchlevel = boxlevel + 1;
+      // Huynh: insert box field
+      nodes.push({id: switchNodeID, label: switchList[j].bridge, box: boxList[i].box, level:switchlevel, group: 'desktop', value: 3, fixed: false, physics:false, color: BridgeNodeColor});
+      edges.push({from: BoxNodeID, to: switchNodeID, length: EDGE_LENGTH_SUB, color: BridgeLinkColor});
+      }
+      }
+      }
+      //Draw the OpenStack Instances
+      vmNodeID      = BoxNodeID+100;
+      serviceNodeID = BoxNodeID+600;
+      instancelevel = switchlevel+1;
+      for (var k in instanceList)
+      {
+      if (boxList[i].box == instanceList[k].box)
+      {
+      vmNodeID = vmNodeID + 1;
+      if (instanceList[k].state == 'Running')
+      {
+      nodes.push({id: vmNodeID, label: instanceList[k].name, box: instanceList[k].box, level:instancelevel, image: DIR + 'vmicongreen.png', shape: 'image', group: 'instance', title: 'Instance Details', fixed: false, physics:true});
+      edges.push({from: switchNodeID, to: vmNodeID, length: EDGE_LENGTH_SUB, color: GREEN});
+      }
+      else
+      {
+      console.log('TEST');
+      nodes.push({id: vmNodeID, label: instanceList[k].name, level:instancelevel, image: DIR + 'vmiconred.png', shape: 'image', group: 'instance', title: 'Instance Details', fixed: false, physics:true});
+      edges.push({from: switchNodeID, to: vmNodeID, length: EDGE_LENGTH_SUB, color: GREEN});
+      }
+      //Draw the Services Running in the OpenStack Instance
+      serviceNodeID = serviceNodeID+1;
+      nodes.push({id: serviceNodeID, label: 'Streaming', level:switchlevel+2, group: 'desktop', value: 3, fixed: false, physics:false});
+      edges.push({from: vmNodeID, to: serviceNodeID, length: EDGE_LENGTH_SUB, color: GREEN});
+      }
+      }
+      }
+      //edges.push({from: 1, to: 2, length: EDGE_LENGTH_MAIN, width: WIDTH_SCALE * 4, color: GREEN, label: '0.71 mbps', arrows:'to, from'});
+      //edges.push({from: 1, to: 1001, length: EDGE_LENGTH_MAIN, width: WIDTH_SCALE * 4, color: GREEN, label: '0.71 mbps', arrows:'to, from'});
+      // legend
+      var mynetwork = document.getElementById('mynetwork');
+      var x = - mynetwork.clientWidth / 2 + 50;
+      var y = - mynetwork.clientHeight / 2 + 50;
+      var step = 70;
+      // create a visualization network
+      var container = document.getElementById('mynetwork');
+      var data = {
+      nodes: nodes,
+      edges: edges
+      };
+      var options = {
+      nodes: {
+      //shape: 'dot',
+      size: 20,
+      borderWidth: 2,
+      font: {
+      size: 16,
+      color: '#000000'
+      },
+      scaling: {
+      min: 16,
+      max: 32,
+      }
+      },
+      edges: {
+      color: GRAY,
+      smooth: false,
+      width: 2
+      },
+      layout: {
+      hierarchical: {
+      enabled:true,
+      levelSeparation: 150,
+      nodeSpacing: 200,
+      direction: "DU",
+      }
+      },
+      physics:{
+      barnesHut:{gravitationalConstant:-30000},
+      stabilization: {iterations:2500}
+      },
+      interaction: {
+      navigationButtons: true,
+      hover: true,
+      keyboard: true
+      },
+      groups: {
+      'switch': {
+      shape: 'triangle',
+      color: '#FF9900' // orange
+      },
+      mobile: {
+      shape: 'dot',
+      color: "#5A1E5C" // purple
+      },
+      server: {
+      shape: 'square',
+      color: "#C5000B" // red
+      },
+      internet: {
+      shape: 'square',
+      color: "#109618" // green
+      },
+      instance: {
+      shape: 'square',
+      color: "#C5000B" // blue
+      },
+      workload: {
+      shape: 'dot',
+      color: "#C5000B" // red
+      }
+      }
+      };
+      network = new vis.Network(container, data, options);
+      network.on("click", function (params){
+          console.log(params);
+          params.event = "[original event]";
+          if(params.nodes == ""){
+          }
+          else
+          {
+            var nodeId = params.nodes;
+            //stupid
+            for(var i=0; i<nodes.length; i++){
+              if(nodes[i].id == nodeId){
+                switch (nodes[i].level){
+                  case 1: //Box
+                  window.parent.receiveValueBox(nodes[i]);
+                  break;
+                  case 2: // brcap
+                  window.parent.receiveValueBrCap(nodes[i]);
+                  break;
+                  case 3: // brdev
+                  break;
+                  case 4: // brvlan
+                  break;
+                  case 5: // brint
+                  break;
+                  case 6: // vm
+                  window.parent.receiveValueVM(nodes[i])
+                  break;
+                  case 7: // service
+                  break;
+                }
+      
+                break;
+              }
+            }
+          }
+          });
+          var myInput = $("#mynetwork");
+          var inputOpentip = new Opentip(myInput, { showOn: null, style: 'glass' });
+          var count = 0;
+        network.on("hoverNode", function (params){
+          params.event = "[original event]";
+          var nodeId = params.node;
+          for(var i=0; i<nodes.length; i++){
+            if(nodes[i].id == nodeId){
+              count = i;
+              break;
+            }
+          }
+          inputOpentip.setContent("Node label: "+ nodes[count].label +" Id: "+ nodes[count].id);
+          inputOpentip.show();
+        });
+        network.on("blurNode", function (params){
+          inputOpentip.hide();
+        });
+      }
+      
+    </script>
+  </head>
+  <body onload="draw()">
+    <p></p>
+    <p></p>
+    <div id="mynetwork" align="center"></div>
+  </body>
+</html>

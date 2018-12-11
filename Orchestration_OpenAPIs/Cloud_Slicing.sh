@@ -81,38 +81,46 @@ fi
 #echo -n "Input Sllicing ID: "
 #read Slicing
 
-read -ra vars <<< $(mysql -DSlicing_Management -uroot -p'$DB_PASS' -se "SELECT Slicing_ID FROM Slicing where Tenant_ID = '$User_ID' ")
-for i in "${vars[i]}"
-do a=1
-done
-NAME=vars
-tmp="${NAME}[@]"
-size_var=("${!tmp}")
-size="${#size_var[@]}"
-((size_1=${size}-1))
-#size_l=$(( size - 1 ))
-check_val=0
-for j in $(seq 0 $size_1 )  
-do
-# echo ${vars[j]}
-if [ "${vars[j]}" == "$Slicing" ]; then
-# echo "Correct"
-((check_val=${check_val}+1))
-else
-# echo "Different"
-((check_val=${check_val}+0))
+sql=$(mysql -u root -h $DB_HOST --password=$DB_PASS -e "use Slicing_Management; select * from Slicing where Slicing_ID='$Slicing' and Tenant_ID='$User_ID';")
+
+if [ "$sql" == "" ]; then
+  echo "Error: Invalid VLAN ID"
+  exit 0
 fi
-done
+
+
+#read -ra vars <<< $(mysql -DSlicing_Management -uroot -p'$DB_PASS' -se "SELECT Slicing_ID FROM Slicing where Tenant_ID = '$User_ID' ")
+#for i in "${vars[i]}"
+#do a=1
+#done
+#NAME=vars
+#tmp="${NAME}[@]"
+#size_var=("${!tmp}")
+#size="${#size_var[@]}"
+#((size_1=${size}-1))
+#size_l=$(( size - 1 ))
+#check_val=0
+#for j in $(seq 0 $size_1 )  
+#do
+# echo ${vars[j]}
+#if [ "${vars[j]}" == "$Slicing" ]; then
+# echo "Correct"
+#((check_val=${check_val}+1))
+#else
+# echo "Different"
+#((check_val=${check_val}+0))
+#fi
+#done
 
 #for j in $(seq 0 $size_1)
 #do
 #echo $check_val
-if [ "${check_val}" -eq  0 ] ; then
-echo "Error: Invalid VLAN ID"
-exit 0
+#if [ "${check_val}" -eq  0 ] ; then
+#echo "Error: Invalid VLAN ID"
+#exit 0
 #else 
 #echo "VLAN ID checking complete"
-fi
+#fi
 #done
 
 
@@ -161,7 +169,7 @@ if [ "$net_list" == "" ]; then
   subnet=`cat network_pool | grep $Slicing | awk '{print $3}'`
   allocation=`cat network_pool | grep $Slicing | awk '{print $4}'`
 
-  temp=$(openstack subnet create --project demo --subnet-range $subnet --ip-version 4 --network $Net_ID --dns-nameserver 8.8.8.8 --allocation-pool start=$allocation.100,end=$allocation.200 sub_$Slicing --os-region-name $REGION)
+  temp=$(openstack subnet create --project $User_ID --subnet-range $subnet --ip-version 4 --network $Net_ID --dns-nameserver 8.8.8.8 --allocation-pool start=$allocation.100,end=$allocation.200 sub_$Slicing --os-region-name $REGION)
 
 
   export OS_PROJECT_DOMAIN_NAME=default
@@ -243,10 +251,13 @@ done
 
 cat << EOF | mysql -h $DB_HOST -uroot -p$DB_PASS
 use Slicing_Management;
-INSERT INTO Instance VALUES ('$Instance_ID', '$Instance_IP', '$Slicing');
+INSERT INTO Instance VALUES ('$Instance_ID', '$Instance_IP', '$Slicing', '$REGION');
 quit
 EOF
 
+
+# update json file
+bash json_cloud_create.sh $Instance_IP $Slicing $REGION
 
 
 

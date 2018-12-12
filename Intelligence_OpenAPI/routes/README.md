@@ -2,12 +2,12 @@
 
 ## api.js
 
-Route spark api
+spark api를 route하는 파일
 
 ## auth.js
 
-Route login auth
+login auth를 route하는 파일
 
 ## controllers.js
 
-Route web page controllers
+web page controller들을 route하는 파일

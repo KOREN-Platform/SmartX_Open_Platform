@@ -1,9 +1,9 @@
-# routes
+# views
 
 ## pages
 
-main page collection
+메인페이지 모음 폴더
 
 ## patial
 
-Partial page collection
+부분페이지 모음 폴더

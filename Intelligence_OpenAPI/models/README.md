@@ -1,18 +1,18 @@
-# routes
+# models
 
 ## appSchema.js
 
-DB's apps collection schema
+DB apps의 collection schema
 
 ## dataSchema.js
 
-DB's datas collection schema
+DB datas의 collection schema
 
 ## ResultSchema.js
 
-DB's results collection schema
+DB results의 collection schema
 
 ## users.js
 
-DB's users collection schema
+DB users의 collection schema
 

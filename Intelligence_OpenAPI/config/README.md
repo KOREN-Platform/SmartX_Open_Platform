@@ -1,9 +1,9 @@
-# routes
+# config
 
 ## config.json
 
-Set otter's config
+설정 값을 저장하는 json 파일
 
 ## database.js
 
-Set DB's ip and port
+DB의 IP와 Port 번호를 저장한 javascript파일

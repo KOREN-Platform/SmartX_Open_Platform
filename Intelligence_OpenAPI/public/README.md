@@ -2,12 +2,12 @@
 
 ## images
 
-Used image collection
+image 파일들이 저장된 폴더
 
 ## js
 
-JavaScript for each web page
+웹페이지에서 사용하는 javascript 파일들이 저장된 폴더
 
 ## stylesheets
 
-Web page's style sheets
+웹페이지에서 사용하는 style sheet가 저장된 폴더

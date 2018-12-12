@@ -1,0 +1,49 @@
+<html lang="en">
+  <% include ../partial/head %>
+  <body id="page-top">
+    <% include ../partial/toolbar %>
+    <div id="wrapper">
+      <% include ../partial/sidebar %>
+      <div id="content-wrapper">
+        <div class="container-fluid">
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="#">About</a>
+            </li>
+            <li class="breadcrumb-item active">About</li>
+          </ol>
+          <!-- Icon Cards-->
+          <div class="card mb-3">
+            <!--zookeeper state-->
+            <div class="card-header">
+              <i class="fas fa-table"></i>About</div>
+            <div class="card-body">
+              <div class="table-responsive" style=" overflow-x:  hidden;">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                  <p>Otter는 Big Data App Container 구조로 데이터 분석이 가능한 Intelligence API를 제공합니다.</p>
+                  <p>기존 빅데이터 분석 시스템은 빅데이터 분석 코드를 작성하거나 SQL-Like 쿼리를 사용해야 합니다.</p>
+                  <p>그러나 Otter는 미리 개발된 Big Data App을 이용하여 다양한 분석을 할 수 있습니다. </p>
+                  <p>데이터 분석가는 편리한 UX를 통해서 분석이 가능하며, REST 기반 API 호출을 통해서도 사용이 가능합니다.</p>
+                  <p>Container 구조이므로 재사용성이 우수하며, 프로그래밍 언어가 제공할 수 있는 모든 수준의 분석이 가능합니다. </p>
+                  <br>
+                  <h4>1. 대시보드를 이용한 Big Data App 실행</h4><br>
+                  <p>
+                  - 대시보드를 이용하여, 미리 개발된 Big Data App을 선택해서, 분석할 수 있습니다.  
+                  </p>
+                  <p><img src="bootstrap/dist/img/about_1.png" width="40%" ></p><br><br>
+                  <h4>2. API 호출을 통한 Big Data App 실행</h4><br>
+                  <p>
+                  - REST 기반 API 호출을 통해서 Big Data App을 원격에서 실행이 가능하며, 다양한 프로그래밍 언어에서 접근이 가능하도록 Code Stub이 제공됩니다. 
+                  </p>
+                  <p><img src="bootstrap/dist/img/about_2.png" width="40%" ></p>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer small text-muted"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

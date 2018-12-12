@@ -1,0 +1,68 @@
+<html lang="en">
+  <% include ../partial/head %>
+  <body id="page-top">
+    <% include ../partial/toolbar %>
+    <script type="text/javascript" src="js/Apps_history.js" defer></script>
+    <div id="wrapper">
+      <% include ../partial/sidebar %>
+      <div id="content-wrapper">
+        <div class="container-fluid">
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="#">Apps</a>
+            </li>
+            <li class="breadcrumb-item active">History</li>
+          </ol>
+          <!-- Icon Cards-->
+          <div class="card mb-3">
+            <div class="card-body">
+              <!--table tool-->
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12"><div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="dataTable_length">
+                </div></div><div class="col-sm-12 col-md-6"><div id="dataTable_filter" class="dataTables_filter">
+                </div></div></div><div class="row"><div class="col-sm-12">
+                  <!-- finished yarn status -->
+                  <h3><ion-icon name="save"></ion-icon> Finished Apps</h3>
+                  <br/>
+                  <table id="dtVerticalScrollExample1" class="table  table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                      <thead >
+                        <tr>
+                          <th class="th-sm">Id
+                            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                          </th>
+                          <th class="th-sm">Name
+                            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                          </th>
+                          <th class="th-sm">State
+                            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                          </th>
+                          <th class="th-sm">Elapsed time
+                            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                          </th>
+                          <th class="th-sm">Started time
+                            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                          </th>
+                          <th class="th-sm">Finished time
+                            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="doneState1">
+                      </tbody>
+                    </table>
+                  <br />
+              <h4>Result</h4>
+              <div class="alert alert-secondary" role="alert">
+                <hr class="my-2">
+                <div class="form-group">
+                  <textarea class="form-control" id="resultTextBox" rows="3" readonly></textarea>
+                </div>
+              </div>  
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

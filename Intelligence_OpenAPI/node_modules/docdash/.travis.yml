@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+- '6'
+- '8'
+sudo: false
+branches:
+  except:
+  - gh-pages
+before_script:
+- npm install
+- npm install -g jsdoc
+script:
+- npm test

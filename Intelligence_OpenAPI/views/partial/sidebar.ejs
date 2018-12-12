@@ -1,0 +1,43 @@
+
+<!-- Sidebar -->
+<script type="text/javascript" src="js/sidebar.js" defer></script>
+<ul class="sidebar navbar-nav">
+  <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="controller?name=Apps_list" id="pagesDropdown" role="button" aria-haspopup="true" aria-expanded="true">
+        <i class="fas fa-fw"><ion-icon name="list-box"></ion-icon></i>
+        <span><b>Apps</b></span>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
+        <a class="dropdown-item" id="Apps_list" href="controller?name=Apps_list"><ion-icon name="arrow-dropright"></ion-icon> List</a>
+        <a class="dropdown-item" id="Apps_status" href="controller?name=Apps_status"><ion-icon name="arrow-dropright"></ion-icon> Status</a>
+        <a class="dropdown-item" id="Apps_history" href="controller?name=Apps_history"><ion-icon name="arrow-dropright"></ion-icon> History</a>
+      </div>
+    </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="controller?name=Data_list" id="pagesDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-fw"><ion-icon name="document"></ion-icon></i>
+      <span><b>Data</b></span>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
+      <a class="dropdown-item" id="Data_list" href="controller?name=Data_list"><ion-icon name="arrow-dropright"></ion-icon> List</a>
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="controller?name=Spark_cluster" id="pagesDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-fw"><ion-icon name="save"></ion-icon></i>
+      <span><b>Spark</b></span>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 56px, 0px);">
+      <a class="dropdown-item" id="Spark_cluster" href="controller?name=Spark_cluster"><ion-icon name="arrow-dropright"></ion-icon> Cluster</a>
+      <a class="dropdown-item" id="Spark_hdfs" href="controller?name=Spark_hdfs"><ion-icon name="arrow-dropright"></ion-icon> Hdfs</a>
+      <a class="dropdown-item" id="Spark_yarn" href="controller?name=Spark_yarn"><ion-icon name="arrow-dropright"></ion-icon> Yarn</a>
+      <a class="dropdown-item" id="Spark_zoo" href="controller?name=Spark_zoo"><ion-icon name="arrow-dropright"></ion-icon> Zookeeper</a> 
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link" href="controller?name=About" id="pagesDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-fw"><ion-icon name="save"></ion-icon></i>
+      <span><b>About</b></span>
+    </a>
+  </li>
+</ul>

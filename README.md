@@ -1,12 +1,9 @@
 # Intelligence OpenAPI
 
-## How to Use
-git clone http://git.nilab.xyz:6363/nightzen/otter2.git 
+## Summary
 
-cd otter2/
+Spark에 OpenAPI를 통해 접근이 가능한, Data Scientist를 위한 새로운 Spark 사용법
 
-npm install
+![Intelligence OpenAPI](./public/images/Intelligence_OpenAPI.jpg)
 
-node app.js
-
-http://localhost:3000
+Developer를 위한 Swagger codegen 제공

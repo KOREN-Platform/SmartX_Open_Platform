@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # KOREN SmartX_Open_Platform
 
 KOREN 기반의 정보 기술 및 서비스 개발/운영을 위한 KOREN 사용자 중심의 오픈 플랫폼
@@ -36,3 +37,14 @@ KOREN 기반의 정보 기술 및 서비스 개발/운영을 위한 KOREN 사용
   - [상세가이드](https://goo.gl/xyXfpd)
   - [Collaboration_2017](https://github.com/KOREN-Platform/Collaboration_2017)
   - [Technical_Documents](https://github.com/KOREN-Platform/Technical_Documents)
+=======
+# Intelligence OpenAPI
+
+## Summary
+
+Spark에 OpenAPI를 통해 접근이 가능한, Data Scientist를 위한 새로운 Spark 사용법
+
+![Intelligence OpenAPI](./public/images/Intelligence_OpenAPI.jpg)
+
+Developer를 위한 Swagger codegen 제공
+>>>>>>> dev

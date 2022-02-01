@@ -35,6 +35,6 @@
     "request": "^2.88.0",
     "slack-node": "^0.1.8",
     "swagger-ui": "^3.19.5",
-    "zip-local": "^0.3.4"
+    "zip-local": "^0.3.5"
   }
 }
